@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>org.springframework.data.elasticsearch.core.query.Query</OriginalElement>
+  <nodes>
+    <node x="433.0" y="160.0">org.springframework.data.repository.PagingAndSortingRepository</node>
+    <node x="58.0" y="160.0">org.springframework.data.elasticsearch.core.AbstractElasticsearchTemplate</node>
+    <node x="581.0" y="550.0">org.springframework.data.elasticsearch.core.SearchHits</node>
+    <node x="565.0" y="710.0">org.springframework.data.elasticsearch.core.SearchHitsImpl</node>
+    <node x="188.0" y="550.0">org.springframework.data.elasticsearch.core.query.Query</node>
+    <node x="212.0" y="0.0">org.springframework.data.elasticsearch.core.SearchOperations</node>
+    <node x="481.0" y="80.0">org.springframework.data.repository.CrudRepository</node>
+    <node x="0.0" y="0.0">org.springframework.data.elasticsearch.core.DocumentOperations</node>
+    <node x="156.0" y="630.0">org.springframework.data.elasticsearch.core.query.AbstractQuery</node>
+    <node x="74.0" y="240.0">org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate</node>
+    <node x="557.0" y="630.0">org.springframework.data.elasticsearch.core.SearchScrollHits</node>
+    <node x="159.0" y="315.0">org.springframework.data.elasticsearch.core.IndexOperations</node>
+    <node x="0.0" y="710.0">org.springframework.data.elasticsearch.core.query.StringQuery</node>
+    <node x="99.0" y="395.0">org.springframework.data.elasticsearch.core.AbstractDefaultIndexOperations</node>
+    <node x="82.0" y="80.0">org.springframework.data.elasticsearch.core.ElasticsearchOperations</node>
+    <node x="497.0" y="0.0">org.springframework.data.repository.Repository</node>
+    <node x="156.0" y="710.0">org.springframework.data.elasticsearch.core.query.CriteriaQuery</node>
+    <node x="244.0" y="475.0">org.springframework.data.elasticsearch.core.DefaultTransportIndexOperations</node>
+    <node x="0.0" y="475.0">org.springframework.data.elasticsearch.core.DefaultIndexOperations</node>
+    <node x="328.0" y="710.0">org.springframework.data.elasticsearch.core.query.NativeSearchQuery</node>
+    <node x="445.0" y="240.0">org.springframework.data.elasticsearch.repository.ElasticsearchRepository</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="org.springframework.data.elasticsearch.core.DefaultTransportIndexOperations" target="org.springframework.data.elasticsearch.core.AbstractDefaultIndexOperations">
+      <point x="-74.0" y="-15.0" />
+      <point x="318.0" y="450.0" />
+      <point x="315.0" y="450.0" />
+      <point x="72.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.repository.CrudRepository" target="org.springframework.data.repository.Repository">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.query.NativeSearchQuery" target="org.springframework.data.elasticsearch.core.query.AbstractQuery">
+      <point x="0.0" y="-15.0" />
+      <point x="420.0" y="685.0" />
+      <point x="282.66666666666663" y="685.0" />
+      <point x="50.66666666666663" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.query.AbstractQuery" target="org.springframework.data.elasticsearch.core.query.Query">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.ElasticsearchOperations" target="org.springframework.data.elasticsearch.core.DocumentOperations">
+      <point x="-58.0" y="-15.0" />
+      <point x="140.0" y="55.0" />
+      <point x="96.0" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.DefaultTransportIndexOperations" target="org.springframework.data.elasticsearch.core.IndexOperations">
+      <point x="74.0" y="-15.0" />
+      <point x="466.0" y="450.0" />
+      <point x="430.25" y="450.0" />
+      <point x="430.25" y="370.0" />
+      <point x="299.0" y="370.0" />
+      <point x="56.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.repository.ElasticsearchRepository" target="org.springframework.data.repository.PagingAndSortingRepository">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.AbstractDefaultIndexOperations" target="org.springframework.data.elasticsearch.core.IndexOperations">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.DefaultIndexOperations" target="org.springframework.data.elasticsearch.core.IndexOperations">
+      <point x="-56.0" y="-15.0" />
+      <point x="56.0" y="450.0" />
+      <point x="70.75" y="450.0" />
+      <point x="70.75" y="370.0" />
+      <point x="187.0" y="370.0" />
+      <point x="-56.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.SearchScrollHits" target="org.springframework.data.elasticsearch.core.SearchHits">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.SearchHitsImpl" target="org.springframework.data.elasticsearch.core.SearchScrollHits">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.AbstractElasticsearchTemplate" target="org.springframework.data.elasticsearch.core.ElasticsearchOperations">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate" target="org.springframework.data.elasticsearch.core.AbstractElasticsearchTemplate">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.query.StringQuery" target="org.springframework.data.elasticsearch.core.query.AbstractQuery">
+      <point x="0.0" y="-15.0" />
+      <point x="68.0" y="685.0" />
+      <point x="181.33333333333334" y="685.0" />
+      <point x="-50.66666666666666" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.ElasticsearchOperations" target="org.springframework.data.elasticsearch.core.SearchOperations">
+      <point x="58.0" y="-15.0" />
+      <point x="256.0" y="55.0" />
+      <point x="300.0" y="55.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.query.CriteriaQuery" target="org.springframework.data.elasticsearch.core.query.AbstractQuery">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.repository.PagingAndSortingRepository" target="org.springframework.data.repository.CrudRepository">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="org.springframework.data.elasticsearch.core.DefaultIndexOperations" target="org.springframework.data.elasticsearch.core.AbstractDefaultIndexOperations">
+      <point x="56.0" y="-15.0" />
+      <point x="168.0" y="450.0" />
+      <point x="171.0" y="450.0" />
+      <point x="-72.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="366.5" y="370.0" />
+  <SelectedNodes>
+    <node>org.springframework.data.elasticsearch.core.query.Query</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
