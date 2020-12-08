@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
+    url: jdbc:mysql://127.0.0.1:3306/smp?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8 #连接地址
+    username: root # 用户名
+    password: 123 #密码
+mybatis-plus:
+  mapper-locations: classpath*:/com/maxqiu/demo/mapper/xml/**.xml # xml路径
+  global-config:
+    db-config:
+      id-type: assign_id # 全局主键策略
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰转下划线（默认）
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出

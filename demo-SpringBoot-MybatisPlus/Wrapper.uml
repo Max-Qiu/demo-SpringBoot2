@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.baomidou.mybatisplus.core.conditions.query.QueryWrapper</OriginalElement>
+  <nodes>
+    <node x="928.0" y="160.0">com.baomidou.mybatisplus.core.conditions.query.QueryWrapper</node>
+    <node x="676.0" y="240.0">com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper</node>
+    <node x="1092.0" y="160.0">com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper</node>
+    <node x="416.0" y="240.0">com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper</node>
+    <node x="0.0" y="240.0">com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper</node>
+    <node x="1384.0" y="240.0">com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper</node>
+    <node x="928.0" y="240.0">com.baomidou.mybatisplus.core.toolkit.Wrappers.EmptyWrapper</node>
+    <node x="204.0" y="240.0">com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper</node>
+    <node x="1016.7142857142858" y="80.0">com.baomidou.mybatisplus.core.conditions.AbstractWrapper</node>
+    <node x="658.5" y="0.0">com.baomidou.mybatisplus.core.conditions.Wrapper</node>
+    <node x="1264.0" y="160.0">com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper</node>
+    <node x="1164.0" y="240.0">com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper</node>
+    <node x="314.0" y="160.0">com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1168.0" y="140.0" />
+      <point x="1121.7142857142858" y="140.0" />
+      <point x="21.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.conditions.query.QueryWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1000.0" y="140.0" />
+      <point x="1079.7142857142858" y="140.0" />
+      <point x="-21.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1264.0" y="220.0" />
+      <point x="1318.0" y="220.0" />
+      <point x="-54.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.toolkit.Wrappers.EmptyWrapper" target="com.baomidou.mybatisplus.core.conditions.query.QueryWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="0.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper" target="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="792.0" y="210.0" />
+      <point x="496.0" y="210.0" />
+      <point x="78.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper" target="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="536.0" y="220.0" />
+      <point x="444.0" y="220.0" />
+      <point x="26.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.query.QueryChainWrapper" target="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="92.0" y="210.0" />
+      <point x="340.0" y="210.0" />
+      <point x="-78.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper" target="com.baomidou.mybatisplus.core.conditions.Wrapper">
+      <point x="-52.0" y="-15.0" />
+      <point x="366.0" y="55.0" />
+      <point x="684.5" y="55.0" />
+      <point x="-26.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper" target="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="300.0" y="220.0" />
+      <point x="392.0" y="220.0" />
+      <point x="-26.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1372.0" y="130.0" />
+      <point x="1163.7142857142858" y="130.0" />
+      <point x="63.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractWrapper">
+      <point x="52.0" y="-15.0" />
+      <point x="470.0" y="130.0" />
+      <point x="1037.7142857142858" y="130.0" />
+      <point x="-63.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper" target="com.baomidou.mybatisplus.core.conditions.AbstractLambdaWrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1480.0" y="220.0" />
+      <point x="1426.0" y="220.0" />
+      <point x="54.0" y="15.0" />
+    </edge>
+    <edge source="com.baomidou.mybatisplus.core.conditions.AbstractWrapper" target="com.baomidou.mybatisplus.core.conditions.Wrapper">
+      <point x="0.0" y="-15.0" />
+      <point x="1100.7142857142858" y="55.0" />
+      <point x="736.5" y="55.0" />
+      <point x="26.0" y="15.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="838.0" y="135.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
