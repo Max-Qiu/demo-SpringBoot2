@@ -1,21 +1,15 @@
 package com.maxqiu.demo.controller;
 
-
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * <p>
- *  前端控制器
- * </p>
+ * 用户表 前端控制器
  *
  * @author Max_Qiu
- * @since 2020-12-08
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
 }
-

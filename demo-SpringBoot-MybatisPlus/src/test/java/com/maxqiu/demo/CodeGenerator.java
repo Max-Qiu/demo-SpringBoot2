@@ -52,34 +52,36 @@ public class CodeGenerator {
         // 数据库表字段映射到实体的命名策略
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
         // 表前缀
-        // strategyConfig.setTablePrefix("tbl_");
+        strategyConfig.setTablePrefix("smp_");
         // 字段前缀
         // strategyConfig.setFieldPrefix("");
         // 排除的表，生成的表（二选一）
-        // strategyConfig.setExclude("xxx");
+        strategyConfig.setExclude("smp_test_exclude");
         // strategyConfig.setInclude("xxx");
         // 是否生成serialVersionUID
         strategyConfig.setEntitySerialVersionUID(true);
         // 实体是否为链式模型，即实体可以连续set，例：.setXxx().setXxx();（需关闭lombok）
-        // strategyConfig.setChainModel(false);
+        strategyConfig.setChainModel(false);
         // 实体使用lombok
-        strategyConfig.setEntityLombokModel(true);
+        strategyConfig.setEntityLombokModel(false);
         // 是否移除is前缀
         // strategyConfig.setEntityBooleanColumnRemoveIsPrefix(false);
+        // 生成Rest风格的Controller
+        strategyConfig.setRestControllerStyle(true);
         // 是否生成实体的注解，即每个字段都设置 @TableId/@TableField
-        // strategyConfig.setEntityTableFieldAnnotationEnable(true);
+        strategyConfig.setEntityTableFieldAnnotationEnable(true);
 
         // 3. 包名策略配置
         PackageConfig packageConfig = new PackageConfig();
         // 父包名
         packageConfig.setParent("com.maxqiu.demo");
-        // 子包名
-        // packageConfig.setEntity("entity");
-        // packageConfig.setService("service");
-        // packageConfig.setServiceImpl("serviceImpl");
-        // packageConfig.setMapper("mapper");
-        // packageConfig.setXml("mapper.xml");
-        // packageConfig.setController("controller");
+        // 子包名（以下为默认）
+        packageConfig.setEntity("entity");
+        packageConfig.setService("service");
+        packageConfig.setServiceImpl("service.impl");
+        packageConfig.setMapper("mapper");
+        packageConfig.setXml("mapper.xml");
+        packageConfig.setController("controller");
 
         // 4. 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
@@ -96,11 +98,11 @@ public class CodeGenerator {
         // 是否支持AR模式
         globalConfig.setActiveRecord(true);
         // xml 中是否生成 通用查询映射结果
-        globalConfig.setBaseResultMap(false);
+        globalConfig.setBaseResultMap(true);
         // 表中时间类型对应的实体属性类型
         globalConfig.setDateType(DateType.TIME_PACK);
         // xml 中是否生成 通用查询结果列
-        globalConfig.setBaseColumnList(false);
+        globalConfig.setBaseColumnList(true);
         // 全局主键策略 自增、空、手动输入、雪花ID、UUID。。。等（不建议设置，如果是自增则会自动添加注解，其他情况手动指定）
         // globalConfig.setIdType(IdType.AUTO);
 
@@ -108,7 +110,12 @@ public class CodeGenerator {
         TemplateConfig templateConfig = new TemplateConfig();
         // 自定义entity模板路径
         templateConfig.setEntity("mybatis/entity.java");
-        // 关闭生成controller
+        templateConfig.setService("mybatis/service.java");
+        templateConfig.setServiceImpl("mybatis/serviceImpl.java");
+        templateConfig.setMapper("mybatis/mapper.java");
+        templateConfig.setXml("mybatis/mapper.xml");
+        templateConfig.setController("mybatis/controller.java");
+        // 如果设置为null，则为关闭生成
         // templateConfig.setController(null);
 
         // 6. 自定义配置

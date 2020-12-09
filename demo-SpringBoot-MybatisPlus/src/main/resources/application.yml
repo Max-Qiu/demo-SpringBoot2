@@ -8,7 +8,7 @@ mybatis-plus:
   mapper-locations: classpath*:/com/maxqiu/demo/mapper/xml/**.xml # xml路径
   global-config:
     db-config:
-      id-type: assign_id # 全局主键策略
+      id-type: assign_id # 全局默认主键策略
   configuration:
     map-underscore-to-camel-case: true # 驼峰转下划线（默认）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出

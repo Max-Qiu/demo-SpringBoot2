@@ -1,15 +1,12 @@
 package com.maxqiu.demo.mapper;
 
-import com.maxqiu.demo.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.maxqiu.demo.entity.User;
 
 /**
- * <p>
- *  Mapper 接口
- * </p>
+ * 用户表 Mapper 接口
  *
  * @author Max_Qiu
- * @since 2020-12-08
  */
 public interface UserMapper extends BaseMapper<User> {
 
