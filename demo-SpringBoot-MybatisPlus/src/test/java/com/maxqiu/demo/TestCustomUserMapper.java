@@ -22,7 +22,7 @@ public class TestCustomUserMapper {
     private UserMapper userMapper;
 
     @Test
-    public void customSql() {
+    void customSql() {
         // select * from user WHERE (username LIKE ?)
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.like(User::getUsername, "m");
@@ -31,7 +31,7 @@ public class TestCustomUserMapper {
     }
 
     @Test
-    public void selectMyPage() {
+    void selectMyPage() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // select * from user WHERE (email LIKE ?) LIMIT ?
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();

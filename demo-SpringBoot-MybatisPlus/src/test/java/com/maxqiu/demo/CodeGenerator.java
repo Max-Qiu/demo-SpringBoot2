@@ -24,7 +24,7 @@ public class CodeGenerator {
      * 代码生成 示例代码
      */
     @Test
-    public void generator() {
+    void generator() {
         // 1. 数据源配置
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         // 数据库类型

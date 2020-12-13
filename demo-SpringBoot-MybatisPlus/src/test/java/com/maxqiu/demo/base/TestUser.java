@@ -1,4 +1,4 @@
-package com.maxqiu.demo;
+package com.maxqiu.demo.base;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import com.maxqiu.demo.entity.User;
 @SpringBootTest
 public class TestUser {
     @Test
-    public void insert() {
+    void insert() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         User user = new User();
         // 若设置了ID，则会使用指定的ID
@@ -30,7 +30,7 @@ public class TestUser {
     }
 
     @Test
-    public void insertOrUpdate() {
+    void insertOrUpdate() {
         // 先查询有没有，没有则插入
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         // INSERT INTO smp_user ( id, username ) VALUES ( ?, ? )
@@ -45,14 +45,14 @@ public class TestUser {
     }
 
     @Test
-    public void deleteById1() {
+    void deleteById1() {
         // DELETE FROM smp_user WHERE id=?
         boolean b = new User().deleteById(123L);
         System.out.println(b);
     }
 
     @Test
-    public void deleteById2() {
+    void deleteById2() {
         // DELETE FROM smp_user WHERE id=?
         User user = new User();
         user.setId(123L);
@@ -61,16 +61,16 @@ public class TestUser {
     }
 
     @Test
-    public void delete() {
+    void delete() {
         // DELETE FROM smp_user WHERE (username = ?)
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(User::getUsername, "max");
         boolean delete = new User().delete(wrapper);
         System.out.println(delete);
     }
 
     @Test
-    public void updateById() {
+    void updateById() {
         // UPDATE smp_user SET username=? WHERE id=?
         User user = new User();
         user.setId(123L);
@@ -80,7 +80,7 @@ public class TestUser {
     }
 
     @Test
-    public void update1() {
+    void update1() {
         // UPDATE smp_user SET email=? WHERE (username = ?)
         // 构造WHERE条件
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
@@ -94,7 +94,7 @@ public class TestUser {
     }
 
     @Test
-    public void update2() {
+    void update2() {
         // UPDATE smp_user SET email=? WHERE username=? AND (username = ?)
         // 构造WHERE条件
         User whereUser = new User();
@@ -109,7 +109,7 @@ public class TestUser {
     }
 
     @Test
-    public void update3() {
+    void update3() {
         // UPDATE smp_user SET age=? WHERE (username = ?)
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper
@@ -122,14 +122,14 @@ public class TestUser {
     }
 
     @Test
-    public void selectAll() {
+    void selectAll() {
         // SELECT id,username,age,email FROM smp_user
         List<User> users = new User().selectAll();
         users.forEach(System.out::println);
     }
 
     @Test
-    public void selectById1() {
+    void selectById1() {
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         User user = new User();
         user.setId(123L);
@@ -139,7 +139,7 @@ public class TestUser {
     }
 
     @Test
-    public void selectById2() {
+    void selectById2() {
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         User user = new User();
         User newUser = user.selectById(123L);
@@ -148,9 +148,9 @@ public class TestUser {
     }
 
     @Test
-    public void selectOne() {
+    void selectOne() {
         // SELECT id,username,age,email FROM smp_user WHERE (age > ? AND age < ?)
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.gt(User::getAge, 50).lt(User::getAge, 100);
         // 慎用！！！除非保证查询后的结果只有一条或者为空，否则会抛出异常 Expected one result (or null) to be returned by selectOne(), but found: 5
         User user = new User().selectOne(queryWrapper);
@@ -158,16 +158,16 @@ public class TestUser {
     }
 
     @Test
-    public void selectCount() {
+    void selectCount() {
         // SELECT COUNT( * ) FROM smp_user WHERE (age > ? AND age < ?)
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.gt(User::getAge, 0).lt(User::getAge, 100);
         int count = new User().selectCount(queryWrapper);
         System.out.println(count);
     }
 
     @Test
-    public void selectList() {
+    void selectList() {
         // SELECT id,username,age,email FROM smp_user
         // 1. 如果有条件，则传一个 wrapper ；
         // 2. 如果无条件，可以直接传 null 或者 Wrappers.emptyWrapper()
@@ -177,7 +177,7 @@ public class TestUser {
     }
 
     @Test
-    public void selectPage() {
+    void selectPage() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?,?
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();

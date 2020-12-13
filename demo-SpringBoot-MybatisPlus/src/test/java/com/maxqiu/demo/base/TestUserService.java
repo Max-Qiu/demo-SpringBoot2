@@ -1,4 +1,4 @@
-package com.maxqiu.demo;
+package com.maxqiu.demo.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +34,10 @@ public class TestUserService {
      * 获取 BaseMapper 对象
      */
     @Test
-    public void getBaseMapper() {
+    void getBaseMapper() {
         BaseMapper<User> baseMapper = userService.getBaseMapper();
-        List<User> userList = baseMapper.selectList(new LambdaQueryWrapper<>());
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        List<User> userList = baseMapper.selectList(wrapper);
         System.out.println(userList);
     }
 
@@ -44,7 +45,7 @@ public class TestUserService {
      * 获取 QueryChainWrapper 对象
      */
     @Test
-    public void query() {
+    void query() {
         QueryChainWrapper<User> query = userService.query();
         List<User> list = query.list();
         list.forEach(System.out::println);
@@ -54,7 +55,7 @@ public class TestUserService {
      * 获取 LambdaQueryChainWrapper 对象
      */
     @Test
-    public void lambdaQuery() {
+    void lambdaQuery() {
         LambdaQueryChainWrapper<User> query = userService.lambdaQuery();
         List<User> list = query.list();
         list.forEach(System.out::println);
@@ -64,7 +65,7 @@ public class TestUserService {
      * 获取 UpdateChainWrapper 对象
      */
     @Test
-    public void update() {
+    void update() {
         UpdateChainWrapper<User> wrapper = userService.update();
         wrapper.eq("username", "max");
         boolean update = wrapper.update(new User().setAge(100));
@@ -75,7 +76,7 @@ public class TestUserService {
      * 获取 LambdaUpdateChainWrapper 对象
      */
     @Test
-    public void lambdaUpdate() {
+    void lambdaUpdate() {
         LambdaUpdateChainWrapper<User> update = userService.lambdaUpdate();
         boolean b = update.eq(User::getAge, 100).update(new User().setAge(88));
         System.out.println(b);
@@ -87,7 +88,7 @@ public class TestUserService {
      * 如果设置ID，则存在相同ID时抛出异常
      */
     @Test
-    public void save() {
+    void save() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         boolean save1 = userService.save(new User().setUsername("Amy").setAge(11));
         System.out.println(save1);
@@ -103,7 +104,7 @@ public class TestUserService {
      * TODO 为啥这个会使用事务
      */
     @Test
-    public void saveOrUpdate() {
+    void saveOrUpdate() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         boolean save1 = userService.saveOrUpdate(new User().setUsername("Amy").setAge(11));
         System.out.println(save1);
@@ -121,7 +122,7 @@ public class TestUserService {
      * 更新或保存，带条件查询
      */
     @Test
-    public void saveOrUpdateWithWrapper() {
+    void saveOrUpdateWithWrapper() {
         // update(entity, updateWrapper) || saveOrUpdate(entity);
         // 先执行 update ，根据update结果执行 saveOrUpdate
 
@@ -149,13 +150,14 @@ public class TestUserService {
      * 遇到相同ID抛出异常
      */
     @Test
-    public void saveBatch() {
+    void saveBatch() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         List<User> userList = new ArrayList<>();
         userList.add(new User().setUsername("max").setAge(12));
         userList.add(new User().setUsername("Tom").setAge(13));
         userList.add(new User().setId(3L).setUsername("张三").setAge(13));
-        userService.saveBatch(userList);
+        boolean b = userService.saveBatch(userList);
+        System.out.println(b);
     }
 
     /**
@@ -164,7 +166,7 @@ public class TestUserService {
      * 并限制每次最大数量
      */
     @Test
-    public void saveBatchAndSetBatchSize() {
+    void saveBatchAndSetBatchSize() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
@@ -173,7 +175,8 @@ public class TestUserService {
         userList.add(new User().setUsername("Tom").setAge(13));
         userList.add(new User().setId(4L).setUsername("张三").setAge(13));
         // 批量插入时，限制单次最大数量
-        userService.saveBatch(userList, 1);
+        boolean b = userService.saveBatch(userList, 1);
+        System.out.println(b);
     }
 
     /**
@@ -186,7 +189,7 @@ public class TestUserService {
      * 如果有ID，则会先检查，再决定执行 INSERT 或 UPDATE
      */
     @Test
-    public void saveOrUpdateBatch() {
+    void saveOrUpdateBatch() {
         List<User> userList = new ArrayList<>();
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         userList.add(new User().setUsername("max").setAge(12));
@@ -206,7 +209,7 @@ public class TestUserService {
      * 同上，且限制数量
      */
     @Test
-    public void saveOrUpdateBatchAndSetBatchSize() {
+    void saveOrUpdateBatchAndSetBatchSize() {
         List<User> userList = new ArrayList<>();
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         userList.add(new User().setUsername("max").setAge(12));
@@ -227,7 +230,7 @@ public class TestUserService {
      * 更新2
      */
     @Test
-    public void updateByWrapper() {
+    void updateByWrapper() {
         // UPDATE smp_user SET username=? WHERE (age = ?)
         boolean update =
             userService.update(new User().setUsername("max"), new LambdaUpdateWrapper<User>().eq(User::getAge, "101"));
@@ -238,7 +241,7 @@ public class TestUserService {
      * 根据ID更新
      */
     @Test
-    public void updateById() {
+    void updateById() {
         // UPDATE smp_user SET username=? WHERE id=?
         boolean b = userService.updateById(new User().setId(8L).setUsername("123"));
         System.out.println(b);
@@ -248,7 +251,7 @@ public class TestUserService {
      * 批量更新ID更新
      */
     @Test
-    public void updateBatchById1() {
+    void updateBatchById1() {
         // UPDATE smp_user SET username=?, age=? WHERE id=?
         List<User> userList = new ArrayList<>();
         userList.add(new User().setId(11L).setUsername("max").setAge(12));
@@ -262,7 +265,7 @@ public class TestUserService {
      * 批量更新ID更新
      */
     @Test
-    public void updateBatchById2() {
+    void updateBatchById2() {
         List<User> userList = new ArrayList<>();
         // UPDATE smp_user SET username=?, age=? WHERE id=?
         userList.add(new User().setId(11L).setUsername("max").setAge(12));
@@ -277,7 +280,7 @@ public class TestUserService {
      * 根据ID删除
      */
     @Test
-    public void removeById() {
+    void removeById() {
         // DELETE FROM smp_user WHERE id=?
         boolean b = userService.removeById(1);
         // 无结果返回 false
@@ -288,7 +291,7 @@ public class TestUserService {
      * 根据ID批量删除
      */
     @Test
-    public void removeByIds() {
+    void removeByIds() {
         // DELETE FROM smp_user WHERE id IN ( ? , ? , ? )
         ArrayList<Integer> integers = new ArrayList<>();
         integers.add(1);
@@ -303,7 +306,7 @@ public class TestUserService {
      * 条件删除
      */
     @Test
-    public void remove() {
+    void remove() {
         // DELETE FROM smp_user WHERE (age = ?)
         boolean remove = userService.remove(new LambdaQueryWrapper<User>().eq(User::getAge, 14));
         System.out.println(remove);
@@ -313,7 +316,7 @@ public class TestUserService {
      * 条件删除（Map）
      */
     @Test
-    public void removeByMap() {
+    void removeByMap() {
         // DELETE FROM smp_user WHERE username = ?
         HashMap<String, Object> map = new HashMap<>();
         map.put("username", "mmm");
@@ -326,7 +329,7 @@ public class TestUserService {
      * 根据ID获取
      */
     @Test
-    public void getById() {
+    void getById() {
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         User one = userService.getById(1);
         System.out.println(one);
@@ -336,7 +339,7 @@ public class TestUserService {
      * 条件查询获取第一个，并设置是否抛出异常
      */
     @Test
-    public void getOne1() {
+    void getOne1() {
         // SELECT id,name,age,email,pid,createtime FROM user WHERE (age > ?)
         // false 查出多个时，仅返回第一个，并日志记录警告
         User one = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getAge, 24), false);
@@ -347,7 +350,7 @@ public class TestUserService {
      * 条件查询获取第一个，多个时抛出异常，即上一个方法的第二个参数为true
      */
     @Test
-    public void getOne2() {
+    void getOne2() {
         // SELECT id,username,age,email FROM smp_user WHERE (age > ?)
         // 查出多个时，抛出异常
         User one = userService.getOne(Wrappers.<User>lambdaQuery().eq(User::getAge, 1000));
@@ -358,19 +361,17 @@ public class TestUserService {
      * 条件查询 Map (仅返回第一条数据)
      */
     @Test
-    public void getMap() {
+    void getMap() {
         // SELECT id,username,age,email FROM smp_user
         Map<String, Object> user = userService.getMap(Wrappers.emptyWrapper());
-        for (String s : user.keySet()) {
-            System.out.println(user.get(s));
-        }
+        System.out.println(user);
     }
 
     /**
      * 获取ID
      */
     @Test
-    public void getObj() {
+    void getObj() {
         Long id = userService.getObj(Wrappers.emptyWrapper(), o -> (Long)o);
         System.out.println(id);
     }
@@ -379,7 +380,7 @@ public class TestUserService {
      * 统计
      */
     @Test
-    public void count() {
+    void count() {
         // SELECT COUNT( * ) FROM smp_user
         int count = userService.count();
         System.out.println(count);
@@ -389,7 +390,7 @@ public class TestUserService {
      * 条件统计
      */
     @Test
-    public void countByWrapper() {
+    void countByWrapper() {
         // SELECT COUNT( * ) FROM smp_user WHERE (username = ?)
         int count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, "m"));
         System.out.println(count);
@@ -399,7 +400,7 @@ public class TestUserService {
      * 无条件查询全部
      */
     @Test
-    public void list() {
+    void list() {
         // SELECT id,username,age,email FROM smp_user
         List<User> list = userService.list();
         list.forEach(System.out::println);
@@ -409,7 +410,7 @@ public class TestUserService {
      * 有条件查询列表
      */
     @Test
-    public void listByWrapper() {
+    void listByWrapper() {
         // SELECT id,username,age,email FROM smp_user WHERE (age = ?)
         List<User> list = userService.list(new LambdaQueryWrapper<User>().eq(User::getAge, 18));
         list.forEach(System.out::println);
@@ -419,7 +420,7 @@ public class TestUserService {
      * 根据多个id查询列表
      */
     @Test
-    public void listByIds() {
+    void listByIds() {
         // SELECT id,username,age,email FROM smp_user WHERE id IN ( ? , ? , ? )
         ArrayList<Integer> integers = new ArrayList<>();
         integers.add(1);
@@ -433,7 +434,7 @@ public class TestUserService {
      * 根据map对象条件查询列表
      */
     @Test
-    public void listByMap() {
+    void listByMap() {
         // SELECT id,username,age,email FROM smp_user WHERE username = ?
         HashMap<String, Object> map = new HashMap<>();
         map.put("username", "mmm");
@@ -445,7 +446,7 @@ public class TestUserService {
      * 无条件查询，返回 List<Map<String, Object>>
      */
     @Test
-    public void listMaps() {
+    void listMaps() {
         // SELECT id,username,age,email FROM smp_user
         List<Map<String, Object>> list = userService.listMaps();
         list.forEach(System.out::println);
@@ -455,7 +456,7 @@ public class TestUserService {
      * 有条件查询，返回 List<Map<String, Object>>
      */
     @Test
-    public void listMapsByWrapper() {
+    void listMapsByWrapper() {
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?)
         List<Map<String, Object>> list = userService.listMaps(new LambdaQueryWrapper<User>().like(User::getEmail, "m"));
         list.forEach(System.out::println);
@@ -465,7 +466,7 @@ public class TestUserService {
      * 无条件查询，返回 List<Object>
      */
     @Test
-    public void listObjs() {
+    void listObjs() {
         // SELECT id,username,age,email FROM smp_user
         List<Object> list = userService.listObjs();
         list.forEach(System.out::println);
@@ -475,7 +476,7 @@ public class TestUserService {
      * 有条件查询，返回 List<Object>
      */
     @Test
-    public void listObjsByWrapper() {
+    void listObjsByWrapper() {
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?)
         List<Object> list = userService.listObjs(new LambdaQueryWrapper<User>().like(User::getEmail, "m"));
         list.forEach(System.out::println);
@@ -485,7 +486,7 @@ public class TestUserService {
      * 无条件查询，返回id集合
      */
     @Test
-    public void listObjs2() {
+    void listObjs2() {
         List<Long> list = userService.listObjs(o -> (Long)o);
         list.forEach(System.out::println);
     }
@@ -494,7 +495,7 @@ public class TestUserService {
      * 有条件查询，返回id集合
      */
     @Test
-    public void listObjs2ByWrapper() {
+    void listObjs2ByWrapper() {
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?)
         List<Long> list = userService.listObjs(new LambdaQueryWrapper<User>().like(User::getEmail, "m"), o -> (Long)o);
         list.forEach(System.out::println);
@@ -504,7 +505,7 @@ public class TestUserService {
      * 分页
      */
     @Test
-    public void page() {
+    void page() {
         // SELECT COUNT(*) FROM smp_user
         // SELECT id,username,age,email FROM smp_user LIMIT ?
         Page<User> page = userService.page(new Page<>(1, 2));
@@ -518,7 +519,7 @@ public class TestUserService {
      * 条件分页
      */
     @Test
-    public void pageByWrapper() {
+    void pageByWrapper() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?
         Page<User> page = userService.page(new Page<>(1, 2), new LambdaQueryWrapper<User>().like(User::getEmail, "m"));
@@ -532,7 +533,7 @@ public class TestUserService {
      * 分页 返回 map
      */
     @Test
-    public void pageMaps() {
+    void pageMaps() {
         // SELECT COUNT(*) FROM smp_user
         // SELECT id,username,age,email FROM smp_user LIMIT ?
         Page<Map<String, Object>> page = userService.pageMaps(new Page<>(1, 2));
@@ -546,7 +547,7 @@ public class TestUserService {
      * 条件分页 返回 map
      */
     @Test
-    public void pageMapsByWrapper() {
+    void pageMapsByWrapper() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?
         Page<Map<String, Object>> page =
