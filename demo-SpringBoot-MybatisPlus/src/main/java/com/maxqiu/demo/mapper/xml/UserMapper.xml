@@ -15,4 +15,13 @@
         id, username, age, email
     </sql>
 
+    <select id="selectAll" resultType="com.maxqiu.demo.entity.User">
+        select *
+        from user ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectUserPage" resultType="com.maxqiu.demo.entity.User">
+        select *
+        from user ${ew.customSqlSegment}
+    </select>
 </mapper>

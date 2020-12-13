@@ -21,6 +21,8 @@ public class TestUser {
     public void insert() {
         // INSERT INTO smp_user ( id, username, age ) VALUES ( ?, ?, ? )
         User user = new User();
+        // 若设置了ID，则会使用指定的ID
+        // user.setId(123L);
         user.setUsername("sssssssss");
         user.setAge(188);
         boolean insert = user.insert();

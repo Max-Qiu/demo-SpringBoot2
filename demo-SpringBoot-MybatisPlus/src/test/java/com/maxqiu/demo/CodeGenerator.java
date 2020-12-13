@@ -61,11 +61,11 @@ public class CodeGenerator {
         // 是否生成serialVersionUID
         strategyConfig.setEntitySerialVersionUID(true);
         // 实体是否为链式模型，即实体可以连续set，例：.setXxx().setXxx();（需关闭lombok）
-        strategyConfig.setChainModel(false);
+        strategyConfig.setChainModel(true);
         // 实体使用lombok
         strategyConfig.setEntityLombokModel(false);
         // 是否移除is前缀
-        // strategyConfig.setEntityBooleanColumnRemoveIsPrefix(false);
+        strategyConfig.setEntityBooleanColumnRemoveIsPrefix(true);
         // 生成Rest风格的Controller
         strategyConfig.setRestControllerStyle(true);
         // 是否生成实体的注解，即每个字段都设置 @TableId/@TableField
