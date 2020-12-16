@@ -73,11 +73,11 @@ public class TestWrappers {
      * 此时实体作为查询条件
      */
     @Test
-    void queryWithEntity1() {
+    void queryWithEntity() {
         // 相同字段的条件查询均会添加进SQL
         // 前一个username=?是实体生成的查询条件
         // 后一个username = ?是eq设置的查询条件
-        // 实例类默认比较条件是相等，字段设置 condition = SqlCondition.xxx 可以进行修改
+        // 实例传入Wrapper时，默认比较条件是相等，实体字段设置 condition = SqlCondition.xxx 可以进行修改
         // 比如：添加 condition = SqlCondition.LIKE 则查询时为 username LIKE CONCAT('%',?,'%')
         // SELECT id,username,age,email FROM smp_user WHERE username=? AND (username = ?)
         User user = new User();
@@ -86,6 +86,54 @@ public class TestWrappers {
         lambdaQueryWrapper.eq(User::getUsername, "tom");
         List<User> list = userMapper.selectList(lambdaQueryWrapper);
         System.out.println(list);
+    }
+
+    /**
+     * 无参 不指定泛型 创建一个 LambdaUpdateWrapper
+     *
+     * 此时需要手动指定泛型
+     */
+    @Test
+    void update() {
+        // UPDATE smp_user SET age=? WHERE (id = ?)
+        User user = new User().setAge(18);
+        LambdaUpdateWrapper<User> updateWrapper = Wrappers.lambdaUpdate();
+        updateWrapper.eq(User::getId, 1);
+        int update = userMapper.update(user, updateWrapper);
+        System.out.println(update);
+    }
+
+    /**
+     * 带参 指定泛型 创建一个 LambdaQueryWrapper
+     */
+    @Test
+    void updateWithClass() {
+        // UPDATE smp_user SET age=? WHERE (id = ?)
+        User user = new User().setAge(18);
+        LambdaUpdateWrapper<User> updateWrapper = Wrappers.lambdaUpdate(User.class);
+        updateWrapper.eq(User::getId, 1);
+        int update = userMapper.update(user, updateWrapper);
+        System.out.println(update);
+    }
+
+    /**
+     * 带参 传入实体 创建一个 LambdaQueryWrapper
+     *
+     * 此时实体作为查询条件
+     */
+    @Test
+    void updateWithEntity() {
+        // 相同字段的条件查询均会添加进SQL
+        // 前一个username=?是实体生成的查询条件
+        // 后一个username = ?是eq设置的查询条件
+        // 实例传入Wrapper时，默认比较条件是相等，实体字段设置 condition = SqlCondition.xxx 可以进行修改
+        // 比如：添加 condition = SqlCondition.LIKE 则查询时为 username LIKE CONCAT('%',?,'%')
+        // UPDATE smp_user SET age=? WHERE username=? AND (username = ?)
+        LambdaUpdateWrapper<User> updateWrapper = Wrappers.lambdaUpdate(new User().setUsername("max"));
+        updateWrapper.eq(User::getUsername, "max");
+        // SET 条件通过实体传入
+        int update = userMapper.update(new User().setAge(18), updateWrapper);
+        System.out.println(update);
     }
 
 }

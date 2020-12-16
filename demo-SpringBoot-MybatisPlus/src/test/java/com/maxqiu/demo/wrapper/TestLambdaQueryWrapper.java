@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.maxqiu.demo.entity.User;
 import com.maxqiu.demo.mapper.UserMapper;
 
@@ -371,5 +373,28 @@ public class TestLambdaQueryWrapper {
         queryWrapper.nested(userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
+    }
+
+    /**
+     * 链式写法，
+     */
+    @Test
+    void testLambdaQueryChainWrapper() {
+        // SELECT id,username,age,email FROM smp_user WHERE (age = ?)
+        List<User> list = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).list();
+        list.forEach(System.out::println);
+
+        // SELECT COUNT(*) FROM smp_user WHERE (age = ?)
+        // SELECT id,username,age,email,create_time FROM smp_user WHERE (age = ?) LIMIT ?
+        Page<User> page = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).page(new Page<>(1, 10));
+        System.out.println(page.getTotal());
+
+        // SELECT COUNT( * ) FROM smp_user WHERE (age = ?)
+        Integer count = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).count();
+        System.out.println(count);
+
+        // SELECT id,username,age,email,create_time FROM smp_user WHERE (age = ?)
+        User one = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).one();
+        System.out.println(one);
     }
 }
