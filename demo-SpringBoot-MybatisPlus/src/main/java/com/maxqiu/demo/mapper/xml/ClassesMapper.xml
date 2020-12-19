@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxqiu.demo.mapper.ClassesMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.maxqiu.demo.entity.Classes">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <resultMap id="classesStudentMap" type="com.maxqiu.demo.model.ClassesStudent">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="create_time" property="createTime"/>
+        <collection property="studentList" ofType="com.maxqiu.demo.entity.Student" columnPrefix="s_">
+            <id column="id" property="id"/>
+            <result column="name" property="name"/>
+            <result column="create_time" property="createTime"/>
+            <result column="classes_id" property="classesId"/>
+        </collection>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, `name`, create_time
+    </sql>
+
+    <select id="classesStudentPage" resultMap="classesStudentMap">
+        SELECT c.id,
+        c.`name`,
+        c.create_time,
+        s.id 's_id',
+        s.`name` 's_name',
+        s.create_time 's_create_time',
+        s.classes_id 's_classes_id'
+        FROM smp_classes c
+        LEFT JOIN smp_student s ON c.id = s.classes_id
+        <where>
+            <if test="map.classesName != null">
+                AND c.`name` = #{map.classesName}
+            </if>
+            <if test="map.studentName != null">
+                AND s.`name` = #{map.studentName}
+            </if>
+        </where>
+    </select>
+
+</mapper>

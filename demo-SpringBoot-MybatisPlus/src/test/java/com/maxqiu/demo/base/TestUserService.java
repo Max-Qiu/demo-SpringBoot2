@@ -22,6 +22,8 @@ import com.maxqiu.demo.entity.User;
 import com.maxqiu.demo.service.IUserService;
 
 /**
+ * 测试 Service 层
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest

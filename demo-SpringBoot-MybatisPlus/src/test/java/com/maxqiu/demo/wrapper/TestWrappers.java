@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.maxqiu.demo.entity.User;
 import com.maxqiu.demo.mapper.UserMapper;
 
@@ -33,14 +35,19 @@ public class TestWrappers {
         QueryWrapper<User> queryWrapper2 = Wrappers.query(new User());
         // 创建一个支持Lambda语法查询构造器（推荐，详细区别见下方代码）
         LambdaQueryWrapper<User> lambdaQueryWrapper1 = Wrappers.lambdaQuery();
+        // 如果不使用对象接收直接链式...写法，可以使用下面这种写法设置泛型
+        Wrappers.<User>lambdaQuery();
         LambdaQueryWrapper<User> lambdaQueryWrapper3 = Wrappers.lambdaQuery(User.class);
-        LambdaQueryWrapper<User> lambdaQueryWrapper2 = Wrappers.lambdaQuery(new User());
+        LambdaQueryWrapper<User> lambdaQueryWrapper4 = Wrappers.lambdaQuery(new User());
+        // 创建一个支持Lambda语法且支持链式写法的查询构造器
+        LambdaQueryChainWrapper<User> lambdaQueryChainWrapper = new LambdaQueryChainWrapper<>(userMapper);
 
         UpdateWrapper<User> updateWrapper1 = Wrappers.update();
         UpdateWrapper<User> updateWrapper2 = Wrappers.update(new User());
         LambdaUpdateWrapper<User> lambdaUpdateWrapper1 = Wrappers.lambdaUpdate();
         LambdaUpdateWrapper<User> lambdaUpdateWrapper2 = Wrappers.lambdaUpdate(new User());
         LambdaUpdateWrapper<User> lambdaUpdateWrapper3 = Wrappers.lambdaUpdate(User.class);
+        LambdaUpdateChainWrapper<User> lambdaUpdateChainWrapper = new LambdaUpdateChainWrapper<>(userMapper);
     }
 
     /**
@@ -70,7 +77,7 @@ public class TestWrappers {
     /**
      * 带参 传入实体 创建一个 LambdaQueryWrapper
      * 
-     * 此时实体作为查询条件
+     * 此时 传入实体 作为查询条件
      */
     @Test
     void queryWithEntity() {
@@ -119,7 +126,7 @@ public class TestWrappers {
     /**
      * 带参 传入实体 创建一个 LambdaQueryWrapper
      *
-     * 此时实体作为查询条件
+     * 此时 传入实体 作为查询条件
      */
     @Test
     void updateWithEntity() {

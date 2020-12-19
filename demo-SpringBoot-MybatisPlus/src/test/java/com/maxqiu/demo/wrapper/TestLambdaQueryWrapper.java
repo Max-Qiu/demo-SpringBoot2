@@ -36,13 +36,15 @@ public class TestLambdaQueryWrapper {
     // 3. 使用 new QueryWrapper<User>().lambda(); （太繁琐了，不推荐）
     LambdaQueryWrapper<User> lambdaQueryWrapper3 = new QueryWrapper<User>().lambda();
 
+    // groupBy having 见 TestOther
+
     /**
      * 选择部分字段进行查询
      * 
      * 仅 LambdaQueryWrapper 和 QueryWrapper 有 select() 方法
      */
     @Test
-    void select1() {
+    void testSelect1() {
         // SELECT id,username FROM user
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(User::getId, User::getUsername);
@@ -56,12 +58,32 @@ public class TestLambdaQueryWrapper {
      * 仅 LambdaQueryWrapper 和 QueryWrapper 有 select() 方法
      */
     @Test
-    void select2() {
+    void testSelect2() {
         // SELECT id,age,email FROM user
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.select(User.class, tableFieldInfo -> !tableFieldInfo.getColumn().equals("username"));
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
+    }
+
+    /**
+     * 使用 select 查询最大id
+     */
+    @Test
+    public void testSelectMaxId() {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.select("max(id) as id");
+        User user = userMapper.selectOne(wrapper);
+        System.out.println("maxId=" + user.getId());
+    }
+
+    // TODO
+    @Test
+    public void testTableFieldExistFalse() {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.select("age, count(age) as count").groupBy("age");
+        List<User> list = userMapper.selectList(wrapper);
+        list.forEach(System.out::println);
     }
 
     /**
@@ -239,20 +261,6 @@ public class TestLambdaQueryWrapper {
     }
 
     /**
-     * TODO 需要详细研究
-     */
-    @Test
-    void testGroupByHaving() {
-        // SELECT age FROM smp_user GROUP BY age HAVING sum(age) < ?
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(User::getAge);
-        queryWrapper.groupBy(User::getAge);
-        queryWrapper.having("sum(age) < {0}", 500);
-        List<User> users = userMapper.selectList(queryWrapper);
-        users.forEach(System.out::println);
-    }
-
-    /**
      * and 且
      * 
      * or 或者
@@ -288,7 +296,7 @@ public class TestLambdaQueryWrapper {
     }
 
     @Test
-    void allEq() {
+    void testAllEq() {
         // SELECT id,username,age,email FROM smp_user WHERE (username = ? AND age = ?)
         Map<SFunction<User, ?>, Object> map = new HashMap<>();
         map.put(User::getUsername, "max");
@@ -302,7 +310,7 @@ public class TestLambdaQueryWrapper {
     }
 
     @Test
-    void allEqWithNullCheck() {
+    void testAllEqWithNullCheck() {
         // SELECT id,username,age,email FROM smp_user WHERE (username = ?)
         Map<SFunction<User, ?>, Object> map = new HashMap<>();
         map.put(User::getUsername, "max");
@@ -315,7 +323,7 @@ public class TestLambdaQueryWrapper {
     }
 
     @Test
-    void allEq2() {
+    void testAllEq2() {
         // SELECT id,username,age,email FROM user WHERE (age IS NULL)
         Map<SFunction<User, ?>, Object> map = new HashMap<>();
         map.put(User::getUsername, "max");
@@ -333,7 +341,7 @@ public class TestLambdaQueryWrapper {
     }
 
     @Test
-    void allEq3() {
+    void testAllEq3() {
         // SELECT id,username,age,email FROM user WHERE (username = ?)
         Map<SFunction<User, ?>, Object> map = new HashMap<>();
         map.put(User::getUsername, "max");
@@ -345,32 +353,40 @@ public class TestLambdaQueryWrapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 嵌套
+     */
     @Test
-    public void apply() {
-        // TODO 待完善
-        // SELECT id,name,age,email,pid,createtime FROM user WHERE (date_format(createtime,'%Y-%m-%d') >= ?)
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.apply("date_format(createtime,'%Y-%m-%d') >= {0}", "2020-01-01");
+    public void testNested() {
+        // SELECT id,username,age,email FROM smp_user
+        // WHERE (
+        // (age = ? OR age = ?)
+        // AND (age >= ?)
+        // )
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.nested(i -> i.eq(User::getAge, 2L).or().eq(User::getAge, 3L));
+        queryWrapper.and(i -> i.ge(User::getAge, 20));
+        List<User> users = userMapper.selectList(queryWrapper);
+        users.forEach(System.out::println);
+    }
+
+    /**
+     * 自定义SQL
+     */
+    @Test
+    public void testApply() {
+        // SELECT id,username,age,email FROM smp_user WHERE (age > ?)
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.apply("age > {0}", "1");
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
 
     @Test
-    public void func() {
+    public void testFunc() {
         // TODO 待完善
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.func(false, userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
-        List<User> users = userMapper.selectList(queryWrapper);
-        users.forEach(System.out::println);
-    }
-
-    @Test
-    public void nested() {
-        // TODO 待完善
-        // SELECT id,username,age,email FROM smp_user WHERE (email = ? AND (age = ?))
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getEmail, "m");
-        queryWrapper.nested(userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }

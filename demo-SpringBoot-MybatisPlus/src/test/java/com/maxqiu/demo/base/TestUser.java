@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.maxqiu.demo.entity.User;
 
 /**
+ * 测试 Entity 层 / 测试 AR 模式
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest

@@ -16,6 +16,31 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `smp_test_delete`
+--
+
+DROP TABLE IF EXISTS `smp_test_delete`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `smp_test_delete` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `username` varchar(255) DEFAULT NULL COMMENT '名称',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `smp_test_delete`
+--
+
+LOCK TABLES `smp_test_delete` WRITE;
+/*!40000 ALTER TABLE `smp_test_delete` DISABLE KEYS */;
+INSERT INTO `smp_test_delete` VALUES (1,'张三',_binary '\0'),(2,'李四',_binary ''),(3,'王五',_binary '\0'),(4,'赵六',_binary '\0');
+/*!40000 ALTER TABLE `smp_test_delete` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `smp_test_exclude`
 --
 
@@ -47,7 +72,7 @@ DROP TABLE IF EXISTS `smp_user`;
 CREATE TABLE `smp_user` (
   `id` bigint(20) NOT NULL COMMENT '主键ID',
   `username` varchar(30) DEFAULT NULL COMMENT '姓名',
-  `age` int(11) DEFAULT NULL COMMENT '年龄',
+  `age` tinyint(4) unsigned DEFAULT NULL COMMENT '年龄',
   `email` varchar(50) DEFAULT NULL COMMENT '邮箱',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
@@ -72,4 +97,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-13  8:57:56
+-- Dump completed on 2020-12-17 11:39:05

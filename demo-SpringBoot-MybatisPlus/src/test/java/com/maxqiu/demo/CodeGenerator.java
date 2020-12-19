@@ -114,7 +114,7 @@ public class CodeGenerator {
         templateConfig.setServiceImpl("mybatis/serviceImpl.java");
         templateConfig.setMapper("mybatis/mapper.java");
         templateConfig.setXml("mybatis/mapper.xml");
-        templateConfig.setController("mybatis/controller.java");
+        templateConfig.setController(null);
         // 如果设置为null，则为关闭生成
         // templateConfig.setController(null);
 

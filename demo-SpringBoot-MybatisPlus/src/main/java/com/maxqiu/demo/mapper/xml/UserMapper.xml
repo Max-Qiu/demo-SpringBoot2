@@ -15,13 +15,57 @@
         id, username, age, email
     </sql>
 
-    <select id="selectAll" resultType="com.maxqiu.demo.entity.User">
-        select *
-        from user ${ew.customSqlSegment}
+    <select id="rowBoundList" resultType="com.maxqiu.demo.entity.User">
+        select * from smp_user
+        <where>
+            <if test="username!=null and username!=''">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
     </select>
 
-    <select id="selectUserPage" resultType="com.maxqiu.demo.entity.User">
+    <select id="selectMap" resultType="com.maxqiu.demo.entity.User">
+        select * from smp_user
+        <where>
+            <if test="username!=null and username!=''">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectListByXml" resultType="com.maxqiu.demo.entity.User">
         select *
-        from user ${ew.customSqlSegment}
+        from smp_user ${ew.customSqlSegment}
+    </select>
+
+    <select id="selectPageByXml" resultType="com.maxqiu.demo.entity.User">
+        select *
+        from smp_user ${ew.customSqlSegment}
+    </select>
+
+
+    <select id="myPage" resultType="com.maxqiu.demo.entity.User">
+        select * from smp_user
+        <where>
+            <if test="username!=null and username!=''">
+                username like concat('%',#{username},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="myPageMap" resultType="com.maxqiu.demo.entity.User">
+        select * from smp_user
+        <where>
+            <if test="map.username!=null and map.username!=''">
+                username like concat('%',#{map.username},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="mySelectPage" resultType="com.maxqiu.demo.entity.User">
+        select *
+        from smp_user
+        where (age = #{pg.selectInt} and username = #{pg.selectStr})
+           or (age = #{ps.yihao} and username = #{ps.erhao})
     </select>
 </mapper>

@@ -13,12 +13,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.maxqiu.demo.entity.User;
 import com.maxqiu.demo.mapper.UserMapper;
 
 /**
+ * 测试 DAO 层
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -26,6 +27,9 @@ public class TestUserMapper {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * 插入
+     */
     @Test
     void insert() {
         // INSERT INTO smp_user ( id, age ) VALUES ( ?, ? )
@@ -37,6 +41,9 @@ public class TestUserMapper {
         System.out.println(insert);
     }
 
+    /**
+     * 根据id删除
+     */
     @Test
     void deleteById() {
         // DELETE FROM smp_user WHERE id=?
@@ -44,6 +51,9 @@ public class TestUserMapper {
         System.out.println(i);
     }
 
+    /**
+     * 根据id批量删除
+     */
     @Test
     void deleteBatchIds() {
         // DELETE FROM smp_user WHERE id IN ( ? , ? , ? )
@@ -51,6 +61,21 @@ public class TestUserMapper {
         System.out.println(i);
     }
 
+    /**
+     * 条件删除
+     */
+    @Test
+    void delete() {
+        // DELETE FROM smp_user WHERE (age = ?)
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(User::getAge, 18);
+        int delete = userMapper.delete(wrapper);
+        System.out.println(delete);
+    }
+
+    /**
+     * 条件删除（条件为map对象）
+     */
     @Test
     void deleteByMap() {
         // DELETE FROM smp_user WHERE username = ? AND age = ?
@@ -62,15 +87,9 @@ public class TestUserMapper {
         System.out.println(users);
     }
 
-    @Test
-    void delete() {
-        // DELETE FROM smp_user WHERE (age = ?)
-        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.eq(User::getAge, 18);
-        int delete = userMapper.delete(wrapper);
-        System.out.println(delete);
-    }
-
+    /**
+     * 根据id更新
+     */
     @Test
     void updateById() {
         // UPDATE smp_user SET username=?, email=? WHERE id=?
@@ -82,61 +101,25 @@ public class TestUserMapper {
         System.out.println("影响记录数：" + i);
     }
 
+    /**
+     * 条件更新
+     */
     @Test
-    void update1() {
+    void update() {
         // UPDATE smp_user SET email=? WHERE (username = ?)
         // 构造WHERE条件
         LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(User::getUsername, "xxxxxx");
         // 构造 SET 值
-        User user = new User();
-        user.setEmail("123@126.com");
+        User user = new User().setEmail("123@126.com");
         int i = userMapper.update(user, wrapper);
         System.out.println("影响记录数：" + i);
 
     }
 
-    @Test
-    void update2() {
-        // UPDATE smp_user SET email=? WHERE username=? AND (username = ?)
-        // 构造WHERE条件
-        User whereUser = new User();
-        whereUser.setUsername("xxxxxx");
-        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>(whereUser);
-        wrapper.eq(User::getUsername, "xxxxxx");
-        // 构造 SET 值
-        User user = new User();
-        user.setEmail("123@126.com");
-        int i = userMapper.update(user, wrapper);
-        System.out.println("影响记录数：" + i);
-    }
-
-    @Test
-    void update3() {
-        // UPDATE smp_user SET age=? WHERE (username = ?)
-        LambdaUpdateWrapper<User> wrapper = new LambdaUpdateWrapper<>();
-        wrapper
-            // 构造WHERE条件
-            .eq(User::getUsername, "xxxxxx")
-            // 构造 SET 值
-            .set(User::getAge, 88);
-        int i = userMapper.update(null, wrapper);
-        System.out.println("影响记录数：" + i);
-    }
-
-    @Test
-    void update4() {
-        // UPDATE smp_user SET email=? WHERE (id = ?)
-        boolean update = new LambdaUpdateChainWrapper<>(userMapper)
-            // 构造WHERE条件
-            .eq(User::getId, "123")
-            // 构造 SET 值
-            .set(User::getEmail, "456@126.com")
-            // 执行
-            .update();
-        System.out.println("更新是否成功" + update);
-    }
-
+    /**
+     * 根据id查找一个
+     */
     @Test
     void selectById() {
         // SELECT id,username,age,email FROM smp_user WHERE id=?
@@ -144,6 +127,22 @@ public class TestUserMapper {
         System.out.println(user);
     }
 
+    /**
+     * 根据条件查找一个
+     */
+    @Test
+    void selectOne() {
+        // SELECT id,username,age,email FROM smp_user WHERE (age > ? AND age < ?)
+        LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.gt(User::getAge, 50).lt(User::getAge, 100);
+        // 慎用！！！除非保证查询后的结果只有一条或者为空，否则会抛出异常 Expected one result (or null) to be returned by selectOne(), but found: 5
+        User user = userMapper.selectOne(queryWrapper);
+        System.out.println(user);
+    }
+
+    /**
+     * 根据id批量查找
+     */
     @Test
     void selectBatchIds() {
         // SELECT id,username,age,email FROM smp_user WHERE id IN ( ? , ? )
@@ -151,6 +150,22 @@ public class TestUserMapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 条件查询
+     */
+    @Test
+    void selectList() {
+        // SELECT id,username,age,email FROM smp_user
+        // 1. 如果有条件，则传一个 wrapper ；
+        // 2. 如果无条件，可以直接传 null 或者 Wrappers.emptyWrapper()
+        // List<User> users = userMapper.selectList(null);
+        List<User> users = userMapper.selectList(Wrappers.emptyWrapper());
+        users.forEach(System.out::println);
+    }
+
+    /**
+     * 条件查询（条件为map）
+     */
     @Test
     void selectByMap() {
         // SELECT id,username,age,email FROM smp_user WHERE username = ? AND age = ?
@@ -162,16 +177,9 @@ public class TestUserMapper {
         users.forEach(System.out::println);
     }
 
-    @Test
-    void selectOne() {
-        // SELECT id,username,age,email FROM smp_user WHERE (age > ? AND age < ?)
-        LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.gt(User::getAge, 50).lt(User::getAge, 100);
-        // 慎用！！！除非保证查询后的结果只有一条或者为空，否则会抛出异常 Expected one result (or null) to be returned by selectOne(), but found: 5
-        User user = userMapper.selectOne(queryWrapper);
-        System.out.println(user);
-    }
-
+    /**
+     * 统计查询
+     */
     @Test
     void selectCount() {
         // SELECT COUNT( * ) FROM smp_user WHERE (age > ? AND age < ?)
@@ -181,16 +189,9 @@ public class TestUserMapper {
         System.out.println(count);
     }
 
-    @Test
-    void selectList() {
-        // SELECT id,username,age,email FROM smp_user
-        // 1. 如果有条件，则传一个 wrapper ；
-        // 2. 如果无条件，可以直接传 null 或者 Wrappers.emptyWrapper()
-        // List<User> users = userMapper.selectList(null);
-        List<User> users = userMapper.selectList(Wrappers.emptyWrapper());
-        users.forEach(System.out::println);
-    }
-
+    /**
+     * 条件查询（返回为map）
+     */
     @Test
     void selectMap() {
         // SELECT id,username,age,email FROM smp_user
@@ -198,6 +199,9 @@ public class TestUserMapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 条件查询（返回为Object）
+     */
     @Test
     void selectObjs() {
         // SELECT id,username,age,email FROM smp_user
@@ -207,44 +211,40 @@ public class TestUserMapper {
         }
     }
 
+    /**
+     * 分页查询
+     * 
+     * 更多分页示例参照 TestPage
+     */
     @Test
     void selectPage() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?,?
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.like(User::getEmail, "m");
-        Page<User> page = new Page<>(2, 1);
-        IPage<User> userPage = userMapper.selectPage(page, wrapper);
-        System.out.println("总页数" + userPage.getPages());
-        System.out.println("总记录数" + userPage.getTotal());
-        List<User> users = userPage.getRecords();
+        Page<User> page = new Page<>(2, 2);
+        // 直接传入，无需接收返回值，返回值自动存入 page
+        userMapper.selectPage(page, wrapper);
+        System.out.println("总页数" + page.getPages());
+        System.out.println("总记录数" + page.getTotal());
+        List<User> users = page.getRecords();
         users.forEach(System.out::println);
     }
 
+    /**
+     * 分页查询（返回map）
+     */
     @Test
     void selectMapPage() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?,?
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.like(User::getEmail, "m");
-        IPage<Map<String, Object>> page = new Page<>(2, 1);
-        IPage<Map<String, Object>> userPage = userMapper.selectMapsPage(page, wrapper);
-        System.out.println("总页数" + userPage.getPages());
-        System.out.println("总记录数" + userPage.getTotal());
-        List<Map<String, Object>> users = userPage.getRecords();
-        users.forEach(System.out::println);
-    }
-
-    @Test
-    void selectMapPage2() {
-        // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?,?
-        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(User::getEmail, "m");
-        IPage<Map<String, Object>> page = new Page<>(2, 1, false);
-        IPage<Map<String, Object>> userPage = userMapper.selectMapsPage(page, wrapper);
-        System.out.println("总页数" + userPage.getPages());
-        System.out.println("总记录数" + userPage.getTotal());
-        List<Map<String, Object>> users = userPage.getRecords();
+        IPage<Map<String, Object>> page = new Page<>(1, 2);
+        userMapper.selectMapsPage(page, wrapper);
+        System.out.println("总页数" + page.getPages());
+        System.out.println("总记录数" + page.getTotal());
+        List<Map<String, Object>> users = page.getRecords();
         users.forEach(System.out::println);
     }
 }

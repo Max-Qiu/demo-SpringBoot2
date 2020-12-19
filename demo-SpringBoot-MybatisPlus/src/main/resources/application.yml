@@ -1,14 +1,19 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
-    url: jdbc:mysql://127.0.0.1:3306/smp?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8 #连接地址
+    #    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
+    #    url: jdbc:mysql://127.0.0.1:3306/smp?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8 # 连接地址
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver # 使用性能分析器
+    url: jdbc:p6spy:mysql://127.0.0.1:3306/smp?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8 # 使用 性能分析器的 连接地址
     username: root # 用户名
     password: 123 #密码
 mybatis-plus:
   mapper-locations: classpath*:/com/maxqiu/demo/mapper/xml/**.xml # xml路径
   global-config:
     db-config:
-      id-type: assign_id # 全局默认主键策略
+      id-type: ASSIGN_ID # 全局默认主键策略，默认为雪花ID，若表中设置了自增，则生成的实体自动添加自增ID属性，参考 TestDelete
+      logic-delete-field: deleted # 全局逻辑删除的实体字段名，若不配置，则不启用
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   configuration:
     map-underscore-to-camel-case: true # 驼峰转下划线（默认）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出
