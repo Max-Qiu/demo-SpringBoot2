@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.maxqiu.demo.entity.AutoFill;
 
 /**
- *  Mapper 接口
+ * 自动插入 Mapper 接口
  *
  * @author Max_Qiu
  */

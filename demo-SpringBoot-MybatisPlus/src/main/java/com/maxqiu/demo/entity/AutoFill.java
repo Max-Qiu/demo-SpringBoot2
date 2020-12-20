@@ -3,6 +3,7 @@ package com.maxqiu.demo.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,7 +11,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 /**
- * 
+ * 自动插入
  *
  * @author Max_Qiu
  */
@@ -86,7 +87,6 @@ public class AutoFill extends Model<AutoFill> {
 
     @Override
     public String toString() {
-        return "AutoFill{" + "id=" + id + ", name=" + name + ", createTime=" + createTime + ", updateTime=" + updateTime
-            + "}";
+        return JSON.toJSONString(this);
     }
 }

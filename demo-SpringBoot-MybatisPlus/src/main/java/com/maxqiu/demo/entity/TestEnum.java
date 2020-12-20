@@ -2,6 +2,7 @@ package com.maxqiu.demo.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,7 +11,7 @@ import com.maxqiu.demo.enums.GenderEnum;
 import com.maxqiu.demo.enums.StateEnum;
 
 /**
- * 
+ * 枚举
  *
  * @author Max_Qiu
  */
@@ -71,6 +72,6 @@ public class TestEnum extends Model<TestEnum> {
 
     @Override
     public String toString() {
-        return "TestEnum{" + "id=" + id + ", gender=" + gender + ", state=" + state + "} ";
+        return JSON.toJSONString(this);
     }
 }

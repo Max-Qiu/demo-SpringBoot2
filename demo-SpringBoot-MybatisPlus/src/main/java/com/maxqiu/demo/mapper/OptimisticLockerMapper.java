@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.maxqiu.demo.entity.OptimisticLocker;
 
 /**
- *  Mapper 接口
+ * 乐观锁 Mapper 接口
  *
  * @author Max_Qiu
  */

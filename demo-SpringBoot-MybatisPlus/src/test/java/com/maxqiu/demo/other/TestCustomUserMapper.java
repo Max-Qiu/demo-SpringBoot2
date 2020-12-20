@@ -26,12 +26,17 @@ public class TestCustomUserMapper {
     @Autowired
     private UserMapper userMapper;
 
+    /**
+     * MyBatis 自带分页（逻辑分页）
+     */
     @Test
     void rowBoundsTest() {
-        // TODO 待完善
-        // select * from smp_user WHERE username like concat('%',?,'%')
+        // 设置分页条件，offset 代表第 i+1 条数据，limit 代表取几条。如下示例中，取第二条数据，共取 5 条
         RowBounds rowBounds = new RowBounds(1, 5);
+        // select * from smp_user WHERE username like concat('%',?,'%')
         List<User> users = userMapper.rowBoundList(rowBounds, Maps.newHashMap("username", "%"));
+        // 虽然 select * 查出了 2 条数据，但是集合中仅一条数据，因为分页设置从第二条数据开始取
+        System.out.println(users.size());
         users.forEach(System.out::println);
     }
 

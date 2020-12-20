@@ -2,6 +2,7 @@ package com.maxqiu.demo.entity;
 
 import java.io.Serializable;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -9,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 /**
- * 
+ * 乐观锁
  *
  * @author Max_Qiu
  */
@@ -71,6 +72,6 @@ public class OptimisticLocker extends Model<OptimisticLocker> {
 
     @Override
     public String toString() {
-        return "OptimisticLocker{" + "id=" + id + ", name=" + name + ", version=" + version + "}";
+        return JSON.toJSONString(this);
     }
 }

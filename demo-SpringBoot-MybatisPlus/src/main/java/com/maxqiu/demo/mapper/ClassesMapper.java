@@ -8,7 +8,7 @@ import com.maxqiu.demo.entity.Classes;
 import com.maxqiu.demo.model.ClassesStudent;
 
 /**
- * Mapper 接口
+ * 班级表 Mapper 接口
  *
  * @author Max_Qiu
  */

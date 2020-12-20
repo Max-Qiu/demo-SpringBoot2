@@ -28,7 +28,7 @@ CREATE TABLE `smp_auto_fill` (
   `create_time` datetime(6) NOT NULL COMMENT '创建时间',
   `update_time` datetime(6) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='自动插入';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -52,7 +52,7 @@ CREATE TABLE `smp_classes` (
   `name` varchar(255) NOT NULL COMMENT '班级名称',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='班级表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,7 +77,7 @@ CREATE TABLE `smp_logic_delete` (
   `username` varchar(255) DEFAULT NULL COMMENT '名称',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COMMENT='逻辑删除';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `smp_optimistic_locker` (
   `name` varchar(255) NOT NULL COMMENT '测试字段',
   `version` bigint(255) unsigned NOT NULL COMMENT '版本',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='乐观锁';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +128,7 @@ CREATE TABLE `smp_student` (
   `classes_id` bigint(20) unsigned NOT NULL COMMENT '班级id',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='学生表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -142,6 +142,30 @@ INSERT INTO `smp_student` VALUES (1,'张三',1,'2020-12-18 23:17:22'),(2,'李四
 UNLOCK TABLES;
 
 --
+-- Table structure for table `smp_test_enum`
+--
+
+DROP TABLE IF EXISTS `smp_test_enum`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `smp_test_enum` (
+  `id` bigint(20) NOT NULL COMMENT '主键id',
+  `gender` tinyint(4) NOT NULL COMMENT '性别',
+  `state` tinyint(4) NOT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='枚举';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `smp_test_enum`
+--
+
+LOCK TABLES `smp_test_enum` WRITE;
+/*!40000 ALTER TABLE `smp_test_enum` DISABLE KEYS */;
+/*!40000 ALTER TABLE `smp_test_enum` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `smp_test_exclude`
 --
 
@@ -150,7 +174,7 @@ DROP TABLE IF EXISTS `smp_test_exclude`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `smp_test_exclude` (
   `test_id` varchar(255) NOT NULL COMMENT '测试字段'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='被排除的表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,4 +222,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-20  9:41:59
+-- Dump completed on 2020-12-20 15:11:41

@@ -8,7 +8,7 @@ import com.maxqiu.demo.mapper.ClassesMapper;
 import com.maxqiu.demo.service.IClassesService;
 
 /**
- *  服务实现类
+ * 班级表 服务实现类
  *
  * @author Max_Qiu
  */

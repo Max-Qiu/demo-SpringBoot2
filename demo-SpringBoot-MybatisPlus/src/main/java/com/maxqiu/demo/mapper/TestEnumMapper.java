@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.maxqiu.demo.entity.TestEnum;
 
 /**
- *  Mapper 接口
+ * 枚举 Mapper 接口
  *
  * @author Max_Qiu
  */

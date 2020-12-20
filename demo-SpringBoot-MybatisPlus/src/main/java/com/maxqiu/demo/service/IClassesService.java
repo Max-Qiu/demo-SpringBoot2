@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.maxqiu.demo.entity.Classes;
 
 /**
- *  服务类
+ * 班级表 服务类
  *
  * @author Max_Qiu
  */

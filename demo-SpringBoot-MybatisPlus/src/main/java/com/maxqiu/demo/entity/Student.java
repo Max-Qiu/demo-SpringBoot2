@@ -3,6 +3,7 @@ package com.maxqiu.demo.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -10,7 +11,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
 /**
- * 
+ * 学生表
  *
  * @author Max_Qiu
  */
@@ -97,7 +98,6 @@ public class Student extends Model<Student> {
 
     @Override
     public String toString() {
-        return "Student{" + "id=" + id + ", name='" + name + '\'' + ", classesId=" + classesId + ", createTime="
-            + createTime + ", count=" + count + "} " + super.toString();
+        return JSON.toJSONString(this);
     }
 }

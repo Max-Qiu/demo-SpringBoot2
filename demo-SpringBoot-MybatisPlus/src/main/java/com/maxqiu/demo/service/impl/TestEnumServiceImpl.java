@@ -8,7 +8,7 @@ import com.maxqiu.demo.mapper.TestEnumMapper;
 import com.maxqiu.demo.service.ITestEnumService;
 
 /**
- *  服务实现类
+ * 枚举 服务实现类
  *
  * @author Max_Qiu
  */

@@ -8,7 +8,7 @@ import com.maxqiu.demo.mapper.LogicDeleteMapper;
 import com.maxqiu.demo.service.ILogicDeleteService;
 
 /**
- * 服务实现类
+ * 逻辑删除 服务实现类
  *
  * @author Max_Qiu
  */

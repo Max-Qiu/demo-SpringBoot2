@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.maxqiu.demo.entity.TestEnum;
 
 /**
- *  服务类
+ * 枚举 服务类
  *
  * @author Max_Qiu
  */

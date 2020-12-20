@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.maxqiu.demo.entity.AutoFill;
 
 /**
- *  服务类
+ * 自动插入 服务类
  *
  * @author Max_Qiu
  */

@@ -8,7 +8,7 @@ import com.maxqiu.demo.mapper.AutoFillMapper;
 import com.maxqiu.demo.service.IAutoFillService;
 
 /**
- *  服务实现类
+ * 自动插入 服务实现类
  *
  * @author Max_Qiu
  */

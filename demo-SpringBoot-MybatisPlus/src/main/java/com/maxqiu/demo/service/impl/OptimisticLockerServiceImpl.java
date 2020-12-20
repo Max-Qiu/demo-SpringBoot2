@@ -8,11 +8,12 @@ import com.maxqiu.demo.mapper.OptimisticLockerMapper;
 import com.maxqiu.demo.service.IOptimisticLockerService;
 
 /**
- *  服务实现类
+ * 乐观锁 服务实现类
  *
  * @author Max_Qiu
  */
 @Service
-public class OptimisticLockerServiceImpl extends ServiceImpl<OptimisticLockerMapper, OptimisticLocker> implements IOptimisticLockerService {
+public class OptimisticLockerServiceImpl extends ServiceImpl<OptimisticLockerMapper, OptimisticLocker>
+    implements IOptimisticLockerService {
 
 }

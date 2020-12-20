@@ -17,6 +17,8 @@ import com.maxqiu.demo.entity.User;
 import com.maxqiu.demo.mapper.UserMapper;
 
 /**
+ * 条件构造器创建方法
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest

@@ -1,5 +1,6 @@
 package ${package.Entity};
 
+import com.alibaba.fastjson.JSON;
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
 #end
@@ -142,15 +143,7 @@ public class ${entity} implements Serializable {
 #if(!${entityLombokModel})
     @Override
     public String toString() {
-        return "${entity}{" +
-  #foreach($field in ${table.fields})
-    #if($!{foreach.index}==0)
-        "${field.propertyName}=" + ${field.propertyName} +
-    #else
-        ", ${field.propertyName}=" + ${field.propertyName} +
-    #end
-  #end
-        "}";
+        return JSON.toJSONString(this);
     }
 #end
 }

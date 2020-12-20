@@ -16,7 +16,9 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.maxqiu.demo.entity.Student;
 import com.maxqiu.demo.entity.User;
+import com.maxqiu.demo.mapper.StudentMapper;
 import com.maxqiu.demo.mapper.UserMapper;
 
 /**
@@ -75,15 +77,6 @@ public class TestLambdaQueryWrapper {
         wrapper.select("max(id) as id");
         User user = userMapper.selectOne(wrapper);
         System.out.println("maxId=" + user.getId());
-    }
-
-    // TODO
-    @Test
-    public void testTableFieldExistFalse() {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.select("age, count(age) as count").groupBy("age");
-        List<User> list = userMapper.selectList(wrapper);
-        list.forEach(System.out::println);
     }
 
     /**
@@ -223,14 +216,24 @@ public class TestLambdaQueryWrapper {
         users.forEach(System.out::println);
     }
 
+    @Autowired
+    private StudentMapper studentMapper;
+
+    /**
+     * exists 存在 EXISTS
+     * 
+     * notExists 不存在 NOT EXISTS
+     */
     @Test
     void testExistsNotExists() {
-        // TODO 待完善
-        // SELECT id,username,age,email FROM smp_user WHERE (EXISTS (aaaa) AND NOT EXISTS (bbbb))
-        LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.exists("aaaa");
-        queryWrapper.notExists("bbbb");
-        List<User> users = userMapper.selectList(queryWrapper);
+        // SELECT id,`name`,classes_id,create_time FROM smp_student WHERE (
+        // EXISTS (SELECT * FROM `smp_classes` WHERE `classes_id` = `id` AND `name` = '一班')
+        // AND NOT EXISTS (SELECT * FROM `smp_classes` WHERE `classes_id` = `id` AND `name` = '一班')
+        // )
+        LambdaQueryWrapper<Student> queryWrapper = Wrappers.lambdaQuery();
+        queryWrapper.exists("SELECT * FROM `smp_classes` WHERE `classes_id` = `id` AND `name` = '一班'");
+        queryWrapper.notExists("SELECT * FROM `smp_classes` WHERE `classes_id` = `id` AND `name` = '一班'");
+        List<Student> users = studentMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
 
@@ -286,6 +289,9 @@ public class TestLambdaQueryWrapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 拼接SQL
+     */
     @Test
     void testLast() {
         // SELECT id,username,age,email FROM user limit 1
@@ -295,6 +301,9 @@ public class TestLambdaQueryWrapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 所有条件使用 = 判断
+     */
     @Test
     void testAllEq() {
         // SELECT id,username,age,email FROM smp_user WHERE (username = ? AND age = ?)
@@ -309,6 +318,11 @@ public class TestLambdaQueryWrapper {
         users.forEach(System.out::println);
     }
 
+    /**
+     * 所有条件使用 = 判断
+     * 
+     * 且忽略空值
+     */
     @Test
     void testAllEqWithNullCheck() {
         // SELECT id,username,age,email FROM smp_user WHERE (username = ?)
@@ -317,7 +331,7 @@ public class TestLambdaQueryWrapper {
         map.put(User::getAge, null);
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         // 为true则在map的value为null时调用 isNull 方法,为false时则忽略value为null的条件
-        queryWrapper.allEq(map, false);
+        queryWrapper.allEq(map, true);
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
@@ -384,9 +398,11 @@ public class TestLambdaQueryWrapper {
 
     @Test
     public void testFunc() {
-        // TODO 待完善
+        // SELECT id,username,age,email FROM smp_user WHERE (age = ? AND age = ? AND username = ?)
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.func(false, userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
+        queryWrapper.func(true, userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
+        queryWrapper.func(true,
+            userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18).eq(User::getUsername, "max"));
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
