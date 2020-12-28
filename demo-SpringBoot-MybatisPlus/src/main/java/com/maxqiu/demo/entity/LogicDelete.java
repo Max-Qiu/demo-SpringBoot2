@@ -9,12 +9,21 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * 逻辑删除
  *
  * @author Max_Qiu
  */
 @TableName("smp_logic_delete")
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class LogicDelete extends Model<LogicDelete> {
 
     private static final long serialVersionUID = 1L;
@@ -36,33 +45,6 @@ public class LogicDelete extends Model<LogicDelete> {
      */
     @TableField("deleted")
     private Boolean deleted;
-
-    public Long getId() {
-        return id;
-    }
-
-    public LogicDelete setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public LogicDelete setUsername(String username) {
-        this.username = username;
-        return this;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public LogicDelete setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-        return this;
-    }
 
     @Override
     protected Serializable pkVal() {

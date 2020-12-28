@@ -10,12 +10,21 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.maxqiu.demo.enums.GenderEnum;
 import com.maxqiu.demo.enums.StateEnum;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * 枚举
  *
  * @author Max_Qiu
  */
 @TableName("smp_test_enum")
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class TestEnum extends Model<TestEnum> {
 
     private static final long serialVersionUID = 1L;
@@ -37,33 +46,6 @@ public class TestEnum extends Model<TestEnum> {
      */
     @TableField("state")
     private StateEnum state;
-
-    public Long getId() {
-        return id;
-    }
-
-    public TestEnum setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public GenderEnum getGender() {
-        return gender;
-    }
-
-    public TestEnum setGender(GenderEnum gender) {
-        this.gender = gender;
-        return this;
-    }
-
-    public StateEnum getState() {
-        return state;
-    }
-
-    public TestEnum setState(StateEnum state) {
-        this.state = state;
-        return this;
-    }
 
     @Override
     protected Serializable pkVal() {

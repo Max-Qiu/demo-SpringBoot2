@@ -16,9 +16,33 @@ import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
 /**
  * 代码生成器
  * 
+ * 以 MySQL 为例
+ * 
+ * 1. 拷贝到自己的项目
+ * 
+ * 2. 修改最重要的设置
+ * 
+ * 3. 运行 generator
+ * 
  * @author Max_Qiu
  */
 public class CodeGenerator {
+
+    /**
+     * 最重要的配置
+     */
+    // 数据库地址
+    private static final String URL = "jdbc:mysql://localhost:3306/smp?useSSL=false&serverTimezone=GMT%2B8";
+    // 用户名
+    private static final String USERNAME = "root";
+    // 密码
+    private static final String PASSWORD = "123";
+    // 父包名
+    private static final String PARENT = "com.maxqiu.demo";
+    // 去除表前缀（smp_user -> User）（若不需要去除，则设置为 "" ）
+    private static final String TABLE_PREFIX = "smp_";
+    // 作者（@author Max_Qiu）
+    private static final String AUTHOR = "Max_Qiu";
 
     /**
      * 代码生成 示例代码
@@ -34,25 +58,24 @@ public class CodeGenerator {
         // 数据库连接驱动
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         // 地址
-        dataSourceConfig.setUrl(
-            "jdbc:mysql://localhost:3306/smp?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=Asia/Shanghai");
+        dataSourceConfig.setUrl(URL);
         // 用户名
-        dataSourceConfig.setUsername("root");
+        dataSourceConfig.setUsername(USERNAME);
         // 密码
-        dataSourceConfig.setPassword("123");
+        dataSourceConfig.setPassword(PASSWORD);
 
         // 2. 策略配置
         StrategyConfig strategyConfig = new StrategyConfig();
-        // 是否大写命名
-        // strategyConfig.setCapitalMode(false);
+        // 是否大写命名（默认false，不知道干嘛用的）
+        strategyConfig.setCapitalMode(false);
         // 是否跳过试图
         strategyConfig.setSkipView(true);
-        // 数据库表映射到实体的命名策略
+        // 数据库表映射到实体的命名策略（下划线转驼峰，默认不做改变）
         strategyConfig.setNaming(NamingStrategy.underline_to_camel);
-        // 数据库表字段映射到实体的命名策略
+        // 数据库表字段映射到实体的命名策略（下划线转驼峰，默认跟随naming）
         strategyConfig.setColumnNaming(NamingStrategy.underline_to_camel);
-        // 表前缀
-        strategyConfig.setTablePrefix("smp_");
+        // 自动去除表前缀（smp_user -> User）
+        strategyConfig.setTablePrefix(TABLE_PREFIX);
         // 字段前缀
         // strategyConfig.setFieldPrefix("");
         // 排除的表，生成的表（二选一）
@@ -63,10 +86,10 @@ public class CodeGenerator {
         // 实体是否为链式模型，即实体可以连续set，例：.setXxx().setXxx();（需关闭lombok）
         strategyConfig.setChainModel(true);
         // 实体使用lombok
-        strategyConfig.setEntityLombokModel(false);
-        // 是否移除is前缀
+        strategyConfig.setEntityLombokModel(true);
+        // 是否移除is前缀（is_deleted -> deleted）
         strategyConfig.setEntityBooleanColumnRemoveIsPrefix(true);
-        // 生成Rest风格的Controller
+        // 生成Rest风格的Controller（@Controller -> @RestController 默认false）
         strategyConfig.setRestControllerStyle(true);
         // 是否生成实体的注解，即每个字段都设置 @TableId/@TableField
         strategyConfig.setEntityTableFieldAnnotationEnable(true);
@@ -74,7 +97,7 @@ public class CodeGenerator {
         // 3. 包名策略配置
         PackageConfig packageConfig = new PackageConfig();
         // 父包名
-        packageConfig.setParent("com.maxqiu.demo");
+        packageConfig.setParent(PARENT);
         // 子包名（以下为默认）
         packageConfig.setEntity("entity");
         packageConfig.setService("service");
@@ -87,14 +110,14 @@ public class CodeGenerator {
         GlobalConfig globalConfig = new GlobalConfig();
         // 生成路径
         globalConfig.setOutputDir(System.getProperty("user.dir") + "/src/main/java");
-        // 是否文件覆盖
+        // 是否覆盖已有文件
         globalConfig.setFileOverride(false);
         // 生成后打开生成路径
         globalConfig.setOpen(false);
         // 是否在xml中开启耳机缓存配置
         globalConfig.setEnableCache(false);
         // 作者
-        globalConfig.setAuthor("Max_Qiu");
+        globalConfig.setAuthor(AUTHOR);
         // 是否支持AR模式
         globalConfig.setActiveRecord(true);
         // xml 中是否生成 通用查询映射结果
@@ -114,17 +137,35 @@ public class CodeGenerator {
         templateConfig.setServiceImpl("mybatis/serviceImpl.java");
         templateConfig.setMapper("mybatis/mapper.java");
         templateConfig.setXml("mybatis/mapper.xml");
-        templateConfig.setController(null);
         // 如果设置为null，则为关闭生成
-        // templateConfig.setController(null);
+        templateConfig.setController(null);
 
-        // 6. 自定义配置
-        // 示例：当是否文件覆盖为 false 时，配置Entity强制刷新
-        InjectionConfig cfg = new InjectionConfig() {
+        // 6. 整合配置
+        AutoGenerator autoGenerator = new AutoGenerator();
+        autoGenerator.setDataSource(dataSourceConfig);
+        autoGenerator.setStrategy(strategyConfig);
+        autoGenerator.setPackageInfo(packageConfig);
+        autoGenerator.setGlobalConfig(globalConfig);
+        autoGenerator.setTemplate(templateConfig);
+        // 自定义配置
+        // setCfg(autoGenerator);
+
+        // 7. 生成
+        autoGenerator.execute();
+    }
+
+    /**
+     * 自定义配置
+     */
+    private void setCfg(AutoGenerator autoGenerator) {
+        // 示例：
+        // 当“是否覆盖已有文件为false”时，配置Entity强制刷新，即表结构修改够，仅修改实体即可
+        // 这种情况适用于：不手动修改实体（如添加一对多，Version注解，自定义的字段等），但是数据库经常修改，需要重新生成实体
+        InjectionConfig injectionConfig = new InjectionConfig() {
             @Override
             public void initMap() {}
         };
-        cfg.setFileCreate((configBuilder, fileType, filePath) -> {
+        injectionConfig.setFileCreate((configBuilder, fileType, filePath) -> {
             // 如果是Entity则直接返回true表示写文件
             if (fileType == FileType.ENTITY) {
                 return true;
@@ -135,17 +176,7 @@ public class CodeGenerator {
             // 文件不存在或者全局配置的fileOverride为true才写文件
             return !exist || configBuilder.getGlobalConfig().isFileOverride();
         });
-
-        // 6. 整合配置
-        AutoGenerator autoGenerator = new AutoGenerator();
-        autoGenerator.setDataSource(dataSourceConfig);
-        autoGenerator.setStrategy(strategyConfig);
-        autoGenerator.setPackageInfo(packageConfig);
-        autoGenerator.setGlobalConfig(globalConfig);
-        autoGenerator.setTemplate(templateConfig);
-        autoGenerator.setCfg(cfg);
-
-        // 7. 生成
-        autoGenerator.execute();
+        // 添加设置后
+        autoGenerator.setCfg(injectionConfig);
     }
 }

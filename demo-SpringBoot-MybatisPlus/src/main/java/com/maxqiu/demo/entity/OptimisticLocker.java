@@ -9,12 +9,21 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * 乐观锁
  *
  * @author Max_Qiu
  */
 @TableName("smp_optimistic_locker")
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class OptimisticLocker extends Model<OptimisticLocker> {
 
     private static final long serialVersionUID = 1L;
@@ -37,33 +46,6 @@ public class OptimisticLocker extends Model<OptimisticLocker> {
     @Version
     @TableField("version")
     private Long version;
-
-    public Long getId() {
-        return id;
-    }
-
-    public OptimisticLocker setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public OptimisticLocker setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public OptimisticLocker setVersion(Long version) {
-        this.version = version;
-        return this;
-    }
 
     @Override
     protected Serializable pkVal() {

@@ -10,12 +10,21 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+
 /**
  * 学生表
  *
  * @author Max_Qiu
  */
 @TableName("smp_student")
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
 public class Student extends Model<Student> {
 
     private static final long serialVersionUID = 1L;
@@ -46,50 +55,6 @@ public class Student extends Model<Student> {
 
     @TableField(exist = false)
     private Long count;
-
-    public Long getCount() {
-        return count;
-    }
-
-    public void setCount(Long count) {
-        this.count = count;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Student setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Student setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public Long getClassesId() {
-        return classesId;
-    }
-
-    public Student setClassesId(Long classesId) {
-        this.classesId = classesId;
-        return this;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public Student setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-        return this;
-    }
 
     @Override
     protected Serializable pkVal() {
