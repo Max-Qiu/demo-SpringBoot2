@@ -19,11 +19,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_optimistic_locker")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_optimistic_locker")
 public class OptimisticLocker extends Model<OptimisticLocker> {
 
     private static final long serialVersionUID = 1L;

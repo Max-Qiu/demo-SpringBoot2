@@ -18,11 +18,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_user")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_user")
 public class User extends Model<User> {
 
     private static final long serialVersionUID = 1L;

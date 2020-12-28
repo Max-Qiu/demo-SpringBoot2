@@ -20,11 +20,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_test_enum")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_test_enum")
 public class TestEnum extends Model<TestEnum> {
 
     private static final long serialVersionUID = 1L;

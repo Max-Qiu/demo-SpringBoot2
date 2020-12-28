@@ -142,10 +142,8 @@ public class ${entity} implements Serializable {
     }
 
 #end
-#if(!${entityLombokModel})
     @Override
     public String toString() {
         return JSON.toJSONString(this);
     }
-#end
 }

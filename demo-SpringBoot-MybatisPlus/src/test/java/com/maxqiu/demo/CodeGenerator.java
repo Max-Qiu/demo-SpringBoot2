@@ -24,6 +24,12 @@ import com.baomidou.mybatisplus.generator.keywords.MySqlKeyWordsHandler;
  * 
  * 3. 运行 generator
  * 
+ * 4. resources 目录下新建 mapper 文件夹，之后将 xml 移动到 resources/mapper 目录下
+ * 
+ * 5. 若新增表，则再次运行，xml 同样进行移动，重复的 xml 记得删除
+ * 
+ * PS 代码生成后推荐格式化一下，毕竟模板中可能有多余的空行或者空格或者import顺序不一样等等
+ * 
  * @author Max_Qiu
  */
 public class CodeGenerator {

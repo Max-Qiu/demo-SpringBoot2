@@ -20,11 +20,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_auto_fill")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_auto_fill")
 public class AutoFill extends Model<AutoFill> {
 
     private static final long serialVersionUID = 1L;

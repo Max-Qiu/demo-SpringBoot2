@@ -20,11 +20,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_classes")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_classes")
 public class Classes extends Model<Classes> {
 
     private static final long serialVersionUID = 1L;

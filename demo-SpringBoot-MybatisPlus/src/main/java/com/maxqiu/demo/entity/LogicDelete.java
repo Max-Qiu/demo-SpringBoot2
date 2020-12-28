@@ -19,11 +19,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@TableName("smp_logic_delete")
 @Data
-@Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @NoArgsConstructor
+@TableName("smp_logic_delete")
 public class LogicDelete extends Model<LogicDelete> {
 
     private static final long serialVersionUID = 1L;
