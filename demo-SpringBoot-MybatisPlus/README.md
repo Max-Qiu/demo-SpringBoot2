@@ -124,6 +124,7 @@ mybatis-plus:
 - TestCustomUserMapper 自定义Mapper
 - TestPage 分页详细示例
 - TestGroupByAndHaving 分组
+- TestJoinQuery 多对多关联查询
 - TestLogicDelete 逻辑删除
 - TestOptimisticLocker 乐观锁
 - TestOther

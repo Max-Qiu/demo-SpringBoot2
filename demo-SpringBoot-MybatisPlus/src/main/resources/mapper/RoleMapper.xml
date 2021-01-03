@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxqiu.demo.mapper.RoleMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.maxqiu.demo.entity.Role">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="locked" property="locked"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        `name`,
+        `locked`,
+        create_time,
+        update_time
+    </sql>
+
+    <select id="getRoleAndPermissionIds" resultType="com.maxqiu.demo.entity.Role">
+        SELECT r.id,
+               r.`name`,
+               r.locked,
+               GROUP_CONCAT(z.permission_id) permission_ids
+        FROM smp_role r
+                     LEFT JOIN smp_role_permission z ON r.id = z.role_id
+        GROUP BY r.id, r.`name`, r.locked
+    </select>
+
+    <select id="getRoleAndPermissionList" resultMap="roleAndPermissionList">
+        SELECT r.id,
+               r.`name`,
+               r.locked,
+               r.create_time,
+               r.update_time,
+               p.id          'p_id',
+               p.`name`      'p_name',
+               p.locked      'p_locked',
+               p.create_time 'p_create_time',
+               p.update_time 'p_update_time'
+        FROM smp_role r
+                     LEFT JOIN smp_role_permission z ON r.id = z.role_id
+                     LEFT JOIN smp_permission p on p.id = z.permission_id
+        ORDER BY r.id
+    </select>
+    <resultMap id="roleAndPermissionList" type="com.maxqiu.demo.entity.Role" extends="BaseResultMap">
+        <collection property="permissionList" ofType="com.maxqiu.demo.entity.Permission">
+            <id column="p_id" property="id"/>
+            <result column="p_name" property="name"/>
+            <result column="p_locked" property="locked"/>
+            <result column="p_create_time" property="createTime"/>
+            <result column="p_update_time" property="updateTime"/>
+        </collection>
+    </resultMap>
+
+    <select id="getRoleAndPermissionPage" resultMap="roleAndPermissionListPage">
+        SELECT r.id,
+               r.`name`,
+               r.locked,
+               r.create_time,
+               r.update_time
+        FROM smp_role r
+    </select>
+    <resultMap id="roleAndPermissionListPage" type="com.maxqiu.demo.entity.Role" extends="BaseResultMap">
+        <collection property="permissionList" ofType="com.maxqiu.demo.entity.Permission"
+                    select="com.maxqiu.demo.mapper.RolePermissionMapper.getPermissionListByRoleId" column="{id=id}">
+        </collection>
+    </resultMap>
+</mapper>

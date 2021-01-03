@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxqiu.demo.mapper.RolePermissionMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.maxqiu.demo.entity.RolePermission">
+        <id column="role_id" property="roleId"/>
+        <result column="permission_id" property="permissionId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_id,
+        permission_id,
+        create_time
+    </sql>
+
+    <select id="getPermissionListByRoleId" resultType="com.maxqiu.demo.entity.Permission">
+        SELECT p.id, p.`name`, p.locked, p.create_time, p.update_time
+        FROM smp_role_permission z
+        LEFT JOIN smp_permission p ON z.permission_id = p.id
+        where z.role_id = #{id}
+    </select>
+</mapper>
