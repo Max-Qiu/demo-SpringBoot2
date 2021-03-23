@@ -1,6 +1,8 @@
 package com.maxqiu.demo.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,12 +25,30 @@ public class RequestController {
     }
 
     /**
+     * GetMapping
+     */
+    @GetMapping(value = "get2")
+    @ResponseBody
+    public String get2() {
+        return "get2";
+    }
+
+    /**
      * post
      */
     @RequestMapping(value = "post", method = RequestMethod.POST)
     @ResponseBody
     public String post() {
         return "post";
+    }
+
+    /**
+     * PostMapping
+     */
+    @PostMapping("post2")
+    @ResponseBody
+    public String post2() {
+        return "post2";
     }
 
     /**
