@@ -1,0 +1,10 @@
+logging:
+  level:
+    root: info # 修改默认的日志级别
+    com.maxqiu.demo: warn # 设置某个包下面的日志级别
+  file:
+    #    path: ./log # 日志文件所在位置
+    name: ./log/test.log # 日志文件名以及路径（默认项目根路径，文件名默认为 spring.log）
+  pattern:
+    console: '%d{yyyy-MM-dd} -- [%thread] -- %-5level -- %logger{50} -- %msg%n' # 控制台输出格式
+    file: '%d{yyyy-MM-dd} == [%thread] == %-5level == %logger{50} == %msg%n' # 文件输出格式
