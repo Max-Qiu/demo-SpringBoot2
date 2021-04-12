@@ -1,0 +1,17 @@
+spring:
+  mail:
+    host: smtp.126.com # 邮箱服务器
+    username: username@maxqiu.com # 用户名
+    password: password # 密码
+    port: 994 # 端口
+    default-encoding: utf-8 # 编码
+    properties:
+      mail:
+        smtp.ssl.enable: true # 开启 SSL 通道
+        mime.splitlongparameters: false # 解决邮件发送附件不正常的问题
+  thymeleaf:
+    enabled: true # 开启模板引擎
+    encoding: UTF-8 # 设置字符编码
+    prefix: classpath:/templates/ # 设置文件路径
+    cache: true # 启用缓存（本地测试修改为false）
+    suffix: .html # 文件后缀
