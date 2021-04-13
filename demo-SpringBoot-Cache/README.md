@@ -2,10 +2,6 @@
 
 环境介绍：本文使用`SpringBoot 2.4.4`，视频教程使用的`1.5.x`版本
 
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Cache](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Cache)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Cache](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Cache)
-
 > 官方文档：
 [Spring Framework Documentation -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#cache)
 [Spring Boot Reference Documentation -- 13. Caching](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-caching)

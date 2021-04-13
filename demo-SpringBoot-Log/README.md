@@ -2,11 +2,6 @@
 
 环境介绍：本文使用`SpringBoot 2.4.4`，视频教程使用的`1.5.x`版本
 
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Log](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Log)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Log](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Log)
-
-
 # 常用日志框架
 
 日志门面 | 日志实现

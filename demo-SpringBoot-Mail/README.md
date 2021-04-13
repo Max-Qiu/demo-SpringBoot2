@@ -1,12 +1,7 @@
 > 官方文档：
 [Spring Framework Documentation -- Integration -- 6. Email](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#mail)
 
-
 环境介绍：本文使用`SpringBoot 2.4.4`
-
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Mail](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Mail)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Mail](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-Mail)
 
 # 依赖
 

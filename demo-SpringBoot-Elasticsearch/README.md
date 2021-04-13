@@ -7,14 +7,10 @@
 | 2.1.18.RELEASE | 3.1.21.RELEASE            | 6.4.3         |
 | 2.2.11.RELEASE | 3.2.11.RELEASE            | 6.8.13        |
 | 2.3.6.RELEASE  | 4.0.5.RELEASE             | 7.6.2         |
-| 2.4.0          | 4.1.1                     | 7.9.3         |
+| 2.4.4          | 4.1.1                     | 7.9.3         |
 
-- 本文以`Spring Boot 2.4.0`为例
+- 本文以`Spring Boot 2.4.4`为例
 - 本文不介绍`Reactive`模式的相关代码
-
-> 示例代码：
-> GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-springboot-elasticsearch](https://github.com/Max-Qiu/demo/tree/main/demo-springboot-elasticsearch)
-> Gitee：[https://gitee.com/max-qiu/demo/tree/main/demo-springboot-elasticsearch](https://gitee.com/max-qiu/demo/tree/main/demo-springboot-elasticsearch/)
 
 # 准备
 

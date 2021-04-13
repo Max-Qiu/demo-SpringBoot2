@@ -1,13 +1,3 @@
-Soft | Version
----|---
-SpringBoot | 2.4.1
-MybatisPlus | 3.4.1
-MySQL | 5.7.32
-
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-MybatisPlus](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-MybatisPlus)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-MybatisPlus](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-MybatisPlus)
-
 > 官方示例代码：
 GitHub：[https://github.com/baomidou/mybatis-plus-samples](https://github.com/baomidou/mybatis-plus-samples)
 Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baomidou/mybatis-plus-samples)
@@ -39,7 +29,7 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
 </dependency>
 <!-- JSON 格式化 -->
 <dependency>

@@ -13,10 +13,6 @@
 </dependency>
 ```
 
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC)
-
 # 基本介绍
 
 - `Spring MVC`使用`@RequestMapping`注解为控制器指定可以处理哪些`URL`请求

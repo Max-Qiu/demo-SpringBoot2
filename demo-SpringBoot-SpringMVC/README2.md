@@ -13,10 +13,6 @@
 </dependency>
 ```
 
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC](https://github.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC)
-Gitee：[https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC](https://gitee.com/Max-Qiu/demo/tree/main/demo-SpringBoot-SpringMVC)
-
 # 简介
 
 - `Spring MVC`通过分析处理方法的签名，将`HTTP`请求信息绑定到处理方法的相应入参中。
