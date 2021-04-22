@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    include: druid # 加入 Druid 配置文件
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # 驱动（可以省略，会自动根据url适配）
+    url: jdbc:mysql://127.0.0.1:3307/druid?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
+    username: root # 用户名
+    password: 123 # 密码
+logging:
+  file:
+    name: ./log/log.log

@@ -1,0 +1,82 @@
+# 将 Druid 配置文件独立出来，之后在application.yml添加如下代码加入当前配置，方便复用
+
+#spring:
+#  profiles:
+#    include: druid
+
+spring:
+  datasource:
+    druid:
+      # 连接池核心配置（使用datasource进行配置）
+      #driver-class-name: # 驱动 使用 spring.datasource.driver-class-name（可以省略，会自动根据url适配）
+      #url: # 连接地址 使用 spring.datasource.url
+      #username: # 用户名 使用 spring.datasource.username
+      #password: # 密码 使用 spring.datasource.password
+
+      # 配置统计页面
+      stat-view-servlet:
+        enabled: true # 是否开启（默认 false ）
+        url-pattern: /druid/* # 统计页面访问路径（默认）
+        # 注：生产环境记得打开用户名和密码的配置，并设置复杂密码
+        #login-username: admin # 用户名
+        #login-password: admin # 密码
+        reset-enable: true # 是否允许重置统计数据（默认 true ）
+        allow: "" # 允许任意IP访问（默认 127.0.0.1 ）
+        #eny: 192.168.1.1 # 禁止访问的IP（优先级高于allow）
+
+      # 连接池基础配置
+      initial-size: 5 # 连接池初始大小
+      min-idle: 10 # 最小连接数
+      max-active: 20 # 最大连接数
+      validation-query: select 1 # 连接检查语句
+      test-while-idle: true # 是否在连接空闲一段时间后检测其可用性（默认true）
+      test-on-borrow: false # 是否在获得连接后检测其可用性（默认false）
+      test-on-return: false # 是否在连接放回连接池后检测其可用性（默认false）
+      min-evictable-idle-time-millis: 60000 # 一个连接在池中最小生存的时间（单位：毫秒）（默认1800000）
+      max-evictable-idle-time-millis: 300000 # 一个连接在池中最大生存的时间（单位：毫秒）（默认25200000）
+      keep-alive: true # 保持连接存在（默认false）
+      async-init: true # 异步初始化（默认false）当initial-size数量较多时，打开会加快应用启动
+      ## 更多其他配置不太重要，略
+
+      # 批量配置默认的Filter
+      #filters: "stat,wall,slf4j"
+
+      # 手动配置Filter
+      filter:
+
+        # 配置SQL监控
+        stat:
+          enabled: true # 是否启用（默认关闭，若在filters启用，此处自动开启且不可关闭）
+          db-type: mysql # 数据库类型
+          merge-sql: true # SQL合并：将不同的where条件的SQL合并为一个统计（默认false）
+          log-slow-sql: true # 是否记录慢查询SQL
+          slow-sql-millis: 3000 # 慢查询时间（单位：毫秒）（默认）
+
+        # 配置SQL防火墙
+        wall:
+          enabled: true # 是否启用（默认关闭，若在filters启用，此处自动开启且不可关闭）
+          db-type: mysql # 数据库类型
+          # 刚开始引入WallFilter的时候，把logViolation设置为true，而throwException设置为false。就可以观察是否存在违规的情况，同时不影响业务运行。
+          log-violation: true # 对被认为是攻击的SQL进行LOG.error输出（默认false）
+          throw-exception: false # 对被认为是攻击的SQL抛出SQLException（默认true）
+          #provider-white-list: # 手动配置SQL白名单
+          config:
+            truncate-allow: false # 是否允许truncate语句（默认true）
+            drop-table-allow: false # 是否允许修改表（默认true）
+            # 更多详细配置参照官方文档：https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE-wallfilter#wallconfig%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E
+
+        # 配置日志
+        slf4j:
+          enabled: true # 是否启用（默认关闭，若在filters启用，此处自动开启且不可关闭）
+          # 大部分默认配置均为true，无需额外配置，详细见：com.alibaba.druid.filter.logging.LogFilter
+
+      # 配置Web应用、URI监控、Session监控
+      web-stat-filter:
+        enabled: true # 开启（默认 false）
+        url-pattern: /* # 监控的路径（默认）
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,*.woff2,/druid/*" # 排除监控的路径或文件类型
+        session-stat-enable: true # 启用Session监控（默认）
+        session-stat-max-count: 1000 # 最大统计的session数量
+        profile-enable: true # 监控单个url调用的sql列表
+        #principal-session-name: user # 用session中的某个值标记作Principal当前SESSIONID
+        #principal-cookie-name: nickname # 用cookie中的某个值标记作Principal当前SESSIONID
