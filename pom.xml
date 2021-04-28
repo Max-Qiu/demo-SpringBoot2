@@ -25,6 +25,7 @@
         <module>demo-SpringBoot-Cache</module>
         <module>demo-SpringBoot-Druid</module>
         <module>demo-SpringBoot-Elasticsearch</module>
+        <module>demo-SpringBoot-JUnit5</module>
         <module>demo-SpringBoot-Log</module>
         <module>demo-SpringBoot-Mail</module>
         <module>demo-SpringBoot-MybatisPlus</module>
