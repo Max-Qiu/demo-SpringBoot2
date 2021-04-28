@@ -38,13 +38,6 @@
             <version>3.4.2</version>
         </dependency>
 
-        <!-- JSON 格式化 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.75</version>
-        </dependency>
-
         <!-- 性能分析 -->
         <dependency>
             <groupId>p6spy</groupId>

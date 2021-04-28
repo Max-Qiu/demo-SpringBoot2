@@ -2,7 +2,6 @@ package com.maxqiu.demo.entity;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,7 +25,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @TableName("smp_test_enum")
 public class TestEnum extends Model<TestEnum> {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -50,10 +48,5 @@ public class TestEnum extends Model<TestEnum> {
     @Override
     protected Serializable pkVal() {
         return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

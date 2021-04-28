@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -26,32 +24,8 @@ import com.maxqiu.demo.model.ParamSome;
  */
 @SpringBootTest
 public class TestPage {
-
     @Autowired
     private UserMapper userMapper;
-
-    /**
-     * json 正反序列号
-     */
-    @Test
-    void json() {
-        // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
-        // SELECT id, username, age, email FROM smp_user WHERE (email LIKE ?) ORDER BY age DESC, age ASC LIMIT ?,?
-        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
-        wrapper.like(User::getEmail, "m");
-        Page<User> page = new Page<>(2, 2);
-        // 直接传入，无需接收返回值，返回值自动存入 page
-        userMapper.selectPage(page, wrapper);
-
-        // 序列号
-        String json = JSON.toJSONString(page);
-        System.out.println(json);
-
-        // 反序列化
-        Page<User> page1 = JSON.parseObject(json, new TypeReference<>() {});
-
-        System.out.println(page.getSize() == page1.getSize());
-    }
 
     /**
      * 分页查询 并设置排序

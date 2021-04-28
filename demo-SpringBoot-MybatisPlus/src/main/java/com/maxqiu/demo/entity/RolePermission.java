@@ -3,7 +3,6 @@ package com.maxqiu.demo.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +24,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @TableName("smp_role_permission")
 public class RolePermission extends Model<RolePermission> {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,10 +47,5 @@ public class RolePermission extends Model<RolePermission> {
     @Override
     protected Serializable pkVal() {
         return this.roleId;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

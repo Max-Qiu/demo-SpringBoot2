@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -27,7 +26,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @TableName("smp_role")
 public class Role extends Model<Role> {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -69,10 +67,5 @@ public class Role extends Model<Role> {
     @Override
     protected Serializable pkVal() {
         return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

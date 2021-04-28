@@ -2,7 +2,6 @@ package com.maxqiu.demo.entity;
 
 import java.io.Serializable;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -25,7 +24,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @TableName("smp_logic_delete")
 public class LogicDelete extends Model<LogicDelete> {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -49,10 +47,5 @@ public class LogicDelete extends Model<LogicDelete> {
     @Override
     protected Serializable pkVal() {
         return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }

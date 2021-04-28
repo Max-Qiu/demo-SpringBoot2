@@ -1,6 +1,5 @@
 package ${package.Entity};
 
-import com.alibaba.fastjson.JSON;
 #foreach($pkg in ${table.importPackages})
 import ${pkg};
 #end
@@ -140,10 +139,5 @@ public class ${entity} implements Serializable {
         return null;
   #end
     }
-
 #end
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
-    }
 }

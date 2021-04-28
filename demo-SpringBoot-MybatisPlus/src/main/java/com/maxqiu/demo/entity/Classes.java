@@ -3,7 +3,6 @@ package com.maxqiu.demo.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -26,7 +25,6 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @TableName("smp_classes")
 public class Classes extends Model<Classes> {
-
     private static final long serialVersionUID = 1L;
 
     /**
@@ -50,10 +48,5 @@ public class Classes extends Model<Classes> {
     @Override
     protected Serializable pkVal() {
         return this.id;
-    }
-
-    @Override
-    public String toString() {
-        return JSON.toJSONString(this);
     }
 }
