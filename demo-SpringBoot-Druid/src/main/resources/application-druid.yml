@@ -80,3 +80,6 @@ spring:
         profile-enable: true # 监控单个url调用的sql列表
         #principal-session-name: user # 用session中的某个值标记作Principal当前SESSIONID
         #principal-cookie-name: nickname # 用cookie中的某个值标记作Principal当前SESSIONID
+
+      # 配置Spring监控AOP切入点（多个用英文逗号分割）
+      aop-patterns: com.maxqiu.demo.*
