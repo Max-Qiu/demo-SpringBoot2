@@ -1,0 +1,17 @@
+spring:
+  redis:
+    # url: redis://<username>:<password>@<hostname>:<port> # URL填写用户名、密码、地址和端口
+    host: 192.168.220.101 # 地址
+    port: 6379 # 端口
+    username: # 用户名
+    password: 123 # 密码
+    database: 0 # 指定数据库序号
+    ssl: false # 是否启用SSL
+    connect-timeout: 1000 # 连接超时时间（毫秒）
+    timeout: 1000 # 操作超时时间（毫秒）
+    client-name: # 客户端名称（暂时不知道干嘛用的）
+    client-type: lettuce # 驱动类型
+    # 集群
+    # cluster:+
+    # 主从复制
+    # sentinel:
