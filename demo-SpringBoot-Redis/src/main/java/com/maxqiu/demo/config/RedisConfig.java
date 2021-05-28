@@ -15,9 +15,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 public class RedisConfig {
     /**
      * 自定义RedisTemplate，使用json格式化value
-     * 
-     * @param redisConnectionFactory
-     * @return
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -31,7 +28,8 @@ public class RedisConfig {
         // hash序列化
         template.setHashKeySerializer(RedisSerializer.string());
         template.setHashValueSerializer(RedisSerializer.json());
-        System.out.println("RedisTemplate初始化完成");
+        // 启用事务支持
+        template.setEnableTransactionSupport(true);
         return template;
     }
 }
