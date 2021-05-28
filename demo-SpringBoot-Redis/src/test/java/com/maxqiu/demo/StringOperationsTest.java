@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import com.maxqiu.demo.entity.User;
@@ -31,7 +31,7 @@ import com.maxqiu.demo.entity.User;
 @SpringBootTest
 public class StringOperationsTest {
     @Autowired
-    private RedisOperations<String, Object> redisOperations;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 值是String类型的字符串
@@ -41,7 +41,7 @@ public class StringOperationsTest {
      * 需要使用Spring内置的StringRedisTemplate
      */
     @Resource(name = "stringRedisTemplate")
-    private ValueOperations<String, String> stringOperations;
+    private ValueOperations<String, String> stringValueOperations;
 
     /**
      * 值是对象类型的字符串
@@ -49,7 +49,7 @@ public class StringOperationsTest {
      * 使用自定义的RedisTemplate，将值格式化成JSON
      */
     @Resource(name = "redisTemplate")
-    private ValueOperations<String, User> userOperations;
+    private ValueOperations<String, User> userValueOperations;
 
     /**
      * 值是数字类型的字符串
@@ -57,7 +57,7 @@ public class StringOperationsTest {
      * 自定义的RedisTemplate可以格式化Integer
      */
     @Resource(name = "redisTemplate")
-    private ValueOperations<String, Integer> integerOperations;
+    private ValueOperations<String, Integer> integerValueOperations;
 
     /**
      * GET
@@ -66,21 +66,21 @@ public class StringOperationsTest {
     @Order(1)
     void get() {
         // 获取不存在的键
-        assertNull(stringOperations.get("nonexistent"));
+        assertNull(stringValueOperations.get("nonexistent"));
 
         // 获取String类型的数据
-        stringOperations.set("key", "hello");
-        assertEquals("hello", stringOperations.get("key"));
+        stringValueOperations.set("key", "hello");
+        assertEquals("hello", stringValueOperations.get("key"));
 
         // 获取对象类型的数据
         User user = new User(1, "tom", new BigDecimal(18));
-        userOperations.set("user", user);
-        assertEquals(user, userOperations.get("user"));
+        userValueOperations.set("user", user);
+        assertEquals(user, userValueOperations.get("user"));
 
-        integerOperations.set("num", 1);
-        assertEquals(1, integerOperations.get("num"));
+        integerValueOperations.set("num", 1);
+        assertEquals(1, integerValueOperations.get("num"));
 
-        redisOperations.delete(Arrays.asList("user", "key", "num"));
+        redisTemplate.delete(Arrays.asList("user", "key", "num"));
     }
 
     /**
@@ -97,103 +97,103 @@ public class StringOperationsTest {
     void set() {
         /// SET 设置键与值
         // 简单设置值
-        stringOperations.set("key1", "hello");
-        assertEquals("hello", stringOperations.get("key1"));
+        stringValueOperations.set("key1", "hello");
+        assertEquals("hello", stringValueOperations.get("key1"));
 
         // 如果键存在才设置值
-        Boolean flag1 = stringOperations.setIfPresent("key1", "world");
+        Boolean flag1 = stringValueOperations.setIfPresent("key1", "world");
         assertTrue(flag1);
-        assertEquals("world", stringOperations.get("key1"));
-        Boolean flag2 = stringOperations.setIfPresent("key2", "world");
+        assertEquals("world", stringValueOperations.get("key1"));
+        Boolean flag2 = stringValueOperations.setIfPresent("key2", "world");
         assertFalse(flag2);
-        assertNull(stringOperations.get("key2"));
+        assertNull(stringValueOperations.get("key2"));
 
         // 同上，并设置超时时间
-        Boolean flag3 = stringOperations.setIfPresent("key1", "hello", Duration.ofSeconds(10));
+        Boolean flag3 = stringValueOperations.setIfPresent("key1", "hello", Duration.ofSeconds(10));
         assertTrue(flag3);
         // stringOperations.setIfPresent("key2", "world", 10, TimeUnit.SECONDS);
-        assertEquals(10, redisOperations.getExpire("key1"));
+        assertEquals(10, redisTemplate.getExpire("key1"));
 
         // SETEX 设置键与值并设置超时时间
-        stringOperations.set("key2", "world", Duration.ofSeconds(10));
+        stringValueOperations.set("key2", "world", Duration.ofSeconds(10));
         // stringOperations.set("key2", "world", 10, TimeUnit.SECONDS);
-        assertEquals(10, redisOperations.getExpire("key2"));
+        assertEquals(10, redisTemplate.getExpire("key2"));
 
         // SETNX 键不存在则设置键与值
-        Boolean flag4 = stringOperations.setIfAbsent("key3", "hello");
+        Boolean flag4 = stringValueOperations.setIfAbsent("key3", "hello");
         assertTrue(flag4);
-        assertEquals("hello", stringOperations.get("key3"));
+        assertEquals("hello", stringValueOperations.get("key3"));
 
         // SET ... NX 键不存在则设置键与值（同时设置时间）
-        Boolean flag5 = stringOperations.setIfAbsent("key4", "world", Duration.ofSeconds(10));
+        Boolean flag5 = stringValueOperations.setIfAbsent("key4", "world", Duration.ofSeconds(10));
         // stringOperations.setIfAbsent("key4", "world", 10, TimeUnit.SECONDS);
         assertTrue(flag5);
-        assertEquals("world", stringOperations.get("key4"));
+        assertEquals("world", stringValueOperations.get("key4"));
 
         // GETSET 获取值并设置一个新值
-        String s = stringOperations.getAndSet("key4", "redis");
+        String s = stringValueOperations.getAndSet("key4", "redis");
         assertEquals(s, "world");
-        assertEquals("redis", stringOperations.get("key4"));
+        assertEquals("redis", stringValueOperations.get("key4"));
 
-        assertEquals(4, redisOperations.delete(Arrays.asList("key1", "key2", "key3", "key4")));
+        assertEquals(4, redisTemplate.delete(Arrays.asList("key1", "key2", "key3", "key4")));
     }
 
     @Test
     @Order(3)
     void other() {
         // APPEND 拼接字符串
-        Integer append1 = stringOperations.append("key", "hello");
+        Integer append1 = stringValueOperations.append("key", "hello");
         assertEquals(5, append1);
-        Integer append2 = stringOperations.append("key", " world");
+        Integer append2 = stringValueOperations.append("key", " world");
         assertEquals(11, append2);
 
         // STRLEN 获取字符串长度
-        Long size = stringOperations.size("key");
+        Long size = stringValueOperations.size("key");
         assertEquals(11, size);
 
         // GETRANGE 截取字符串
-        String a1 = stringOperations.get("key", 0, 3);
+        String a1 = stringValueOperations.get("key", 0, 3);
         assertEquals("hell", a1);
-        String a2 = stringOperations.get("key", -3, -1);
+        String a2 = stringValueOperations.get("key", -3, -1);
         assertEquals("rld", a2);
-        String a3 = stringOperations.get("key", 0, -1);
+        String a3 = stringValueOperations.get("key", 0, -1);
         assertEquals("hello world", a3);
-        String a4 = stringOperations.get("key", 20, 100);
+        String a4 = stringValueOperations.get("key", 20, 100);
         assertEquals("", a4);
 
         // SETRANGE 修改字符串
-        stringOperations.set("key", "redis", 6);
-        assertEquals("hello redis", stringOperations.get("key"));
+        stringValueOperations.set("key", "redis", 6);
+        assertEquals("hello redis", stringValueOperations.get("key"));
 
         // MSET 批量设置值
-        stringOperations.multiSet(Map.of("key1", "v1", "key2", "v2"));
-        assertTrue(redisOperations.hasKey("key1"));
+        stringValueOperations.multiSet(Map.of("key1", "v1", "key2", "v2"));
+        assertTrue(redisTemplate.hasKey("key1"));
 
         // MGET 批量获取值
-        List<String> list = stringOperations.multiGet(Arrays.asList("key1", "key2"));
+        List<String> list = stringValueOperations.multiGet(Arrays.asList("key1", "key2"));
         assertNotNull(list);
         assertEquals(2, list.size());
 
         // MSETNX 批量设置值（仅当键不存在）
-        Boolean flag = stringOperations.multiSetIfAbsent(Map.of("key1", "v1", "key3", "v3"));
+        Boolean flag = stringValueOperations.multiSetIfAbsent(Map.of("key1", "v1", "key3", "v3"));
         assertFalse(flag);
 
-        integerOperations.set("num", 1);
+        integerValueOperations.set("num", 1);
 
         // INCR 加一
-        Long num1 = integerOperations.increment("num");
+        Long num1 = integerValueOperations.increment("num");
         assertEquals(2, num1);
         // DECR 减一
-        Long num2 = integerOperations.decrement("num");
+        Long num2 = integerValueOperations.decrement("num");
         assertEquals(1, num2);
 
         // INCRBY 加N
-        Long num3 = integerOperations.increment("num", 15);
+        Long num3 = integerValueOperations.increment("num", 15);
         assertEquals(16, num3);
         // DECRBY 减N
-        Long num4 = integerOperations.decrement("num", 6);
+        Long num4 = integerValueOperations.decrement("num", 6);
         assertEquals(10, num4);
 
-        redisOperations.delete(Arrays.asList("key", "key1", "key2", "num"));
+        redisTemplate.delete(Arrays.asList("key", "key1", "key2", "num"));
     }
 }

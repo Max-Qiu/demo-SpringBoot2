@@ -17,6 +17,8 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 
 /**
+ * ZSet 有序集合（Sorted Sets）
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest

@@ -16,18 +16,20 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 
 import com.maxqiu.demo.entity.User;
 
 /**
+ * Set 集合
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest
 public class SetOperationsTest {
     @Autowired
-    private RedisOperations<String, Object> redisOperations;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 值是String类型的集合
@@ -105,8 +107,8 @@ public class SetOperationsTest {
         assertEquals(2, list2.size());
 
         // 删除数据
-        assertFalse(redisOperations.hasKey("set"));
-        redisOperations.delete("set2");
+        assertFalse(redisTemplate.hasKey("set"));
+        redisTemplate.delete("set2");
     }
 
     /**
@@ -126,7 +128,7 @@ public class SetOperationsTest {
         assertEquals(3, nums);
 
         // 删除数据
-        redisOperations.delete(Arrays.asList("users", "nums"));
+        redisTemplate.delete(Arrays.asList("users", "nums"));
     }
 
     /**
@@ -172,6 +174,6 @@ public class SetOperationsTest {
         assertEquals(2, differenceAndStore);
 
         // 删除数据
-        redisOperations.delete(Arrays.asList("set1", "set2", "set3", "set4", "set5"));
+        redisTemplate.delete(Arrays.asList("set1", "set2", "set3", "set4", "set5"));
     }
 }

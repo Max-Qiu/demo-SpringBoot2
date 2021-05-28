@@ -16,15 +16,17 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 /**
+ * Hash 哈希散列
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest
 public class HashOperationsTest {
     @Autowired
-    private RedisOperations<String, Object> redisOperations;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource(name = "stringRedisTemplate")
     private HashOperations<String, String, String> stringHashOperations;
@@ -54,7 +56,7 @@ public class HashOperationsTest {
         assertFalse(flag2);
 
         // 删除数据
-        redisOperations.delete("user");
+        redisTemplate.delete("user");
     }
 
     /**
@@ -85,9 +87,9 @@ public class HashOperationsTest {
         }
 
         // HGETALL 获取哈希散列的所有字段与值
-        Map<String, String> user1 = stringHashOperations.entries("user");
-        for (String s : user1.keySet()) {
-            System.out.println(s + "  " + user1.get(s));
+        Map<String, String> map = stringHashOperations.entries("user");
+        for (String s : map.keySet()) {
+            System.out.println(s + "  " + map.get(s));
         }
 
         // HKEYS 获取哈希散列的所有字段
@@ -103,7 +105,7 @@ public class HashOperationsTest {
         }
 
         // 删除数据
-        redisOperations.delete("user");
+        redisTemplate.delete("user");
     }
 
     @Test
@@ -131,5 +133,8 @@ public class HashOperationsTest {
         // HINCRBY 增减哈希散列中指定字段的值
         Long increment = integerHashOperations.increment("user", "age", 1);
         assertEquals(19, increment);
+
+        // 删除数据
+        redisTemplate.delete("user");
     }
 }

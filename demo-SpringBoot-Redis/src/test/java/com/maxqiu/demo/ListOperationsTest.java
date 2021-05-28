@@ -14,17 +14,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.maxqiu.demo.entity.User;
 
 /**
+ * List 列表
+ * 
  * @author Max_Qiu
  */
 @SpringBootTest
 public class ListOperationsTest {
     @Autowired
-    private RedisOperations<String, Object> redisOperations;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 值是String类型的列表
@@ -66,7 +68,7 @@ public class ListOperationsTest {
         assertEquals(4, list.size());
         assertEquals("a", list.get(0));
 
-        redisOperations.delete("list");
+        redisTemplate.delete("list");
     }
 
     /**
@@ -125,7 +127,7 @@ public class ListOperationsTest {
         assertEquals(user, user2);
 
         // 清空数据
-        redisOperations.delete(Arrays.asList("list1", "list2", "nums", "users"));
+        redisTemplate.delete(Arrays.asList("list1", "list2", "nums", "users"));
     }
 
     /**
@@ -147,7 +149,7 @@ public class ListOperationsTest {
         assertEquals("a", s2);
 
         // 清空数据
-        redisOperations.delete("list");
+        redisTemplate.delete("list");
     }
 
     @Test
@@ -182,6 +184,6 @@ public class ListOperationsTest {
         assertEquals(1, stringListOperations.size("list2"));
 
         // 清空数据
-        redisOperations.delete(Arrays.asList("list", "list2"));
+        redisTemplate.delete(Arrays.asList("list", "list2"));
     }
 }
