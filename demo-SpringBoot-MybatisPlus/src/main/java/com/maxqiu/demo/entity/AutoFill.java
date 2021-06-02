@@ -52,7 +52,7 @@ public class AutoFill extends Model<AutoFill> {
     private LocalDateTime updateTime;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

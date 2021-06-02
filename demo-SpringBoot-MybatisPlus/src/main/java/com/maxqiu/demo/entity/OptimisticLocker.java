@@ -46,7 +46,7 @@ public class OptimisticLocker extends Model<OptimisticLocker> {
     private Long version;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

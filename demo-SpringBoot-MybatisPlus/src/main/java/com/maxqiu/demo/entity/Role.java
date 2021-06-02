@@ -65,7 +65,7 @@ public class Role extends Model<Role> {
     private List<Permission> permissionList;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

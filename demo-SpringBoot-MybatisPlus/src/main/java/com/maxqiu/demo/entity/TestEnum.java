@@ -46,7 +46,7 @@ public class TestEnum extends Model<TestEnum> {
     private StateEnum state;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

@@ -58,7 +58,7 @@ public class Permission extends Model<Permission> {
     private LocalDateTime updateTime;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

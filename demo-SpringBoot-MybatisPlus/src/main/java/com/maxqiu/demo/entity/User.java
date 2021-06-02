@@ -50,7 +50,7 @@ public class User extends Model<User> {
     private String email;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

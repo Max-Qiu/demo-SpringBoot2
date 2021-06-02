@@ -55,7 +55,7 @@ public class Student extends Model<Student> {
     private Long count;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

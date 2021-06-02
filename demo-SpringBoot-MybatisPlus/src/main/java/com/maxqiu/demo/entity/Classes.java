@@ -46,7 +46,7 @@ public class Classes extends Model<Classes> {
     private LocalDateTime createTime;
 
     @Override
-    protected Serializable pkVal() {
+    public Serializable pkVal() {
         return this.id;
     }
 }

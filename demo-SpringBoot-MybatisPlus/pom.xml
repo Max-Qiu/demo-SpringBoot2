@@ -9,9 +9,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-MybatisPlus</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-MybatisPlus</name>
 
     <dependencies>
         <!-- Web -->
@@ -35,7 +32,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.2</version>
+            <version>3.4.3</version>
         </dependency>
 
         <!-- 性能分析 -->
