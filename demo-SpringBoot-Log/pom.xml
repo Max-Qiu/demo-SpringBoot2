@@ -9,8 +9,5 @@
     </parent>
 
     <artifactId>demo-SpringBoot-Log</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-Log</name>
 
 </project>

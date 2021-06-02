@@ -9,9 +9,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-SpringMVC</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-SpringMVC</name>
 
     <dependencies>
         <!-- web -->

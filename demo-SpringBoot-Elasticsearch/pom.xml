@@ -9,9 +9,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-Elasticsearch</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-Elasticsearch</name>
 
     <dependencies>
         <!-- Elasticsearch -->

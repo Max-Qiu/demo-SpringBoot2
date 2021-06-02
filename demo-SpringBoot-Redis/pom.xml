@@ -10,10 +10,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-Redis</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-Redis</name>
-    <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <!-- Redis -->
@@ -32,4 +28,5 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
     </dependencies>
+
 </project>

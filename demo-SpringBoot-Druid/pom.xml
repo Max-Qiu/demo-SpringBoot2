@@ -9,10 +9,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-Druid</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-Druid</name>
-    <description>Demo project for Spring Boot</description>
 
     <dependencies>
         <!-- web -->
@@ -43,4 +39,5 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
     </dependencies>
+
 </project>

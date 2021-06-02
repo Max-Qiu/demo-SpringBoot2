@@ -9,9 +9,6 @@
     </parent>
 
     <artifactId>demo-SpringBoot-Mail</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-
-    <name>demo-SpringBoot-Mail</name>
 
     <dependencies>
         <!-- 邮件发送 -->
