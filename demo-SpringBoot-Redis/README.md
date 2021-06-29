@@ -1,9 +1,3 @@
-> 示例代码：
-GitHub：[https://github.com/Max-Qiu/demo-SpringBoot](https://github.com/Max-Qiu/demo-SpringBoot)
-Gitee：[https://gitee.com/Max-Qiu/demo-SpringBoot](https://gitee.com/Max-Qiu/demo-SpringBoot)
-
----
-
 > 官方文档：[Spring Data Redis](https://spring.io/projects/spring-data-redis)
 
 # 简介
@@ -24,15 +18,16 @@ Gitee：[https://gitee.com/Max-Qiu/demo-SpringBoot](https://gitee.com/Max-Qiu/de
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-redis</artifactId>
 </dependency>
-<!-- Jackson格式化 -->
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-json</artifactId>
-</dependency>
 <!-- 连接池依赖 -->
 <dependency>
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-pool2</artifactId>
+</dependency>
+<!-- Fastjson -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.76</version>
 </dependency>
 ```
 
@@ -130,24 +125,28 @@ spring:
 
 默认情况下，`org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration`会生成一个默认的`RedisTemplate`，且序列化时使用`JdkSerializationRedisSerializer`，详见`org.springframework.data.redis.core.RedisTemplate`
 
-然而`Jdk`的序列化在Redis中可读性不好，我们需要自定义`Json`格式的序列化转换，示例中的`RedisSerializer.json()`就是`GenericJackson2JsonRedisSerializer`
+然而`Jdk`的序列化在Redis中可读性不好，我们需要自定义`Json`格式的序列化转换，这里我们使用阿里巴巴的`Fastjson`
 
-但是`Jackson`在格式化`String`字符串时会在两边加上`"`，例如`hello`变成`"hello"`，所以`RedisAutoConfiguration`同时还提供了一个`StringRedisTemplate`，详见`org.springframework.data.redis.core.StringRedisTemplate`
+`RedisAutoConfiguration`同时还提供了一个`StringRedisTemplate`，详见`org.springframework.data.redis.core.StringRedisTemplate`
 
 ```java
+import java.nio.charset.StandardCharsets;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 
 /**
- * Redis配置项
+ * Redis操作配置
  */
 @Configuration
-public class RedisConfig {
+public class RedisTemplateConfig {
     /**
-     * 自定义RedisTemplate，使用json格式化value
+     * 自定义RedisTemplate，使用fastjson格式化value
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
@@ -155,12 +154,12 @@ public class RedisConfig {
         // 连接工厂
         template.setConnectionFactory(redisConnectionFactory);
         // key序列化
-        template.setKeySerializer(RedisSerializer.string());
-        // value序列化
-        template.setValueSerializer(RedisSerializer.json());
+        template.setKeySerializer(new StringRedisSerializer(StandardCharsets.UTF_8));
+        // value序列化（这里使用阿里巴巴的Fastjson格式化工具）
+        template.setValueSerializer(new GenericFastJsonRedisSerializer());
         // hash序列化
-        template.setHashKeySerializer(RedisSerializer.string());
-        template.setHashValueSerializer(RedisSerializer.json());
+        template.setHashKeySerializer(new StringRedisSerializer(StandardCharsets.UTF_8));
+        template.setHashValueSerializer(new GenericFastJsonRedisSerializer());
         // 启用事务支持
         template.setEnableTransactionSupport(true);
         return template;

@@ -1,6 +1,8 @@
 > 本文档整理自视频教程：[尚硅谷_Spring Boot整合篇](http://www.atguigu.com/download_detail.shtml?v=38)
 
-环境介绍：本文使用`SpringBoot 2.4.4`，视频教程使用的`1.5.x`版本
+环境介绍：本文使用`SpringBoot 2.4.x`，视频教程使用的`1.5.x`版本
+
+---
 
 > 官方文档：
 [Spring Framework Documentation -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#cache)
@@ -89,10 +91,17 @@ public class IndexController {
 `pom.xml`中添加`redis`依赖
 
 ```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-redis</artifactId>
-</dependency>
+    <!-- Redis数据库依赖 -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-redis</artifactId>
+    </dependency>
+    <!-- Fastjson格式化工具 -->
+    <dependency>
+        <groupId>com.alibaba</groupId>
+        <artifactId>fastjson</artifactId>
+        <version>1.2.76</version>
+    </dependency>
 ```
 
 > 第二步：配置数据库连接
@@ -105,6 +114,8 @@ spring:
     password: 123
     database: 0
 ```
+
+完整的Redis数据库配置请参考：[SpringBoot2.4.x整合Redis](https://maxqiu.com/article/detail/102)
 
 > 第三步：查看缓存
 
@@ -409,52 +420,12 @@ public class BookRepositoryImpl implements BookRepository {
 
 # 自定义`RedisCacheManager`
 
-通过自定义`RedisCacheManager`，可以修改序列化工具、存储时间、空值是否缓存等
-
-## 全局自定义
-
-> 例：
-
-```java
-import java.time.Duration;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.cache.RedisCacheWriter;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-@Configuration
-public class RedisConfig {
-    @Bean
-    public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        // 缓存配置对象
-        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-            // 设置缓存的默认超时时间：30分钟
-            .entryTtl(Duration.ofMinutes(30L))
-            // 如果是空值，不缓存
-            .disableCachingNullValues()
-            // 设置key序列化器
-            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-            // 设置value序列化器
-            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-        return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
-            .cacheDefaults(configuration).build();
-    }
-}
-```
-
-## 局部自定义
-
-当某个缓存需要自定义过期时间或其他设置时，可以通过配置多个`RedisCacheManager`以及使用`@Cacheable`的`cacheManager`属性指定对应的`RedisCacheManager`即可
+通过自定义`RedisCacheManager`，可以修改序列化方案、存储时间、空值是否缓存等。当某个缓存需要自定义过期时间或其他设置时，可以通过配置多个`RedisCacheManager`以及使用`@Cacheable`的`cacheManager`属性指定对应的`RedisCacheManager`即可
 
 > 第一步：定义多个`RedisCacheManager`
 
 ```java
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 
 import org.springframework.context.annotation.Bean;
@@ -463,14 +434,18 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+
+/**
+ * Redis缓存配置
+ */
 @Configuration
-public class RedisConfig {
+public class RedisCacheConfig {
     /**
-     * 默认Redis全局配置。（用不超时）
+     * 默认Redis全局配置。（30分钟超时）
      * 
      * @param redisConnectionFactory
      * @return
@@ -478,15 +453,15 @@ public class RedisConfig {
     @Primary
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
-        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(instanceConfig(0L)).build();
+        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(instanceConfig(30L)).build();
     }
 
     /**
-     * 1分钟超时
+     * 永不超时
      */
     @Bean
-    public RedisCacheManager expire1min(RedisConnectionFactory connectionFactory) {
-        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(60 * 60L)).build();
+    public RedisCacheManager noExpire(RedisConnectionFactory connectionFactory) {
+        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(0L)).build();
     }
 
     /**
@@ -494,7 +469,7 @@ public class RedisConfig {
      */
     @Bean
     public RedisCacheManager expire2h(RedisConnectionFactory connectionFactory) {
-        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(60 * 60 * 2L)).build();
+        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(60 * 2L)).build();
     }
 
     /**
@@ -502,27 +477,26 @@ public class RedisConfig {
      */
     @Bean
     public RedisCacheManager expire1day(RedisConnectionFactory connectionFactory) {
-        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(60 * 60 * 24L)).build();
+        return RedisCacheManager.builder(connectionFactory).cacheDefaults(instanceConfig(60 * 24L)).build();
     }
 
     /**
      * 通用配置
      * 
      * @param ttl
-     *            超时时间（秒）
+     *            超时时间（分钟）
      */
     private RedisCacheConfiguration instanceConfig(Long ttl) {
         // 缓存配置对象
         return RedisCacheConfiguration.defaultCacheConfig()
             // 设置缓存的默认超时时间
-            .entryTtl(Duration.ofSeconds(ttl))
-            // 如果是空值，不缓存
-            .disableCachingNullValues()
+            .entryTtl(Duration.ofMinutes(ttl))
+            // 如果是空值，不缓存（不建议设置，防止缓存穿透）
+            // .disableCachingNullValues()
             // 设置key序列化器
-            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
-            // 设置value序列化器
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer(StandardCharsets.UTF_8)))
+            // 设置value序列化器（这里使用阿里巴巴的Fastjson格式化工具）
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericFastJsonRedisSerializer()));
     }
 }
 ```
