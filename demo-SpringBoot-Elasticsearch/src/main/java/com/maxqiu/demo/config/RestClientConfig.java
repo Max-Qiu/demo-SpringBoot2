@@ -1,5 +1,7 @@
 package com.maxqiu.demo.config;
 
+import java.time.Duration;
+
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +18,6 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
  */
 @Configuration
 public class RestClientConfig extends AbstractElasticsearchConfiguration {
-
     @Bean
     @Override
     public RestHighLevelClient elasticsearchClient() {
@@ -29,8 +30,10 @@ public class RestClientConfig extends AbstractElasticsearchConfiguration {
             // .connectedTo("localhost:9200", "localhost:9291")
             // 是否启用ssl
             // .usingSsl()
-            // 设置超时时间
-            .withConnectTimeout(10L)
+            // 设置连接超时时间
+            .withConnectTimeout(Duration.ofSeconds(10))
+            // 设置
+            .withSocketTimeout(Duration.ofSeconds(30))
             // 设置用户名密码
             // .withBasicAuth("elastic", "123456")
             // 创建连接信息

@@ -6,7 +6,7 @@
 #      username: elastic # 用户名
 #      password: 123456 # 密码
 #      connection-timeout: 10s # 连接超时时间（默认1s）
-#      read-timeout: 30 # 数据读取超时时间（默认30s）
+#      read-timeout: 30s # 数据读取超时时间（默认30s）
 
 logging:
   file:
