@@ -1,10 +1,15 @@
+server:
+  port: 8080
 spring:
+  session:
+    store-type: redis # 使用 Redis 存储 Session
+    #redis:
+    #  flush-mode: immediate # 会话刷新模式（此处有bug，设置无效，需要在启动类注册上设置）
+    #  namespace: demo::session # 用于存储会话的键的命名空间（此处有bug，设置无效，需要在启动类注册上设置）
+  # Redis相关配置
   redis:
-    ## 单机模式
     host: redis # 地址
     port: 6379 # 端口
-
-    # 通用配置
     username: # 用户名
     password: 123 # 密码
     database: 0 # 指定数据库序号
