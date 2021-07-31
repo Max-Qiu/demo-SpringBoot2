@@ -1,7 +1,7 @@
 spring:
   mail:
-    host: smtp.126.com # 邮箱服务器
-    username: username@maxqiu.com # 用户名
+    host: smtp.xxx.com # 邮箱服务器
+    username: xxx@xxx.com # 用户名
     password: password # 密码
     port: 994 # 端口
     default-encoding: utf-8 # 编码

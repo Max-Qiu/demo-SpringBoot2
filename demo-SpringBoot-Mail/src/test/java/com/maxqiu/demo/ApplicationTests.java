@@ -11,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+/**
+ * JavaMailSender 示例
+ */
 @SpringBootTest
 class ApplicationTests {
     @Autowired
-    private JavaMailSenderImpl sender;
+    private JavaMailSender sender;
 
     @Value("${spring.mail.username}")
     private String from;
@@ -85,6 +88,7 @@ class ApplicationTests {
         context.setVariables(map);
         String text = engine.process("template", context);
         helper.setText(text, true);
+        helper.addInline("image1", new File("C:\\file1.jpg")); // 内部附件
         sender.send(mimeMessage);
     }
 }
