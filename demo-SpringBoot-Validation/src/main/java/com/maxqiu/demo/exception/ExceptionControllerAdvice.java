@@ -26,14 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice(basePackages = "com.maxqiu.demo.controller")
 public class ExceptionControllerAdvice {
     /**
-     * 处理方法上的单个参数异常
-     *
-     * @param e
-     * @return
+     * 处理方法的普通参数异常
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     public Result handleValidException(ConstraintViolationException e) {
-        log.error("其他异常：{}\n异常类型：{}", e.getMessage(), e.getClass());
         Map<String, String> errorMap = new HashMap<>();
         for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
             String field = "";
@@ -50,7 +46,6 @@ public class ExceptionControllerAdvice {
      */
     @ExceptionHandler(value = BindException.class)
     public Result handleValidException(BindException e) {
-        log.error("其他异常：{}\n异常类型：{}", e.getMessage(), e.getClass());
         Map<String, String> errorMap = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(r -> errorMap.put(r.getField(), r.getDefaultMessage()));
         return Result.error(500, errorMap);
