@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 
 /**
  * 自动填充
- * 
+ *
  * @author Max_Qiu
  */
 @Component
@@ -58,7 +58,8 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         System.out.println("修改时自动填充");
-
+        // 更新时间每次更新时都需要修改，MetaObjectHandler默认不覆盖已存在值的字段，所以需要手动设置为null
+        metaObject.setValue("updateTime", null);
         // 方案1 起始版本 3.3.0(推荐使用)
         // this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
         LocalDateTime parse = LocalDateTime.parse(LocalDateTime.now().format(FORMATTER), FORMATTER);
