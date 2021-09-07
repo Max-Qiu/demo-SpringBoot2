@@ -11,16 +11,15 @@ import com.maxqiu.demo.mapper.OptimisticLockerMapper;
 
 /**
  * 乐观锁
- * 
+ *
  * 需要在插件内添加 interceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
- * 
+ *
  * 然后在对应实体的版本控制字段添加 @Version
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestOptimisticLocker {
-
     @Autowired
     private OptimisticLockerMapper mapper;
 
@@ -131,7 +130,7 @@ public class TestOptimisticLocker {
         LambdaQueryWrapper<OptimisticLocker> ew = Wrappers.lambdaQuery();
         ew.eq(OptimisticLocker::getVersion, 1);
         // SELECT COUNT( * ) FROM smp_optimistic_locker WHERE (version = ?)
-        int count = mapper.selectCount(ew);
+        long count = mapper.selectCount(ew);
 
         // 设置一个查询条件，且需要更新的版本为 1
         OptimisticLocker entity = new OptimisticLocker();
@@ -149,7 +148,7 @@ public class TestOptimisticLocker {
         LambdaQueryWrapper<OptimisticLocker> ew1 = Wrappers.lambdaQuery();
         ew1.eq(OptimisticLocker::getVersion, 1);
         // SELECT COUNT( * ) FROM smp_optimistic_locker WHERE (version = ?)
-        Integer count1 = mapper.selectCount(ew1);
+        long count1 = mapper.selectCount(ew1);
         // 应当查询不到版本为 1 的数据
         System.out.println(count1);
 
@@ -157,7 +156,7 @@ public class TestOptimisticLocker {
         LambdaQueryWrapper<OptimisticLocker> ew2 = Wrappers.lambdaQuery();
         ew2.eq(OptimisticLocker::getVersion, 2);
         // SELECT COUNT( * ) FROM smp_optimistic_locker WHERE (version = ?)
-        Integer count2 = mapper.selectCount(ew);
+        long count2 = mapper.selectCount(ew);
         System.out.println(count2);
     }
 }

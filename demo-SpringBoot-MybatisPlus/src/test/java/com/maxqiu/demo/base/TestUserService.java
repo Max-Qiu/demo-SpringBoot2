@@ -23,12 +23,11 @@ import com.maxqiu.demo.service.IUserService;
 
 /**
  * 测试 Service 层
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestUserService {
-
     @Autowired
     private IUserService userService;
 
@@ -86,7 +85,7 @@ public class TestUserService {
 
     /**
      * 单条对象保存
-     * 
+     *
      * 如果设置ID，则存在相同ID时抛出异常
      */
     @Test
@@ -98,11 +97,11 @@ public class TestUserService {
 
     /**
      * 更新或保存
-     * 
+     *
      * 如果没有ID，则直接保存
-     * 
+     *
      * 如果有ID，则会先检查，再决定执行 INSERT 或 UPDATE
-     * 
+     *
      * TODO 为啥这个会使用事务
      */
     @Test
@@ -148,7 +147,7 @@ public class TestUserService {
 
     /**
      * 单条SQL批量保存
-     * 
+     *
      * 遇到相同ID抛出异常
      */
     @Test
@@ -164,7 +163,7 @@ public class TestUserService {
 
     /**
      * 单条SQL批量保存
-     * 
+     *
      * 并限制每次最大数量
      */
     @Test
@@ -183,11 +182,11 @@ public class TestUserService {
 
     /**
      * 批量保存或更新
-     * 
+     *
      * 有ID和没ID会自动分段
-     * 
+     *
      * 如果没有ID，则直接保存
-     * 
+     *
      * 如果有ID，则会先检查，再决定执行 INSERT 或 UPDATE
      */
     @Test
@@ -384,7 +383,7 @@ public class TestUserService {
     @Test
     void count() {
         // SELECT COUNT( * ) FROM smp_user
-        int count = userService.count();
+        long count = userService.count();
         System.out.println(count);
     }
 
@@ -394,7 +393,7 @@ public class TestUserService {
     @Test
     void countByWrapper() {
         // SELECT COUNT( * ) FROM smp_user WHERE (username = ?)
-        int count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, "m"));
+        long count = userService.count(new LambdaQueryWrapper<User>().eq(User::getUsername, "m"));
         System.out.println(count);
     }
 
@@ -559,5 +558,4 @@ public class TestUserService {
         List<Map<String, Object>> users = page.getRecords();
         users.forEach(System.out::println);
     }
-
 }

@@ -26,7 +26,6 @@ import com.maxqiu.demo.mapper.UserMapper;
  */
 @SpringBootTest
 public class TestLambdaQueryWrapper {
-
     @Autowired
     private UserMapper userMapper;
 
@@ -42,7 +41,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * 选择部分字段进行查询
-     * 
+     *
      * 仅 LambdaQueryWrapper 和 QueryWrapper 有 select() 方法
      */
     @Test
@@ -56,7 +55,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * 排查某些字段，其中，主键ID不可排除
-     * 
+     *
      * 仅 LambdaQueryWrapper 和 QueryWrapper 有 select() 方法
      */
     @Test
@@ -81,7 +80,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * boolean condition
-     * 
+     *
      * 是否拼接该查询条件
      */
     @Test
@@ -101,7 +100,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * eq 等于 xxx = ?
-     * 
+     *
      * ne 不等于 xxx <> ?
      */
     @Test
@@ -116,11 +115,11 @@ public class TestLambdaQueryWrapper {
 
     /**
      * ge 大于 xxx > ?
-     * 
+     *
      * gt 大于等于 xxx >= >
-     * 
+     *
      * lt 小于 xxx < ?
-     * 
+     *
      * le 小于等于 xxx <= ?
      */
     @Test
@@ -148,13 +147,13 @@ public class TestLambdaQueryWrapper {
 
     /**
      * like 存在 xxx LIKE ?
-     * 
+     *
      * notLike 不存在 xxx NOT LIKE ?
-     * 
+     *
      * likeLeft 开通匹配 xxx LIKE ?
-     * 
+     *
      * likeRight 结尾匹配 xxx LIKE ?
-     * 
+     *
      * MybatisPlus会自动添加 %
      */
     @Test
@@ -221,7 +220,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * exists 存在 EXISTS
-     * 
+     *
      * notExists 不存在 NOT EXISTS
      */
     @Test
@@ -239,9 +238,9 @@ public class TestLambdaQueryWrapper {
 
     /**
      * orderBy 排序
-     * 
+     *
      * orderByAsc 正序 xxx ASC
-     * 
+     *
      * orderByDesc 倒序 xxx DESC
      */
     @Test
@@ -265,7 +264,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * and 且
-     * 
+     *
      * or 或者
      */
     @Test
@@ -320,7 +319,7 @@ public class TestLambdaQueryWrapper {
 
     /**
      * 所有条件使用 = 判断
-     * 
+     *
      * 且忽略空值
      */
     @Test
@@ -422,7 +421,7 @@ public class TestLambdaQueryWrapper {
         System.out.println(page.getTotal());
 
         // SELECT COUNT( * ) FROM smp_user WHERE (age = ?)
-        Integer count = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).count();
+        long count = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).count();
         System.out.println(count);
 
         // SELECT id,username,age,email,create_time FROM smp_user WHERE (age = ?)

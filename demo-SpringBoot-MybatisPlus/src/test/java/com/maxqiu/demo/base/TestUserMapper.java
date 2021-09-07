@@ -19,7 +19,7 @@ import com.maxqiu.demo.mapper.UserMapper;
 
 /**
  * 测试 DAO 层
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -185,7 +185,7 @@ public class TestUserMapper {
         // SELECT COUNT( * ) FROM smp_user WHERE (age > ? AND age < ?)
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
         queryWrapper.gt(User::getAge, 0).lt(User::getAge, 100);
-        int count = userMapper.selectCount(queryWrapper);
+        long count = userMapper.selectCount(queryWrapper);
         System.out.println(count);
     }
 
@@ -213,7 +213,7 @@ public class TestUserMapper {
 
     /**
      * 分页查询
-     * 
+     *
      * 更多分页示例参照 TestPage
      */
     @Test

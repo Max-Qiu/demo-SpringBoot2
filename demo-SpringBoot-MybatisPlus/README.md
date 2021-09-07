@@ -4,8 +4,6 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
 
 # pom 依赖
 
-## 核心依赖
-
 ```xml
 <!-- SpringBoot相关其他依赖略 -->
 <!-- Lombok 如果实体使用Lombok，则需要添加 -->
@@ -29,7 +27,7 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
-    <version>3.4.2</version>
+    <version>3.4.3.3</version>
 </dependency>
 <!-- JSON 格式化 -->
 <dependency>
@@ -45,24 +43,6 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
 </dependency>
 ```
 
-## 代码生成器
-
-```xml
-<!-- MybatisPlus代码生成器 -->
-<dependency>
-    <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-generator</artifactId>
-    <version>3.4.1</version>
-    <scope>test</scope>
-</dependency>
-<!-- MybatisPlus代码生成器模板引擎 -->
-<dependency>
-    <groupId>org.apache.velocity</groupId>
-    <artifactId>velocity-engine-core</artifactId>
-    <version>2.2</version>
-    <scope>test</scope>
-</dependency>
-```
 # yml
 
 > 仅展示常用示例
@@ -91,10 +71,6 @@ mybatis-plus:
 ```
 
 # 代码示例
-
-## 代码生成器
-
-- CodeGenerator
 
 ## CRUD 增删改查
 
