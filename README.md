@@ -10,6 +10,7 @@
 demo-SpringBoot-Cache | 缓存（含Redis缓存配置）
 demo-SpringBoot-Druid | Druid连接池配置
 demo-SpringBoot-Elasticsearch | ES搜索（仅配置与简单CRUD）
+demo-SpringBoot-HikariCP | HikariCP连接池配置
 demo-SpringBoot-JUnit5 | 单元测试
 demo-SpringBoot-Log | 日志
 demo-SpringBoot-Mail | 邮件发送
