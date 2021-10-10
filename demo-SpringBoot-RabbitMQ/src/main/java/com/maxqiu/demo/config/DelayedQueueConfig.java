@@ -9,12 +9,11 @@ import org.springframework.amqp.core.CustomExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Max_Qiu
  */
-@Configuration
+// @Configuration
 public class DelayedQueueConfig {
     public static final String DELAYED_QUEUE_NAME = "delayed.queue";
     public static final String DELAYED_EXCHANGE_NAME = "delayed.exchange";

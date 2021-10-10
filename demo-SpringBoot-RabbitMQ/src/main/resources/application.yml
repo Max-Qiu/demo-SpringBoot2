@@ -1,7 +1,6 @@
 spring:
   rabbitmq:
-    host: 127.0.0.1
-    port: 5672
-    username: guest
-    password: guest
-    publisher-confirm-type: correlated
+    host: 127.0.0.1 # 地址
+    port: 5672 # 端口
+    username: guest # 用户名
+    password: guest # 密码

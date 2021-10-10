@@ -9,12 +9,11 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Max_Qiu
  */
-@Configuration
+// @Configuration
 public class ConfirmConfig {
     public static final String CONFIRM_EXCHANGE_NAME = "confirm.exchange";
     public static final String CONFIRM_QUEUE_NAME = "confirm.queue";

@@ -10,12 +10,11 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Max_Qiu
  */
-@Configuration
+// @Configuration
 public class TtlQueueConfig {
     public static final String X_EXCHANGE = "X";
     public static final String QUEUE_A = "QA";
