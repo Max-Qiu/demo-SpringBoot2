@@ -10,18 +10,13 @@ import org.springframework.context.annotation.Configuration;
  * @author Max_Qiu
  */
 @Configuration
-public class QueueConfig {
-    /**
-     * 入门队列名称
-     */
-    public static final String HELLO_WORLD_QUEUE_NAME = "hello.queue";
-
+public class HelloWorldConfig {
     /**
      * 入门队列配置
      */
     @Bean
     public Queue helloWorldQueue() {
         // 创建一个队列，并指定队列名称
-        return new Queue(HELLO_WORLD_QUEUE_NAME);
+        return new Queue("hello-world");
     }
 }
