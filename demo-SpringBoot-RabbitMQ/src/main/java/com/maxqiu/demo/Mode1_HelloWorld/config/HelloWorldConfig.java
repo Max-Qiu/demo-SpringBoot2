@@ -2,14 +2,14 @@ package com.maxqiu.demo.Mode1_HelloWorld.config;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * 队列配置
  *
  * @author Max_Qiu
  */
-@Configuration
+@Component
 public class HelloWorldConfig {
     /**
      * 入门队列配置

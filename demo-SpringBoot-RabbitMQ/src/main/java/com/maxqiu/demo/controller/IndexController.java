@@ -50,4 +50,16 @@ public class IndexController {
         rabbitTemplate.convertAndSend("work-queues", i);
         return i++;
     }
+
+    /**
+     * 发布订阅 生产者
+     */
+    @GetMapping("publish-subscribe")
+    public Integer publishSubscribe() {
+        System.out.println("~~~~Sent:" + i);
+        rabbitTemplate.convertAndSend(
+            // 指定交换机名称
+            "fanout", "", i);
+        return i++;
+    }
 }
