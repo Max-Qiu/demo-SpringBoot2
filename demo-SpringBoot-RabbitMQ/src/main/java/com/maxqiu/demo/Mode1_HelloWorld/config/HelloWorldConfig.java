@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
- * 队列配置
+ * 队列
  *
  * @author Max_Qiu
  */

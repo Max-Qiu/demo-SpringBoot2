@@ -5,7 +5,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 /**
- * 工作队列消费者
+ * 消费者
  *
  * @author Max_Qiu
  */

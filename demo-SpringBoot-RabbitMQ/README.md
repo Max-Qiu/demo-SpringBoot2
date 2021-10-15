@@ -40,7 +40,7 @@ spring:
 
 # 使用
 
-`RabbitMQ`有七种核心使用方式：
+`RabbitMQ`七种核心使用方式：
 
 1. `"Hello World!"`入门：最简单的消息发送与接收
 2. `Work queues`工作队列：分配任务（竞争消费者模式，即轮询）
@@ -67,9 +67,6 @@ spring:
 此处声明了一个队列，名称为`hello-world`
 
 ```java
-/**
- * 队列配置
- */
 @Component
 public class HelloWorldConfig {
     /**
@@ -88,9 +85,6 @@ public class HelloWorldConfig {
 使用`@RabbitListener`注解创建一个监听器，用于指定监听哪个队列。使用`@RabbitHandler`指定方法接收数据，根据入参类型处理不同类型的数据。下文展示了处理不同类型的消息
 
 ```java
-/**
- * 入门消费者
- */
 @Component
 @RabbitListener(
     // 指定要监听哪些队列（可指定多个）
@@ -133,9 +127,6 @@ public class HelloWorldReceiver {
 生产者使用`RabbitTemplate`发送消息，在`Controller`、`Service`、或者其他类中使用`@Autowired`注解引入`RabbitTemplate`即可使用。使用`convertAndSend`方法自动将对象转换为消息并发送。下文中展示了发送不同类型的消息
 
 ```java
-/**
- * 生产者
- */
 @RestController
 public class IndexController {
     @Autowired
@@ -190,9 +181,6 @@ public class IndexController {
 同入门示例，再建立一个队列
 
 ```java
-/**
- * 队列配置
- */
 @Component
 public class WorkQueuesConfig {
     /**
@@ -210,9 +198,6 @@ public class WorkQueuesConfig {
 创建两个消费者
 
 ```java
-/**
- * 工作队列消费者
- */
 @Component
 @RabbitListener(queues = "work-queues")
 public class WorkQueuesReceiver1 {
@@ -224,9 +209,6 @@ public class WorkQueuesReceiver1 {
 ```
 
 ```java
-/**
- * 工作队列消费者
- */
 @Component
 @RabbitListener(queues = "work-queues")
 public class WorkQueuesReceiver2 {
@@ -239,11 +221,7 @@ public class WorkQueuesReceiver2 {
 
 ### 生产者
 
-
-```
-/**
- * 生产者
- */
+```java
 @RestController
 public class IndexController {
     @Autowired
@@ -307,9 +285,6 @@ public class IndexController {
 ### 交换机和队列
 
 ```java
-/**
- * 队列配置
- */
 @Component
 public class PublishSubscribeConfig {
     /**
@@ -357,9 +332,6 @@ public class PublishSubscribeConfig {
 2. 上文中使用`AnonymousQueue`声明随机名称队列，所以注解内使用表达式获取队列名称
 
 ```java
-/**
- * 工作队列消费者
- */
 @Component
 public class PublishSubscribeReceiver {
     @RabbitListener(queues = "#{autoDeleteQueue1.name}")
@@ -379,9 +351,6 @@ public class PublishSubscribeReceiver {
 生产者发送消息时需要指定交换机，但是不能指定队列，所以使用`""`
 
 ```java
-/**
- * 生产者
- */
 @RestController
 public class IndexController {
     @Autowired
@@ -421,3 +390,164 @@ public class IndexController {
 ===Received1:3
 ===Received2:3
 ```
+
+## `Routing`路由
+
+本节将添加一些特别的功能：比方说只让某个消费者订阅发布的**部分**消息。例如只把严重错误消息定向存储到日志文件，同时仍然能够在控制台上打印所有日志消息。
+
+> 绑定
+
+绑定是交换器和队列之间的关系。这可以简单地理解为：**队列只对它绑定的交换机的消息感兴趣**。绑定可以采用额外的绑定键参数。`Spring AMQP`使用了一个`fluent API`来让这种关系非常清晰。将交换机和队列传入`BindingBuilder`并简单地用绑定键将队列绑定到交换机，如下所示：
+
+```java
+@Bean
+public Binding binding1a(DirectExchange direct,
+    Queue autoDeleteQueue1) {
+    return BindingBuilder.bind(autoDeleteQueue1)
+        .to(direct)
+        .with("orange");
+}
+```
+
+绑定键的含义取决于交换机类型。以前使用的扇形交换，完全忽略了它的价值。
+
+> 直接交换
+
+上一节中的日志系统将所有消息广播给所有消费者，对此我们想做一些改变，例如我们希望将日志消息写入磁盘的程序仅接收严重错误(errros)，而不存储哪些警告(warning)或信息(info)日志消息避免浪费磁盘空间。扇出这种交换类型并不能带来很大的灵活性，它只能进行无意识的广播，在这里将使用`direct`（直连）这种类型来进行替换，这种类型的工作方式是，消息只去到它绑定的`routingKey`队列中去。
+
+![](https://cdn.maxqiu.com/upload/d13412c2b0f04d0ea5fbe937c7937a24.png)
+
+在上面这张图中，可以看到`X`绑定了两个队列，绑定类型是`direct`。队列`Q1`绑定键为`orange`，队列`Q2`绑定键有两个：一个绑定键为`black`，另一个绑定键为`green`。在这种绑定情况下，生产者发布消息到`exchange`上，绑定键为`orange`的消息会被发布到队列`Q1`。绑定键为`black`和`green`的消息会被发布到队列`Q2`，其他消息类型的消息将被丢弃。
+
+> 多重绑定
+
+如果`exchange`的绑定类型是`direct`，但是它绑定的多个队列的`key`如果都相同，在这种情况下虽然绑定类型是`direct`但是它表现的就和`fanout`类似了，就跟广播差不多，如上图所示。
+
+> 综合
+
+将`直接交换`和`多重绑定`放在一起，如上图所示。
+
+### 交换机和队列
+
+```java
+@Component
+public class RoutingConfig {
+    /**
+     * 声明一个直连类型的交换机
+     */
+    @Bean
+    public DirectExchange direct() {
+        return new DirectExchange("direct");
+    }
+
+    /**
+     * 声明队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue autoDeleteQueue3() {
+        return new AnonymousQueue();
+    }
+
+    /**
+     * 声明一个绑定关系，将队列绑定到交换机，并指定要监听的 routingKey
+     */
+    @Bean
+    public Binding binding3a(DirectExchange direct, Queue autoDeleteQueue3) {
+        return BindingBuilder.bind(autoDeleteQueue3).to(direct).with("error");
+    }
+
+    // 下同
+
+    @Bean
+    public Queue autoDeleteQueue4() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
+    public Binding binding4a(DirectExchange direct, Queue autoDeleteQueue4) {
+        return BindingBuilder.bind(autoDeleteQueue4).to(direct).with("info");
+    }
+
+    @Bean
+    public Binding binding4b(DirectExchange direct, Queue autoDeleteQueue4) {
+        return BindingBuilder.bind(autoDeleteQueue4).to(direct).with("warning");
+    }
+
+    @Bean
+    public Binding binding4c(DirectExchange direct, Queue autoDeleteQueue4) {
+        return BindingBuilder.bind(autoDeleteQueue4).to(direct).with("error");
+    }
+}
+```
+
+### 消费者
+
+```java
+@Component
+public class RoutingReceiver {
+    @RabbitListener(queues = "#{autoDeleteQueue3.name}")
+    public void receive1(Integer msg) {
+        System.out.println("===Received1:" + msg);
+    }
+
+    @RabbitListener(queues = "#{autoDeleteQueue4.name}")
+    public void receive2(Integer msg) {
+        System.out.println("===Received2:" + msg);
+    }
+}
+```
+
+### 生产者
+
+```java
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 测试用的标记序号
+     */
+    private static int i = 1;
+
+    /**
+     * 路由 生产者
+     */
+    @GetMapping("routing")
+    public Integer send() {
+        String[] keys = {"debug", "info", "warning", "error"};
+        // 发送四种类型的消息日志
+        rabbitTemplate.convertAndSend("direct", keys[i % 4], i);
+        System.out.println("~~~~Sent:" + keys[i % 4]);
+        return i++;
+    }
+}
+```
+
+### 结果
+
+多次访问`http://127.0.0.1:8080/routing`，看到如下结果
+
+```
+~~~~Sent:info
+===Received2:1
+~~~~Sent:warning
+===Received2:2
+~~~~Sent:error
+===Received1:3
+===Received2:3
+~~~~Sent:debug
+~~~~Sent:info
+===Received2:5
+~~~~Sent:warning
+===Received2:6
+~~~~Sent:error
+===Received2:7
+===Received1:7
+~~~~Sent:debug
+```
+
+## 主题
+

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 /**
- * 队列配置
+ * 队列 与 交换机
  *
  * @author Max_Qiu
  */

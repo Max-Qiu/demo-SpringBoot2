@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.maxqiu.demo.entity.User;
 
 /**
- * 入门消费者
+ * 消费者
  *
  * @author Max_Qiu
  */

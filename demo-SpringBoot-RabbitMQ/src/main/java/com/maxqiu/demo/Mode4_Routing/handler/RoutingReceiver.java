@@ -1,4 +1,4 @@
-package com.maxqiu.demo.Mode3_PublishSubscribe.handler;
+package com.maxqiu.demo.Mode4_Routing.handler;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
  * @author Max_Qiu
  */
 @Component
-public class PublishSubscribeReceiver {
-    @RabbitListener(queues = "#{autoDeleteQueue1.name}")
+public class RoutingReceiver {
+    @RabbitListener(queues = "#{autoDeleteQueue3.name}")
     public void receive1(Integer msg) {
         System.out.println("===Received1:" + msg);
     }
 
-    @RabbitListener(queues = "#{autoDeleteQueue2.name}")
+    @RabbitListener(queues = "#{autoDeleteQueue4.name}")
     public void receive2(Integer msg) {
         System.out.println("===Received2:" + msg);
     }

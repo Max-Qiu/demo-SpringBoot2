@@ -62,4 +62,16 @@ public class IndexController {
             "fanout", "", i);
         return i++;
     }
+
+    /**
+     * 路由 生产者
+     */
+    @GetMapping("routing")
+    public Integer send() {
+        String[] keys = {"debug", "info", "warning", "error"};
+        // 发送四种类型的消息日志
+        rabbitTemplate.convertAndSend("direct", keys[i % 4], i);
+        System.out.println("~~~~Sent:" + keys[i % 4]);
+        return i++;
+    }
 }
