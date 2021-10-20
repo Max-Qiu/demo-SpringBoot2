@@ -67,11 +67,24 @@ public class IndexController {
      * 路由 生产者
      */
     @GetMapping("routing")
-    public Integer send() {
+    public Integer routing() {
         String[] keys = {"debug", "info", "warning", "error"};
         // 发送四种类型的消息日志
         rabbitTemplate.convertAndSend("direct", keys[i % 4], i);
         System.out.println("~~~~Sent:" + keys[i % 4]);
         return i++;
+    }
+
+    /**
+     * 主题 生产者
+     */
+    @GetMapping("topic")
+    public void topic() {
+        String[] keys = {"quick.orange.rabbit", "lazy.orange.elephant", "quick.orange.fox", "lazy.brown.fox",
+            "lazy.pink.rabbit", "quick.brown.fox", "quick.orange.male.rabbit", "lazy.orange.male.rabbit"};
+        for (String key : keys) {
+            rabbitTemplate.convertAndSend("topic", key, key);
+            System.out.println("~~~~Sent:" + key);
+        }
     }
 }

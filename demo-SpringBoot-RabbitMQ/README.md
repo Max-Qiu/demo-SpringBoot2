@@ -421,9 +421,13 @@ public Binding binding1a(DirectExchange direct,
 
 > 多重绑定
 
+![](https://cdn.maxqiu.com/upload/1f88e22e726a44e6b715fbfc193ba19c.png)
+
 如果`exchange`的绑定类型是`direct`，但是它绑定的多个队列的`key`如果都相同，在这种情况下虽然绑定类型是`direct`但是它表现的就和`fanout`类似了，就跟广播差不多，如上图所示。
 
 > 综合
+
+![](https://cdn.maxqiu.com/upload/a6cdaf6d6c0146fba7acf7f99ce5a14a.png)
 
 将`直接交换`和`多重绑定`放在一起，如上图所示。
 
@@ -551,3 +555,144 @@ public class IndexController {
 
 ## 主题
 
+尽管使用直连交换机改进了系统，但是它仍然存在局限性：它不能基于多个标准进行路由。比如：接收的日志类型有`info.base`和`info.advantage`，某个队列只想接收`info.base`的消息，那这个时候直连就办不到了。这个时候就只能使用`Topic`（主题）类型
+
+> `topic`交换机的`routing_key`编写规则
+
+`topic`交换机的`routing_key`不能随意写，必须满足一定的要求，它必须是一个单词列表，以`.`分隔开。这些单词可以是任意单词，比如说：`stock.usd.nyse`、`nyse.vmw`、`quick.orange.rabbit`这种类型的。当然这个单词列表最多不能超过`255`个字节。
+
+在这个规则列表中，有两个替换符：
+
+- `*`（星号）可以代替一个单词
+- `#`（井号）可以替代零个或多个单词
+
+> 案例
+
+![](https://cdn.maxqiu.com/upload/339f47d1fbea4c778f76cd7f781b4fb0.png)
+
+上图是一个队列绑定关系图，他们之间数据接收情况如下：
+
+- `quick.orange.rabbit`被队列`Q1` `Q2`接收到
+- `lazy.orange.elephant`被队列`Q1` `Q2`接收到
+- `quick.orange.fox`被队列`Q1`接收到
+- `lazy.brown.fox`被队列`Q2`接收到
+- `lazy.pink.rabbit`虽然满足两个绑定但只被队列`Q2`接收一次
+- `quick.brown.fox`不匹配任何绑定不会被任何队列接收到会被丢弃
+- `quick.orange.male.rabbit`是四个单词不匹配任何绑定会被丢弃
+- `lazy.orange.male.rabbit`是四个单词但匹配`Q2`
+
+当队列绑定关系是下列这种情况时需要引起注意
+
+1. 当一个队列绑定键是`#`，那么这个队列将接收所有数据，就有点像`fanout`了
+2. 如果队列绑定键当中没有`#`和`*`出现，那么该队列绑定类型就是`direct`了
+
+### 交换机和队列
+
+```java
+@Component
+public class TopicConfig {
+    /**
+     * 声明一个主题类型的交换机
+     */
+    @Bean
+    public TopicExchange topic() {
+        return new TopicExchange("topic");
+    }
+
+    /**
+     * 声明队列
+     *
+     * @return
+     */
+    @Bean
+    public Queue autoDeleteQueue5() {
+        return new AnonymousQueue();
+    }
+
+    @Bean
+    public Queue autoDeleteQueue6() {
+        return new AnonymousQueue();
+    }
+
+    /**
+     * 声明绑定关系，将队列绑定到交换机，并指定要监听的 routingKey
+     */
+    @Bean
+    public Binding binding5a(TopicExchange topic, Queue autoDeleteQueue5) {
+        return BindingBuilder.bind(autoDeleteQueue5).to(topic).with("*.orange.*");
+    }
+
+    @Bean
+    public Binding binding6a(TopicExchange topic, Queue autoDeleteQueue6) {
+        return BindingBuilder.bind(autoDeleteQueue6).to(topic).with("*.*.rabbit");
+    }
+
+    @Bean
+    public Binding binding6b(TopicExchange topic, Queue autoDeleteQueue6) {
+        return BindingBuilder.bind(autoDeleteQueue6).to(topic).with("lazy.#");
+    }
+}
+```
+
+### 消费者
+
+```java
+@Component
+public class TopicReceiver {
+    @RabbitListener(queues = "#{autoDeleteQueue5.name}")
+    public void receive1(String msg) {
+        System.out.println("===Received1:" + msg);
+    }
+
+    @RabbitListener(queues = "#{autoDeleteQueue6.name}")
+    public void receive2(String msg) {
+        System.out.println("===Received2:" + msg);
+    }
+}
+```
+
+### 生产者
+
+```java
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 主题 生产者
+     */
+    @GetMapping("topic")
+    public void topic() {
+        String[] keys = {"quick.orange.rabbit", "lazy.orange.elephant", "quick.orange.fox", "lazy.brown.fox",
+            "lazy.pink.rabbit", "quick.brown.fox", "quick.orange.male.rabbit", "lazy.orange.male.rabbit"};
+        for (String key : keys) {
+            rabbitTemplate.convertAndSend("topic", key, key);
+            System.out.println("~~~~Sent:" + key);
+        }
+    }
+}
+```
+
+### 结果
+
+多次访问`http://127.0.0.1:8080/publish-subscribe`，看到如下结果
+
+```
+~~~~Sent:quick.orange.rabbit
+~~~~Sent:lazy.orange.elephant
+~~~~Sent:quick.orange.fox
+~~~~Sent:lazy.brown.fox
+~~~~Sent:lazy.pink.rabbit
+~~~~Sent:quick.brown.fox
+~~~~Sent:quick.orange.male.rabbit
+~~~~Sent:lazy.orange.male.rabbit
+===Received1:quick.orange.rabbit
+===Received2:quick.orange.rabbit
+===Received1:lazy.orange.elephant
+===Received2:lazy.orange.elephant
+===Received1:quick.orange.fox
+===Received2:lazy.brown.fox
+===Received2:lazy.pink.rabbit
+===Received2:lazy.orange.male.rabbit
+```
