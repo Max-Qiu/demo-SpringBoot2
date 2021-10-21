@@ -38,17 +38,17 @@ spring:
     password: guest # 密码
 ```
 
-# 使用
+# 入门使用
 
-`RabbitMQ`七种核心使用方式：
+下文中介绍`RabbitMQ`5种入门使用方法
 
-1. `"Hello World!"`入门：最简单的消息发送与接收
-2. `Work queues`工作队列：分配任务（竞争消费者模式，即轮询）
-3. `Publish/Subscribe`发布/订阅：同时向许多消费者发送信息
-4. `Routing`路由：有选择地接收消息
-5. `Topics`主题：基于模式(主题)接收消息
-6. `RPC`远程调用：请求/应答模式的例子
-7. `Publisher Confirms`发布确认：与发布者确认可靠的推送
+1. 使用默认交换机类型模式：
+    1. `"Hello World!"`入门：最简单的消息发送与接收
+    2. `Work queues`工作队列：分配任务（单生产多消费）（轮询模式）
+2. 使用指定交换机类型模式：根据交换机类型分为如下三种
+    1. `Publish/Subscribe`发布/订阅：同时向许多消费者发送信息
+    2. `Routing`路由：有选择地接收消息
+    3. `Topics`主题：基于模式(主题)接收消息
 
 ## `Hello World`入门
 
@@ -492,12 +492,12 @@ public class RoutingConfig {
 @Component
 public class RoutingReceiver {
     @RabbitListener(queues = "#{autoDeleteQueue3.name}")
-    public void receive1(Integer msg) {
+    public void receive1(String msg) {
         System.out.println("===Received1:" + msg);
     }
 
     @RabbitListener(queues = "#{autoDeleteQueue4.name}")
-    public void receive2(Integer msg) {
+    public void receive2(String msg) {
         System.out.println("===Received2:" + msg);
     }
 }
@@ -512,20 +512,16 @@ public class IndexController {
     private RabbitTemplate rabbitTemplate;
 
     /**
-     * 测试用的标记序号
-     */
-    private static int i = 1;
-
-    /**
      * 路由 生产者
      */
     @GetMapping("routing")
-    public Integer send() {
+    public void routing() {
         String[] keys = {"debug", "info", "warning", "error"};
-        // 发送四种类型的消息日志
-        rabbitTemplate.convertAndSend("direct", keys[i % 4], i);
-        System.out.println("~~~~Sent:" + keys[i % 4]);
-        return i++;
+        for (String key : keys) {
+            // 发送四种类型的消息日志
+            rabbitTemplate.convertAndSend("direct", key, key);
+            System.out.println("~~~~Sent:" + key);
+        }
     }
 }
 ```
@@ -535,22 +531,14 @@ public class IndexController {
 多次访问`http://127.0.0.1:8080/routing`，看到如下结果
 
 ```
-~~~~Sent:info
-===Received2:1
-~~~~Sent:warning
-===Received2:2
-~~~~Sent:error
-===Received1:3
-===Received2:3
 ~~~~Sent:debug
 ~~~~Sent:info
-===Received2:5
 ~~~~Sent:warning
-===Received2:6
 ~~~~Sent:error
-===Received2:7
-===Received1:7
-~~~~Sent:debug
+===Received1:error
+===Received2:info
+===Received2:warning
+===Received2:error
 ```
 
 ## 主题
@@ -676,7 +664,7 @@ public class IndexController {
 
 ### 结果
 
-多次访问`http://127.0.0.1:8080/publish-subscribe`，看到如下结果
+多次访问`http://127.0.0.1:8080/topic`，看到如下结果
 
 ```
 ~~~~Sent:quick.orange.rabbit
@@ -696,3 +684,17 @@ public class IndexController {
 ===Received2:lazy.pink.rabbit
 ===Received2:lazy.orange.male.rabbit
 ```
+
+# 进阶使用1
+
+## `Publisher Confirms`发布确认
+
+![](https://cdn.maxqiu.com/upload/8e6eb2c864124c729d691099efa79335.png)
+
+如上图，生产者在发送消息时，
+
+# 进阶使用2
+
+- 死信队列
+- 延迟队列
+

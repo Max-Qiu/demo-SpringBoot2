@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class RoutingReceiver {
     @RabbitListener(queues = "#{autoDeleteQueue3.name}")
-    public void receive1(Integer msg) {
+    public void receive1(String msg) {
         System.out.println("===Received1:" + msg);
     }
 
     @RabbitListener(queues = "#{autoDeleteQueue4.name}")
-    public void receive2(Integer msg) {
+    public void receive2(String msg) {
         System.out.println("===Received2:" + msg);
     }
 }

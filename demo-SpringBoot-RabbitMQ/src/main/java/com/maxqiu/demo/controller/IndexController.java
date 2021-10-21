@@ -1,5 +1,6 @@
 package com.maxqiu.demo.controller;
 
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,12 +68,13 @@ public class IndexController {
      * 路由 生产者
      */
     @GetMapping("routing")
-    public Integer routing() {
+    public void routing() {
         String[] keys = {"debug", "info", "warning", "error"};
-        // 发送四种类型的消息日志
-        rabbitTemplate.convertAndSend("direct", keys[i % 4], i);
-        System.out.println("~~~~Sent:" + keys[i % 4]);
-        return i++;
+        for (String key : keys) {
+            // 发送四种类型的消息日志
+            rabbitTemplate.convertAndSend("direct", key, key);
+            System.out.println("~~~~Sent:" + key);
+        }
     }
 
     /**
@@ -86,5 +88,15 @@ public class IndexController {
             rabbitTemplate.convertAndSend("topic", key, key);
             System.out.println("~~~~Sent:" + key);
         }
+    }
+
+    /**
+     * 发布确认生产者
+     */
+    @GetMapping("publisherConfirms")
+    public void publisherConfirms() {
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange", "key1", "message", new CorrelationData("1"));
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange1", "key1", "message", new CorrelationData("2"));
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange", "key2", "message", new CorrelationData("3"));
     }
 }

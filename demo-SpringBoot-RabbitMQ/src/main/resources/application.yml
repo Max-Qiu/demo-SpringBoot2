@@ -4,9 +4,11 @@ spring:
     port: 5672 # 端口
     username: guest # 用户名
     password: guest # 密码
-    template:
-      retry:
-        enabled: true # 开启发送端的重试
+    publisher-confirm-type: correlated # 设置发布确认模式
+    publisher-returns: true # 设置发布退回
+#    template:
+#      retry:
+#        enabled: true # 开启发送端的重试
 #    listener:
 #      simple:
 #        prefetch: 1
