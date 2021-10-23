@@ -8,33 +8,40 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 生产者配置
  *
  * @author Max_Qiu
  */
 @Component
-@Slf4j
 public class RabbitTemplateCallBack implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnsCallback {
     /**
-     * 交换机不管是否收到消息的一个回调方法 CorrelationData 消息相关数据 ack 交换机是否收到消息
+     * 交换机是否收到消息的一个回调方法
+     *
+     * @param correlationData
+     *            消息相关数据
+     * @param ack
+     *            交换机是否收到消息
      */
     @Override
     public void confirm(CorrelationData correlationData, boolean ack, String cause) {
         String id = correlationData != null ? correlationData.getId() : "";
         if (ack) {
-            log.info("交换机已经收到 id 为:{}的消息", id);
+            System.out.println("交换机已经收到消息 id 为：" + id);
         } else {
-            log.info("交换机还未收到 id 为:{}消息,由于原因:{}", id, cause);
+            System.out.println("交换机还未收到消息 id 为：" + id + "，由于原因：" + cause);
         }
     }
 
+    /**
+     * 队列未接收到消息的时候的回调方法
+     *
+     * @param message
+     */
     @Override
-    public void returnedMessage(ReturnedMessage returned) {
-        log.error("消息 {}\t被交换机 {} 退回\t退回原因：{}, 路由key：{}", new String(returned.getMessage().getBody()),
-            returned.getExchange(), returned.getReplyText(), returned.getRoutingKey());
+    public void returnedMessage(ReturnedMessage message) {
+        System.out.println("消息：" + new String(message.getMessage().getBody()) + "\t被交换机：" + message.getExchange()
+            + "退回\t退回原因：" + message.getReplyText() + "\t路由key：" + message.getRoutingKey());
     }
 
     @Autowired
@@ -47,5 +54,7 @@ public class RabbitTemplateCallBack implements RabbitTemplate.ConfirmCallback, R
     public void init() {
         rabbitTemplate.setConfirmCallback(this);
         rabbitTemplate.setReturnsCallback(this);
+        // 同配置文件中的 spring.rabbitmq.publisher-returns=true
+        // rabbitTemplate.setMandatory(true);
     }
 }

@@ -1,7 +1,6 @@
 package com.maxqiu.demo.Mode6_PublisherConfirms.config;
 
 import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.Queue;
@@ -21,7 +20,11 @@ public class PublisherConfirmsConfig {
      */
     @Bean
     public DirectExchange publisherConfirmsExchange() {
-        return ExchangeBuilder.directExchange("publisher.confirms.exchange").build();
+        // return new DirectExchange("direct");
+        // 也可以使用Builder模式创建
+        return ExchangeBuilder
+            // 使用直连交换机
+            .directExchange("publisher.confirms.exchange").build();
     }
 
     /**
@@ -29,7 +32,15 @@ public class PublisherConfirmsConfig {
      */
     @Bean
     public Queue publisherConfirmsQueue() {
-        return QueueBuilder.durable("publisher.confirms.queue").build();
+        // return new AnonymousQueue();
+        // 也可以使用Builder模式创建
+        return QueueBuilder
+            // 使用消息持久化，不使用nonDurable(final String name)，使用随机队列名称
+            .nonDurable()
+            // 独占的
+            .exclusive()
+            // 队列自动删除
+            .autoDelete().build();
     }
 
     /**
@@ -37,6 +48,9 @@ public class PublisherConfirmsConfig {
      */
     @Bean
     public Binding queueBinding(DirectExchange publisherConfirmsExchange, Queue publisherConfirmsQueue) {
-        return BindingBuilder.bind(publisherConfirmsQueue).to(publisherConfirmsExchange).with("key1");
+        // return BindingBuilder.bind(publisherConfirmsQueue).to(publisherConfirmsExchange).with("key1");
+        // 也可以使用 new 方法创建绑定关系
+        return new Binding(publisherConfirmsQueue.getName(), Binding.DestinationType.QUEUE,
+            publisherConfirmsExchange.getName(), "key1", null);
     }
 }

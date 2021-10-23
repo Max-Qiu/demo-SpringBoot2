@@ -691,7 +691,175 @@ public class IndexController {
 
 ![](https://cdn.maxqiu.com/upload/8e6eb2c864124c729d691099efa79335.png)
 
-如上图，生产者在发送消息时，
+如上图，生产者在发送消息时，如果发送到错误的交换机，或者没有队列可以处理该消息，生产者应当知道消息未发送成功。需要对生产者进行配置。
+
+### 队列、交换机
+
+无需额外配置。这里额外介绍使用`Builder`创建队列和交换机以及使用`new`创建绑定关系
+
+```java
+@Component
+public class PublisherConfirmsConfig {
+    /**
+     * 声明交换机
+     */
+    @Bean
+    public DirectExchange publisherConfirmsExchange() {
+        // return new DirectExchange("direct");
+        // 也可以使用Builder模式创建
+        return ExchangeBuilder
+            // 使用直连交换机
+            .directExchange("publisher.confirms.exchange").build();
+    }
+
+    /**
+     * 声明确认队列
+     */
+    @Bean
+    public Queue publisherConfirmsQueue() {
+        // return new AnonymousQueue();
+        // 也可以使用Builder模式创建
+        return QueueBuilder
+            // 使用消息持久化，不使用nonDurable(final String name)，使用随机队列名称
+            .nonDurable()
+            // 队列自动删除
+            .autoDelete().build();
+    }
+
+    /**
+     * 声明确认队列绑定关系
+     */
+    @Bean
+    public Binding queueBinding(DirectExchange publisherConfirmsExchange, Queue publisherConfirmsQueue) {
+        // return BindingBuilder.bind(publisherConfirmsQueue).to(publisherConfirmsExchange).with("key1");
+        // 也可以使用 new 方法创建绑定关系
+        return new Binding(publisherConfirmsQueue.getName(), Binding.DestinationType.QUEUE,
+            publisherConfirmsExchange.getName(), "key1", null);
+    }
+}
+```
+
+### 消费者
+
+无需额外配置
+
+```java
+@Component
+public class ConfirmReceiver {
+    @RabbitListener(queues = "#{publisherConfirmsQueue.name}")
+    public void receiveMsg(String msg) {
+        System.out.println("===Received:" + msg);
+    }
+}
+```
+
+### 生产者
+
+> 配置：生产者的`yml`需要添加如下配置
+
+```yml
+spring:
+  rabbitmq:
+    publisher-confirm-type: correlated # 设置发布确认模式（针对交换机）
+    publisher-returns: true # 设置发布退回（针对队列）
+```
+
+> 回调：新建回调类，编写回调方法并注入`RabbitTemplate`
+
+```java
+@Component
+public class RabbitTemplateCallBack implements RabbitTemplate.ConfirmCallback, RabbitTemplate.ReturnsCallback {
+    /**
+     * 交换机是否收到消息的一个回调方法
+     *
+     * @param correlationData
+     *            消息相关数据
+     * @param ack
+     *            交换机是否收到消息
+     */
+    @Override
+    public void confirm(CorrelationData correlationData, boolean ack, String cause) {
+        String id = correlationData != null ? correlationData.getId() : "";
+        if (ack) {
+            System.out.println("交换机已经收到消息 id 为：" + id);
+        } else {
+            System.out.println("交换机还未收到消息 id 为：" + id + "，由于原因：" + cause);
+        }
+    }
+
+    /**
+     * 队列未接收到消息的时候的回调方法
+     *
+     * @param message
+     */
+    @Override
+    public void returnedMessage(ReturnedMessage message) {
+        System.out.println("消息：" + new String(message.getMessage().getBody()) + "\t被交换机：" + message.getExchange()
+            + "退回\t退回原因：" + message.getReplyText() + "\t路由key：" + message.getRoutingKey());
+    }
+
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 在依赖注入 rabbitTemplate 之后再设置它的回调对象
+     */
+    @PostConstruct
+    public void init() {
+        rabbitTemplate.setConfirmCallback(this);
+        rabbitTemplate.setReturnsCallback(this);
+        // 同配置文件中的 spring.rabbitmq.publisher-returns=true
+        // rabbitTemplate.setMandatory(true);
+    }
+}
+```
+
+> 发送：发送消息时，额外携带`CorrelationData`对象并设置对象id，方便回调时知道是哪一条消息失败
+
+```java
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 发布确认生产者
+     */
+    @GetMapping("publisherConfirms")
+    public void publisherConfirms() {
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange", "key1", "message", new CorrelationData("1"));
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange1", "key1", "message", new CorrelationData("2"));
+        rabbitTemplate.convertAndSend("publisher.confirms.exchange", "key2", "message", new CorrelationData("3"));
+    }
+}
+```
+
+### 结果
+
+访问`http://127.0.0.1:8080/publisherConfirms`，看到如下结果
+
+```
+交换机已经收到消息 id 为：1
+2021-10-23 20:48:49.177 ERROR 19532 --- [ 127.0.0.1:5672] o.s.a.r.c.CachingConnectionFactory       : Shutdown Signal: channel error; protocol method: #method<channel.close>(reply-code=404, reply-text=NOT_FOUND - no exchange 'publisher.confirms.exchange1' in vhost '/', class-id=60, method-id=40)
+===Received:message
+交换机还未收到消息 id 为：2，由于原因：channel error; protocol method: #method<channel.close>(reply-code=404, reply-text=NOT_FOUND - no exchange 'publisher.confirms.exchange1' in vhost '/', class-id=60, method-id=40)
+消息：message	被交换机：publisher.confirms.exchange退回	退回原因：NO_ROUTE	路由key：key2
+交换机已经收到消息 id 为：3
+```
+
+- 如果发送到了错误的交换机，系统会记录`ERROR`日志，且`confirm`中`ack`为`false`
+- 如果发送到了错误的队列，系统不会有记录，配置的`returnedMessage`会收到消息，但是`confirm`中`ack`为`true`
+
+## 消息持久化
+
+当消息发送到队列，但是未被消费时，需要将消息存储在磁盘中，以防止`RabbitMQ`服务宕机造成消息丢失
+
+- `new Queue()`方式：使用有参构造器时设置`boolean durable`参数，`true`为磁盘存储，`false`为内存存储
+- `QueueBuilder`方式：使用`QueueBuilder.durable()`设置为磁盘存储，`QueueBuilder.nonDurable()`设置为内存存储
+
+设置消息持久化的队列，在`RabbitMQ`控制面板`Features`中会显示为`D`
+
+![](https://cdn.maxqiu.com/upload/d78ac5fb455a43b1af349f2b4ad842c9.jpg)
 
 # 进阶使用2
 

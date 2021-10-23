@@ -4,8 +4,8 @@ spring:
     port: 5672 # 端口
     username: guest # 用户名
     password: guest # 密码
-    publisher-confirm-type: correlated # 设置发布确认模式
-    publisher-returns: true # 设置发布退回
+    publisher-confirm-type: correlated # 设置发布确认模式（针对交换机）
+    publisher-returns: true # 设置发布退回（针对队列）
 #    template:
 #      retry:
 #        enabled: true # 开启发送端的重试
