@@ -6,9 +6,7 @@ spring:
     password: guest # 密码
     publisher-confirm-type: correlated # 设置发布确认模式（针对交换机）
     publisher-returns: true # 设置发布退回（针对队列）
-#    template:
-#      retry:
-#        enabled: true # 开启发送端的重试
-#    listener:
-#      simple:
-#        prefetch: 1
+    listener:
+      type: simple # 默认
+      simple:
+        acknowledge-mode: manual

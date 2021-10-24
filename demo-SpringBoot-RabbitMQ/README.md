@@ -745,7 +745,7 @@ public class PublisherConfirmsConfig {
 
 ```java
 @Component
-public class ConfirmReceiver {
+public class PublisherConfirmsReceiver {
     @RabbitListener(queues = "#{publisherConfirmsQueue.name}")
     public void receiveMsg(String msg) {
         System.out.println("===Received:" + msg);
@@ -860,6 +860,130 @@ public class IndexController {
 设置消息持久化的队列，在`RabbitMQ`控制面板`Features`中会显示为`D`
 
 ![](https://cdn.maxqiu.com/upload/d78ac5fb455a43b1af349f2b4ad842c9.jpg)
+
+## `ConsumerAcknowledgements`消费者确认
+
+> ACK确认模式
+
+通过`spring.rabbitmq.listener.simple.acknowledge-mode`与`spring.rabbitmq.listener.direct.acknowledge-mode`进行设置
+
+1. `none`不确认
+    - 默认所有消息消费成功，队列会不断的向消费者推送消息
+    - 因为`RabbitMQ`认为所有消息都被消费成功，所以消息存在丢失的危险
+2. `auto`自动确认（自动）
+    - `Spring`依据消息处理逻辑是否抛出异常自动发送`ack`（无异常）或`nack`（异常）到`server`端。存在丢失消息的可能，如果消费端消费逻辑抛出异常，也就是消费端没有处理成功这条消息，那么就相当于丢失了消息。如果消息已经被处理，但后续代码抛出异常，使用`Spring`进行管理的话消费端业务逻辑会进行回滚，这也同样造成了实际意义的消息丢失
+    - 使用自动确认模式时，需要考虑的另一件事是消费者过载
+3. `manual`手动确认
+    - 手动确认则当消费者调用`ack`、`nack`、`reject`几种方法进行确认，手动确认可以在业务失败后进行一些操作，如果消息未被`ACK`则会发送到下一个消费者
+    - 手动确认模式可以使用`prefetch`，限制通道上未完成的（“正在进行中的”）发送的数量
+    - 忘记ACK确认<br>忘记通过`basicAck`返回确认信息是常见的错误。这个错误非常严重，将导致消费者客户端退出或者关闭后，消息会被退回RabbitMQ服务器，这会使RabbitMQ服务器内存爆满，而且RabbitMQ也不会主动删除这些被退回的消息。只要程序还在运行，没确认的消息就一直是`Unacked`状态，无法被`RabbitMQ`重新投递。`RabbitMQ`消息消费并没有超时机制，也就是说，程序不重启，消息就永远是`Unacked`状态。处理运维事件时不要忘了这些`Unacked`状态的消息。当程序关闭时（实际只要 消费者 关闭就行），消息会恢复为 Ready 状态。
+
+> 消息应答的方法
+
+1. Channel.basicAck（用于肯定确认）RabbitMQ 已知道该消息并且成功的处理消息，可以将其丢弃了
+2. Channel.basicNack（用于否定确认）
+3. Channel.basicReject（用于否定确认）与Channel.basicNack相比少一个参数
+
+> `multiple`的`true`和`false`
+
+- `true`代表批量应答`channel`上未应答的消息：比如`channel`上有传送`tag`的消息`5,6,7,8`当前`tag`是`8`那么此时`5-8`的这些还未应答的消息都会被确认收到消息应答
+- `false`同上面相比只会应答`tag=8`的消息，`5,6,7`这三个消息依然不会被确认收到消息应答
+
+### 队列
+
+```java
+@Component
+public class ConsumerAcknowledgementsConfig {
+    /**
+     * 声明确认队列
+     */
+    @Bean
+    public Queue consumerAcknowledgementsQueue() {
+        return new Queue("consumer.acknowledgements");
+    }
+}
+```
+
+### 消费者
+
+> `yml`配置
+
+yml
+```
+spring:
+  rabbitmq:
+    listener:
+      type: simple # 默认
+      simple:
+        acknowledge-mode: manual
+```
+
+> 手动应答
+
+```java
+@Component
+public class ConsumerAcknowledgementsReceiver {
+    @RabbitListener(queues = "consumer.acknowledgements")
+    public void receiveMsg(Channel channel, Message message, Integer msg) {
+        System.out.println("===Received:start:" + msg);
+        try {
+            System.out.println("sleeping");
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("===Received:end:" + msg);
+
+        // 手动ACK
+        // 默认情况下如果一个消息被消费者正确接收则会被从队列中移除
+        // 如果一个队列没被任何消费者订阅，那么这个队列中的消息会被缓存
+        // 当有消费者订阅时则会立即发送，当消息被消费者正确接收时，就会被从队列中移除
+        try {
+            // 手动ack应答
+            // 告诉服务器收到这条消息已经被消费了，可以在队列中删掉
+            // 否则消息服务器以为这条消息没处理掉，后续还会在发
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // 丢弃这条消息
+            try {
+                // 消息重新入队
+                channel.basicReject(message.getMessageProperties().getDeliveryTag(), true);
+                // 消息丢弃
+                // channel.basicReject(message.getMessageProperties().getDeliveryTag(), false);
+                // 多一个批量参数
+                // channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, false);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+### 生产者
+
+```java
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 测试用的标记序号
+     */
+    private static int i = 1;
+
+    /**
+     * 消费确认生产者
+     */
+    @GetMapping("consumerAcknowledgements")
+    public Integer consumerAcknowledgements() {
+        rabbitTemplate.convertAndSend("consumer.acknowledgements", i);
+        return i++;
+    }
+}
+```
 
 # 进阶使用2
 

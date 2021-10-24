@@ -99,4 +99,13 @@ public class IndexController {
         rabbitTemplate.convertAndSend("publisher.confirms.exchange1", "key1", "message", new CorrelationData("2"));
         rabbitTemplate.convertAndSend("publisher.confirms.exchange", "key2", "message", new CorrelationData("3"));
     }
+
+    /**
+     * 消费确认生产者
+     */
+    @GetMapping("consumerAcknowledgements")
+    public Integer consumerAcknowledgements() {
+        rabbitTemplate.convertAndSend("consumer.acknowledgements", i);
+        return i++;
+    }
 }

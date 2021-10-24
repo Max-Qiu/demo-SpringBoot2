@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * @author Max_Qiu
  */
 @Component
-public class ConfirmReceiver {
+public class PublisherConfirmsReceiver {
     @RabbitListener(queues = "#{publisherConfirmsQueue.name}")
     public void receiveMsg(String msg) {
         System.out.println("===Received:" + msg);
