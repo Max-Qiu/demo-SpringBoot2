@@ -9,4 +9,5 @@ spring:
     listener:
       type: simple # 默认
       simple:
-        acknowledge-mode: manual
+        prefetch: 250 # 每个消费者未确认的消息最大数量
+        acknowledge-mode: auto # 应答模式

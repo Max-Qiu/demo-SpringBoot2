@@ -176,6 +176,21 @@ public class IndexController {
 
 ![](https://cdn.maxqiu.com/upload/6ad6f480729741ea853299098716c034.png)
 
+> 不公平分发
+
+`RabbitMQ`分发消息采用的轮训分发，但是在某种场景下这种策略并不是很好。比方说有两个消费者在处理任务，其中有个消费者`A`处理任务的速度非常快，而另外一个消费者`B`处理速度却很慢，这个时候还是采用轮训分发的话就会导致处理速度快的这个消费者很大一部分时间处于空闲状态，而处理慢的那个消费者一直在干活。但是`RabbitMQ`并不知道这种情况它依然很公平的进行分发。为了避免这种情况，可以设置参数`spring.rabbitmq.listener.simple.refetch`
+
+```yml
+spring:
+  rabbitmq:
+    listener:
+      type: simple # 默认
+      simple:
+        prefetch: 1 # 每个消费者未确认的消息最大数量
+```
+
+默认情况下`prefetch`的值为`250`，即消费者最多同时接收250条消息，并在消费一条或多条之后统一给`RabbitMQ`返回`ack`应答消息
+
 ### 队列
 
 同入门示例，再建立一个队列
@@ -203,6 +218,11 @@ public class WorkQueuesConfig {
 public class WorkQueuesReceiver1 {
     @RabbitHandler
     public void receive(Integer msg) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("---Received1:" + msg);
     }
 }
@@ -214,6 +234,11 @@ public class WorkQueuesReceiver1 {
 public class WorkQueuesReceiver2 {
     @RabbitHandler
     public void receive(Integer msg) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("===Received2:" + msg);
     }
 }
@@ -248,14 +273,35 @@ public class IndexController {
 
 多次访问`http://127.0.0.1:8080/work-queues`，看到如下结果
 
+> `prefetch=1`
+
+消费快的消费者消费更多消息
+
 ```
 ~~~~Sent:1
----Received1:1
 ~~~~Sent:2
-===Received2:2
 ~~~~Sent:3
----Received1:3
 ~~~~Sent:4
+~~~~Sent:5
+---Received1:1
+---Received1:3
+---Received1:4
+---Received1:5
+===Received2:2
+```
+
+> `prefetch=250`
+
+消费者评价分配消息
+
+```
+~~~~Sent:1
+~~~~Sent:2
+~~~~Sent:3
+~~~~Sent:4
+---Received1:1
+---Received1:3
+===Received2:2
 ===Received2:4
 ```
 
@@ -279,7 +325,7 @@ public class IndexController {
 ![](https://cdn.maxqiu.com/upload/5106c9615e7a477b876c6fdaac73fc1d.png)
 
 1. 扇出`fanout`：发布订阅模式需要使用扇出交换机，扇出交换机非常简单，它将收到的所有消息广播到它绑定的所有队列。
-2. 临时队列`AnonymousQueue`：每当连接到`RabbitMQ`时，我们都需要一个全新的空队列，为此可以创建一个具有随机名称的队列，其次一旦断开了消费者的连接，队列将被自动删除。
+2. 临时队列`AnonymousQueue`：每当连接到`RabbitMQ`时，需要一个全新的空队列，为此可以创建一个具有随机名称的队列，其次一旦断开了消费者的连接，队列将被自动删除。
 3. 绑定`Binding`：其实是交换机和队列之间的桥梁，它告诉交换机和哪个队列进行了绑定。
 
 ### 交换机和队列
@@ -987,6 +1033,121 @@ public class IndexController {
 
 # 进阶使用2
 
-- 死信队列
-- 延迟队列
+## 死信队列
+
+死信：就是无法被消费的消息。一般来说，生产者将消息投递到交换机或者直接到队列，消费者从队列取出消息进行消费，但某些时候由于特定的原因导致队列中的某些消息无法被消费，这样的消息如果没有后续的处理，就变成了死信，有死信自然就有了死信队列。
+
+应用场景：为了保证订单业务的消息数据不丢失，需要使用到`RabbitMQ`的死信队列机制，当消息消费发生异常时，将消息投入死信队列中；还有比如用户在商城下单成功并点击去支付后在指定时间未支付时自动失效
+
+> 死信来源
+
+- 消息 TTL 过期
+- 队列达到最大长度(队列满了，无法再添加数据到 mq 中)
+- 消息被拒绝(basic.reject 或 basic.nack)并且 requeue=false.
+
+![](https://cdn.maxqiu.com/upload/8b11fa3812fd47d08bafb4579fad5d5b.png)
+
+## 队列和交换机
+
+```java
+@Component
+public class DeadExchangeConfig {
+    /**
+     * 声明交换机
+     */
+    @Bean
+    public DirectExchange deadExchange() {
+        return new DirectExchange("dead.exchange");
+    }
+
+    @Bean
+    public DirectExchange normalExchange() {
+        return new DirectExchange("normal.exchange");
+    }
+
+    /**
+     * 声明队列
+     */
+    @Bean
+    public Queue deadQueue() {
+        return new Queue("dead.queue");
+    }
+
+    @Bean
+    public Queue normalQueue() {
+        // 绑定死信队列信息
+        Map<String, Object> params = new HashMap<>();
+        // 设置死信 exchange 参数 key 是固定值
+        params.put("x-dead-letter-exchange", "dead.exchange");
+        // 设置死信 routing-key 参数 key 是固定值
+        params.put("x-dead-letter-routing-key", "key2");
+        // 设置队列长度限制
+        params.put("x-max-length", 5);
+        return new Queue("normal.queue", true, true, false, params);
+    }
+
+    /**
+     * 声明队列和交换机绑定关系
+     */
+    @Bean
+    public Binding normalQueueBinding(DirectExchange normalExchange, Queue normalQueue) {
+        return BindingBuilder.bind(normalQueue).to(normalExchange).with("key1");
+    }
+
+    @Bean
+    public Binding deadQueueBinding(DirectExchange deadExchange, Queue deadQueue) {
+        return BindingBuilder.bind(deadQueue).to(deadExchange).with("key2");
+    }
+}
+```
+
+### 消费者
+
+消费者可以暂时不启用，以观察消息的进入死信交换机和队列
+
+```java
+// @Component
+public class DeadExchangeReceiver {
+    @RabbitListener(queues = "dead.queue")
+    public void receiveMsg(String msg) {
+        System.out.println("Dead===Received:" + msg);
+    }
+}
+```
+
+### 生产者
+
+发送消息时，需要设置超时时间
+
+```
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 死信队列生产者
+     */
+    @GetMapping("deadQueue")
+    public void deadQueue() {
+        for (int j = 0; j < 10; j++) {
+            rabbitTemplate.convertAndSend("normal.exchange", "key1", j,
+                // 设置消息过期时间（单位：毫秒）
+                m -> {
+                    m.getMessageProperties().setExpiration("10000");
+                    return m;
+                });
+        }
+    }
+}
+```
+
+### 结果
+
+访问`http://127.0.0.1:8080/deadQueue`，然后查看`RabbitMQ`控制台
+
+- 5条消息进入普通队列，另外5条消息因为队列长度不够，进入死信队列<br>![](https://cdn.maxqiu.com/upload/805bf158c3c4483296e3ee219c6daba3.jpg)
+- 当超过10秒之后，因普通队列无消费者，所有消息进入死信队列<br>![](https://cdn.maxqiu.com/upload/51d54169f92248568fadd9a0498c69ab.jpg)
+
+## 延迟队列
 

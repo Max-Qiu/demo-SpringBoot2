@@ -14,6 +14,11 @@ import org.springframework.stereotype.Component;
 public class WorkQueuesReceiver1 {
     @RabbitHandler
     public void receive(Integer msg) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         System.out.println("---Received1:" + msg);
     }
 }

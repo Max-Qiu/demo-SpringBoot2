@@ -108,4 +108,19 @@ public class IndexController {
         rabbitTemplate.convertAndSend("consumer.acknowledgements", i);
         return i++;
     }
+
+    /**
+     * 死信队列生产者
+     */
+    @GetMapping("deadQueue")
+    public void deadQueue() {
+        for (int j = 0; j < 10; j++) {
+            rabbitTemplate.convertAndSend("normal.exchange", "key1", j,
+                // 设置消息过期时间（单位：毫秒）
+                m -> {
+                    m.getMessageProperties().setExpiration("10000");
+                    return m;
+                });
+        }
+    }
 }
