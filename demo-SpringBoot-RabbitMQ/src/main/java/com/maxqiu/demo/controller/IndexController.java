@@ -1,9 +1,12 @@
 package com.maxqiu.demo.controller;
 
+import java.time.LocalDateTime;
+
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maxqiu.demo.entity.User;
@@ -117,10 +120,25 @@ public class IndexController {
         for (int j = 0; j < 10; j++) {
             rabbitTemplate.convertAndSend("normal.exchange", "key1", j,
                 // 设置消息过期时间（单位：毫秒）
-                m -> {
-                    m.getMessageProperties().setExpiration("10000");
-                    return m;
+                correlationData -> {
+                    correlationData.getMessageProperties().setExpiration("10000");
+                    return correlationData;
                 });
         }
+    }
+
+    /**
+     * 延时队列生产者
+     */
+    @GetMapping("delayedQueue/{delayTime}")
+    public Integer delayedQueue(@PathVariable Integer delayTime) {
+        rabbitTemplate.convertAndSend("delayed.exchange", "delayed.routingKey", i,
+            // 设置消息延时时间
+            correlationData -> {
+                correlationData.getMessageProperties().setDelay(delayTime);
+                return correlationData;
+            });
+        System.out.println("当前时间：" + LocalDateTime.now() + "\t发送延时队列的消息：" + i + "\t延时" + delayTime + "毫秒");
+        return i++;
     }
 }

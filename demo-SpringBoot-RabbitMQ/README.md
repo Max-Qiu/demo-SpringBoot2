@@ -1149,5 +1149,106 @@ public class IndexController {
 - 5条消息进入普通队列，另外5条消息因为队列长度不够，进入死信队列<br>![](https://cdn.maxqiu.com/upload/805bf158c3c4483296e3ee219c6daba3.jpg)
 - 当超过10秒之后，因普通队列无消费者，所有消息进入死信队列<br>![](https://cdn.maxqiu.com/upload/51d54169f92248568fadd9a0498c69ab.jpg)
 
-## 延迟队列
+## 延迟交换机
 
+延时队列就是用来存放需要在指定时间被处理的元素的队列。
+
+> 延迟队列需要安装`rabbitmq_delayed_message_exchange`插件
+
+在这里新增了一个队列`delayed.queue`，一个自定义交换机`delayed.exchange`，绑定关系如下:
+
+![](https://cdn.maxqiu.com/upload/39e562856d1448dba4976444feeed7dd.jpg)
+
+### 交换机和队列
+
+```java
+@Configuration
+public class DelayedExchangeConfig {
+    /**
+     * 延迟交换机
+     *
+     * @return
+     */
+    @Bean
+    public CustomExchange delayedExchange() {
+        Map<String, Object> args = new HashMap<>();
+        // 自定义交换机的类型
+        args.put("x-delayed-type", "direct");
+        return new CustomExchange("delayed.exchange", "x-delayed-message", true, false, args);
+    }
+
+    /**
+     * 队列
+     */
+    @Bean
+    public Queue delayedQueue() {
+        return new Queue("delayed.queue");
+    }
+
+    /**
+     * 绑定关系
+     */
+    @Bean
+    public Binding bindingDelayedQueue(Queue delayedQueue, CustomExchange delayedExchange) {
+        return BindingBuilder.bind(delayedQueue).to(delayedExchange).with("delayed.routingKey").noargs();
+    }
+}
+```
+
+### 消费者
+
+```java
+@Component
+public class DelayedExchangeReceiver {
+    @RabbitListener(queues = "delayed.queue")
+    public void receiveDelayedQueue(Integer message) {
+        System.out.println("当前时间：" + LocalDateTime.now() + "\t收到延时队列的消息：" + message);
+    }
+}
+```
+
+### 生产者
+
+```
+/**
+ * 生产者
+ *
+ * @author Max_Qiu
+ */
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 测试用的标记序号
+     */
+    private static int i = 1;
+
+    /**
+     * 延时队列生产者
+     */
+    @GetMapping("delayedQueue/{delayTime}")
+    public Integer delayedQueue(@PathVariable Integer delayTime) {
+        rabbitTemplate.convertAndSend("delayed.exchange", "delayed.routingKey", i,
+            // 设置消息延时时间
+            correlationData -> {
+                correlationData.getMessageProperties().setDelay(delayTime);
+                return correlationData;
+            });
+        System.out.println("当前时间：" + LocalDateTime.now() + "\t发送延时队列的消息：" + i + "\t延时" + delayTime + "毫秒");
+        return i++;
+    }
+}
+```
+
+### 结果
+
+访问`http://127.0.0.1:8080/delayedQueue/5000`，输出如下
+
+```
+当前时间：2021-10-26T23:08:20.173754	发送延时队列的消息：1	延时5000毫秒
+当前时间：2021-10-26T23:08:25.176630500	收到延时队列的消息：1
+```
+
+## 备份交换机
