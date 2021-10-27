@@ -1,6 +1,7 @@
 package com.maxqiu.demo.controller;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -139,6 +140,23 @@ public class IndexController {
                 return correlationData;
             });
         System.out.println("当前时间：" + LocalDateTime.now() + "\t发送延时队列的消息：" + i + "\t延时" + delayTime + "毫秒");
+        return i++;
+    }
+
+    /**
+     * 备份交换机生产者
+     */
+    @GetMapping("delayedExchange")
+    public Integer delayedExchange() {
+        // 让消息绑定一个 id 值
+        CorrelationData correlationData1 = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend("confirm.exchange", "key1", i, correlationData1);
+        System.out.println("发送消息 id 为：" + correlationData1.getId() + "\t内容为：" + i);
+
+        CorrelationData correlationData2 = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend("confirm.exchange", "key2", i, correlationData2);
+        System.out.println("发送消息 id 为：" + correlationData2.getId() + "\t内容为：" + i);
+
         return i++;
     }
 }

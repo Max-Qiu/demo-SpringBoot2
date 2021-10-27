@@ -1252,3 +1252,132 @@ public class IndexController {
 ```
 
 ## 备份交换机
+
+备份交换机可以理解为`RabbitMQ`中交换机的“备胎”，当我们为某一个交换机声明一个对应的备份交换机时，就是为它创建一个备胎，当交换机接收到一条不可路由消息时，将会把这条消息转发到备份交换机中，由备份交换机来进行转发和处理，通常备份交换机的类型为`Fanout`，这样就能把所有消息都投递到与其绑定的队列中，然后我们在备份交换机下绑定一个队列，这样所有那些原交换机无法被路由的消息，就会都进入这个队列了。当然，我们还可以建立一个报警队列，用独立的消费者来进行监测和报警。
+
+![](https://cdn.maxqiu.com/upload/21543846f3de4cc5a4d0e0861a175658.jpg)
+
+### 交换机和队列
+
+```java
+@Configuration
+public class BackupExchangeConfig {
+    /**
+     * 声明确认交换机
+     */
+    @Bean
+    public DirectExchange confirmExchange() {
+        ExchangeBuilder exchangeBuilder = ExchangeBuilder.directExchange("confirm.exchange").durable(true)
+            // 设置该交换机的备份交换机
+            .withArgument("alternate-exchange", "backup.exchange");
+        return exchangeBuilder.build();
+    }
+
+    /**
+     * 声明备份交换机
+     *
+     * @return
+     */
+    @Bean
+    public FanoutExchange backupExchange() {
+        return new FanoutExchange("backup.exchange");
+    }
+
+    /**
+     * 声明队列
+     */
+    @Bean
+    public Queue confirmQueue() {
+        return QueueBuilder.durable("confirm.queue").build();
+    }
+
+    @Bean
+    public Queue backQueue() {
+        return QueueBuilder.durable("backup.queue").build();
+    }
+
+    @Bean
+    public Queue warningQueue() {
+        return QueueBuilder.durable("warning.queue").build();
+    }
+
+    /**
+     * 声明绑定关系
+     */
+    @Bean
+    public Binding confirmBinding(Queue confirmQueue, DirectExchange confirmExchange) {
+        return BindingBuilder.bind(confirmQueue).to(confirmExchange).with("key1");
+    }
+
+    @Bean
+    public Binding warningBinding(Queue warningQueue, FanoutExchange backupExchange) {
+        return BindingBuilder.bind(warningQueue).to(backupExchange);
+    }
+
+    @Bean
+    public Binding backupBinding(Queue backQueue, FanoutExchange backupExchange) {
+        return BindingBuilder.bind(backQueue).to(backupExchange);
+    }
+}
+```
+
+### 消费者
+
+```java
+@Component
+@Slf4j
+public class BackupExchangeReceiver {
+    @RabbitListener(queues = "confirm.queue")
+    public void receiveConfirmMsg(Integer message) {
+        System.out.println("收到一般消息" + message);
+    }
+
+    @RabbitListener(queues = "warning.queue")
+    public void receiveWarningMsg(Integer message) {
+        System.out.println("报警发现不可路由消息：" + message);
+    }
+}
+```
+
+### 生产者
+
+```java
+@RestController
+public class IndexController {
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
+
+    /**
+     * 测试用的标记序号
+     */
+    private static int i = 1;
+
+    /**
+     * 备份交换机生产者
+     */
+    @GetMapping("sendMessage")
+    public Integer sendMessage() {
+        // 让消息绑定一个 id 值
+        CorrelationData correlationData1 = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend("confirm.exchange", "key1", i, correlationData1);
+        System.out.println("发送消息 id 为：" + correlationData1.getId() + "\t内容为：" + i);
+
+        CorrelationData correlationData2 = new CorrelationData(UUID.randomUUID().toString());
+        rabbitTemplate.convertAndSend("confirm.exchange", "key2", i, correlationData2);
+        System.out.println("发送消息 id 为：" + correlationData2.getId() + "\t内容为：" + i);
+
+        return i++;
+    }
+}
+```
+
+### 结果
+
+访问`http://127.0.0.1:8080/delayedExchange`，结果如下：
+
+```
+发送消息 id 为：9d993eb3-dcf3-424f-9d1b-bc4a2518bb8c	内容为：2
+发送消息 id 为：0e3a2ad3-4a54-4c3e-a866-cb96bc59fd61	内容为：2
+收到一般消息2
+报警发现不可路由消息：2
+```
