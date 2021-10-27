@@ -64,7 +64,9 @@ public class IndexController {
         System.out.println("~~~~Sent:" + i);
         rabbitTemplate.convertAndSend(
             // 指定交换机名称
-            "fanout", "", i);
+            "fanout",
+            // 不指定队列名称
+            "", i);
         return i++;
     }
 
@@ -146,8 +148,8 @@ public class IndexController {
     /**
      * 备份交换机生产者
      */
-    @GetMapping("delayedExchange")
-    public Integer delayedExchange() {
+    @GetMapping("backupExchange")
+    public Integer backupExchange() {
         // 让消息绑定一个 id 值
         CorrelationData correlationData1 = new CorrelationData(UUID.randomUUID().toString());
         rabbitTemplate.convertAndSend("confirm.exchange", "key1", i, correlationData1);

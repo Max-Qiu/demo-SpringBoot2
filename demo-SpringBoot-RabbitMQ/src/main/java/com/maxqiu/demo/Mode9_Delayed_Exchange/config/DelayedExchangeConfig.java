@@ -8,19 +8,17 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.CustomExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * 交换机和队列
  *
  * @author Max_Qiu
  */
-@Configuration
+@Component
 public class DelayedExchangeConfig {
     /**
      * 延迟交换机
-     *
-     * @return
      */
     @Bean
     public CustomExchange delayedExchange() {

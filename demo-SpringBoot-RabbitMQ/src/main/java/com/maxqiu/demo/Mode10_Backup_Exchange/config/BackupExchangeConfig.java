@@ -8,14 +8,14 @@ import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.QueueBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 /**
  * 交换机和队列
  *
  * @author Max_Qiu
  */
-@Configuration
+@Component
 public class BackupExchangeConfig {
     /**
      * 声明确认交换机
@@ -30,8 +30,6 @@ public class BackupExchangeConfig {
 
     /**
      * 声明备份交换机
-     *
-     * @return
      */
     @Bean
     public FanoutExchange backupExchange() {

@@ -25,8 +25,6 @@ public class TopicConfig {
 
     /**
      * 声明队列
-     *
-     * @return
      */
     @Bean
     public Queue autoDeleteQueue5() {

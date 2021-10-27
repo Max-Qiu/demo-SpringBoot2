@@ -15,6 +15,7 @@ demo-SpringBoot-JUnit5 | 单元测试
 demo-SpringBoot-Log | 日志
 demo-SpringBoot-Mail | 邮件发送
 demo-SpringBoot-MybatisPlus | MybatisPlus CRUD
+demo-SpringBoot-RabbitMQ | RabbitMQ 各种模式示例代码
 demo-SpringBoot-Redis | Redis CRUD
 demo-SpringBoot-SpringMVC | URL匹配规则 与 参数接收
 demo-SpringBoot-SpringSession | 分布式Session

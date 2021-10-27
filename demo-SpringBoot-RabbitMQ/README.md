@@ -1,4 +1,5 @@
-官方文档：[RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
+- 官方文档：[RabbitMQ Tutorials](https://www.rabbitmq.com/getstarted.html)
+- 尚硅谷视频：[尚硅谷_RabbitMQ](http://www.atguigu.com/download_detail.shtml?v=327)
 
 > 本文环境
 
@@ -52,7 +53,7 @@ spring:
 
 ## `Hello World`入门
 
-入门示例中，展示了一个生产者和一个消费者的情况。在下图中：
+入门示例介绍一个生产者和一个消费者的情况。在下图中：
 
 - `P`是生产者，用于发送消息
 - `C`是消费者，用于接收消息
@@ -92,8 +93,6 @@ public class HelloWorldConfig {
 public class HelloWorldReceiver {
     /**
      * 接收字符串
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(String msg) {
@@ -102,8 +101,6 @@ public class HelloWorldReceiver {
 
     /**
      * 接收数字
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(Integer msg) {
@@ -112,8 +109,6 @@ public class HelloWorldReceiver {
 
     /**
      * 接收实体
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(User msg) {
@@ -172,7 +167,7 @@ public class IndexController {
 
 ## `Work Queues`工作队列
 
-当消费者需要很长时间才能处理一条消息时，可以建立多个消费者同时处理任务。队列会将消息以**轮询**模式分配给消费者
+当消费者需要很长时间才能处理一条消息时，可以建立多个消费者分配处理任务。队列会将消息以**轮询**模式分配给消费者
 
 ![](https://cdn.maxqiu.com/upload/6ad6f480729741ea853299098716c034.png)
 
@@ -273,26 +268,9 @@ public class IndexController {
 
 多次访问`http://127.0.0.1:8080/work-queues`，看到如下结果
 
-> `prefetch=1`
-
-消费快的消费者消费更多消息
-
-```
-~~~~Sent:1
-~~~~Sent:2
-~~~~Sent:3
-~~~~Sent:4
-~~~~Sent:5
----Received1:1
----Received1:3
----Received1:4
----Received1:5
-===Received2:2
-```
-
 > `prefetch=250`
 
-消费者评价分配消息
+消费者平均分配消息
 
 ```
 ~~~~Sent:1
@@ -303,6 +281,21 @@ public class IndexController {
 ---Received1:3
 ===Received2:2
 ===Received2:4
+```
+
+> `prefetch=1`
+
+消费快的消费者消费更多消息
+
+```
+~~~~Sent:1
+~~~~Sent:2
+~~~~Sent:3
+~~~~Sent:4
+---Received1:1
+---Received1:3
+---Received1:4
+===Received2:2
 ```
 
 ## `Publish/Subscribe`发布/订阅
@@ -415,7 +408,9 @@ public class IndexController {
         System.out.println("~~~~Sent:" + i);
         rabbitTemplate.convertAndSend(
             // 指定交换机名称
-            "fanout", "", i);
+            "fanout",
+            // 不指定队列名称
+            "", i);
         return i++;
     }
 }
@@ -447,11 +442,8 @@ public class IndexController {
 
 ```java
 @Bean
-public Binding binding1a(DirectExchange direct,
-    Queue autoDeleteQueue1) {
-    return BindingBuilder.bind(autoDeleteQueue1)
-        .to(direct)
-        .with("orange");
+public Binding binding(DirectExchange direct, Queue autoDeleteQueue3) {
+    return BindingBuilder.bind(autoDeleteQueue3).to(direct).with("error");
 }
 ```
 
@@ -587,7 +579,7 @@ public class IndexController {
 ===Received2:error
 ```
 
-## 主题
+## `Topic`主题
 
 尽管使用直连交换机改进了系统，但是它仍然存在局限性：它不能基于多个标准进行路由。比如：接收的日志类型有`info.base`和`info.advantage`，某个队列只想接收`info.base`的消息，那这个时候直连就办不到了。这个时候就只能使用`Topic`（主题）类型
 
@@ -635,8 +627,6 @@ public class TopicConfig {
 
     /**
      * 声明队列
-     *
-     * @return
      */
     @Bean
     public Queue autoDeleteQueue5() {
@@ -733,11 +723,19 @@ public class IndexController {
 
 # 进阶使用1
 
-## `Publisher Confirms`发布确认
-
 ![](https://cdn.maxqiu.com/upload/8e6eb2c864124c729d691099efa79335.png)
 
-如上图，生产者在发送消息时，如果发送到错误的交换机，或者没有队列可以处理该消息，生产者应当知道消息未发送成功。需要对生产者进行配置。
+如图，一条消息完整的流程分为：
+
+1. 生产者发布
+2. RabbitMQ缓存
+3. 消费者消费
+
+以上每一个步骤都会出现消息丢失的情况，所以需要进行消息确认
+
+## `Publisher Confirms`发布确认
+
+生产者在发送消息时，如果发送到错误的交换机，或者没有队列可以处理该消息，生产者应当知道消息未发送成功。需要对生产者进行配置。
 
 ### 队列、交换机
 
@@ -837,6 +835,7 @@ public class RabbitTemplateCallBack implements RabbitTemplate.ConfirmCallback, R
      * 队列未接收到消息的时候的回调方法
      *
      * @param message
+     *            返回的数据
      */
     @Override
     public void returnedMessage(ReturnedMessage message) {
@@ -1047,7 +1046,7 @@ public class IndexController {
 
 ![](https://cdn.maxqiu.com/upload/8b11fa3812fd47d08bafb4579fad5d5b.png)
 
-## 队列和交换机
+### 队列和交换机
 
 ```java
 @Component
@@ -1119,7 +1118,7 @@ public class DeadExchangeReceiver {
 
 发送消息时，需要设置超时时间
 
-```
+```java
 @RestController
 public class IndexController {
     @Autowired
@@ -1133,9 +1132,9 @@ public class IndexController {
         for (int j = 0; j < 10; j++) {
             rabbitTemplate.convertAndSend("normal.exchange", "key1", j,
                 // 设置消息过期时间（单位：毫秒）
-                m -> {
-                    m.getMessageProperties().setExpiration("10000");
-                    return m;
+                correlationData -> {
+                    correlationData.getMessageProperties().setExpiration("10000");
+                    return correlationData;
                 });
         }
     }
@@ -1162,12 +1161,10 @@ public class IndexController {
 ### 交换机和队列
 
 ```java
-@Configuration
+@Component
 public class DelayedExchangeConfig {
     /**
      * 延迟交换机
-     *
-     * @return
      */
     @Bean
     public CustomExchange delayedExchange() {
@@ -1209,12 +1206,7 @@ public class DelayedExchangeReceiver {
 
 ### 生产者
 
-```
-/**
- * 生产者
- *
- * @author Max_Qiu
- */
+```java
 @RestController
 public class IndexController {
     @Autowired
@@ -1260,7 +1252,7 @@ public class IndexController {
 ### 交换机和队列
 
 ```java
-@Configuration
+@Component
 public class BackupExchangeConfig {
     /**
      * 声明确认交换机
@@ -1275,8 +1267,6 @@ public class BackupExchangeConfig {
 
     /**
      * 声明备份交换机
-     *
-     * @return
      */
     @Bean
     public FanoutExchange backupExchange() {
@@ -1325,7 +1315,6 @@ public class BackupExchangeConfig {
 
 ```java
 @Component
-@Slf4j
 public class BackupExchangeReceiver {
     @RabbitListener(queues = "confirm.queue")
     public void receiveConfirmMsg(Integer message) {
@@ -1355,8 +1344,8 @@ public class IndexController {
     /**
      * 备份交换机生产者
      */
-    @GetMapping("sendMessage")
-    public Integer sendMessage() {
+    @GetMapping("backupExchange")
+    public Integer backupExchange() {
         // 让消息绑定一个 id 值
         CorrelationData correlationData1 = new CorrelationData(UUID.randomUUID().toString());
         rabbitTemplate.convertAndSend("confirm.exchange", "key1", i, correlationData1);

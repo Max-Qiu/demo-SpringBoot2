@@ -37,6 +37,7 @@ public class RabbitTemplateCallBack implements RabbitTemplate.ConfirmCallback, R
      * 队列未接收到消息的时候的回调方法
      *
      * @param message
+     *            返回的数据
      */
     @Override
     public void returnedMessage(ReturnedMessage message) {

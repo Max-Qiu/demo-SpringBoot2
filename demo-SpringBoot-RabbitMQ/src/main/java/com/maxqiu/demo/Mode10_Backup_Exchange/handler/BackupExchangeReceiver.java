@@ -3,15 +3,12 @@ package com.maxqiu.demo.Mode10_Backup_Exchange.handler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * 消费者
  *
  * @author Max_Qiu
  */
 @Component
-@Slf4j
 public class BackupExchangeReceiver {
     @RabbitListener(queues = "confirm.queue")
     public void receiveConfirmMsg(Integer message) {

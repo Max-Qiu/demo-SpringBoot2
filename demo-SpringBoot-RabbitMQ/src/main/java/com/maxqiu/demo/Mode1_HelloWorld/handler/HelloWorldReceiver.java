@@ -18,8 +18,6 @@ import com.maxqiu.demo.entity.User;
 public class HelloWorldReceiver {
     /**
      * 接收字符串
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(String msg) {
@@ -28,8 +26,6 @@ public class HelloWorldReceiver {
 
     /**
      * 接收数字
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(Integer msg) {
@@ -38,8 +34,6 @@ public class HelloWorldReceiver {
 
     /**
      * 接收实体
-     *
-     * @param msg
      */
     @RabbitHandler
     public void receive(User msg) {
