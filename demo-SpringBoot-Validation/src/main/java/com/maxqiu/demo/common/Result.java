@@ -1,65 +1,65 @@
-/**
- * Copyright (c) 2016-2019 人人开源 All rights reserved.
- *
- * https://www.renren.io
- *
- * 版权所有，侵权必究！
- */
-
 package com.maxqiu.demo.common;
 
-import java.util.HashMap;
-import java.util.Map;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
- * 返回数据
+ * 通用返回对象
  *
- * @author Mark sunlightcs@gmail.com
+ * @author Max_Qiu
  */
-public class Result extends HashMap<String, Object> {
-    private static final long serialVersionUID = 1L;
+@Data
+@NoArgsConstructor
+@Accessors(chain = true)
+public class Result<T> {
+    /**
+     * 状态码
+     */
+    private Integer code;
 
-    public Result() {
-        put("code", 0);
+    /**
+     * 状态码对应提示信息
+     */
+    private String msg;
+
+    /**
+     * 数据
+     */
+    private T data;
+
+    private Result(ResultEnum resultEnum) {
+        this.code = resultEnum.getCode();
+        this.msg = resultEnum.getMsg();
     }
 
-    public static Result error(int code, String msg) {
-        Result result = new Result();
-        result.put("code", code);
-        result.put("msg", code);
-        return result;
+    public static <K> Result<K> success() {
+        return new Result<>(ResultEnum.SUCCESS);
     }
 
-    public static Result error() {
-        return error(500, "未知异常，请联系管理员");
+    public static <K> Result<K> success(K data) {
+        Result<K> success = Result.success();
+        return success.setData(data);
     }
 
-    public static Result error(int code, Map<String, String> msg) {
-        Result result = new Result();
-        result.put("code", code);
-        result.put("msg", msg);
-        return result;
+    public static <K> Result<K> error() {
+        return new Result<>(ResultEnum.ERROR);
     }
 
-    public static Result ok() {
-        return new Result();
+    public static <K> Result<K> fail() {
+        return new Result<>(ResultEnum.FAIL);
     }
 
-    public static Result ok(String msg) {
-        Result result = ok();
-        result.put("msg", msg);
-        return result;
+    public static <K> Result<K> other(ResultEnum resultEnum) {
+        return new Result<>(resultEnum);
     }
 
-    public static Result ok(Map<String, Object> map) {
-        Result result = new Result();
-        result.put("data", map);
-        return result;
+    public static <K> Result<K> other(ResultEnum resultEnum, K data) {
+        Result<K> error = Result.other(resultEnum);
+        return error.setData(data);
     }
 
-    @Override
-    public Result put(String key, Object value) {
-        super.put(key, value);
-        return this;
+    public static <K> Result<K> byFlag(boolean flag) {
+        return new Result<>(flag ? ResultEnum.SUCCESS : ResultEnum.FAIL);
     }
 }

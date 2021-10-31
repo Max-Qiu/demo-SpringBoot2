@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxqiu.demo.common.Result;
 import com.maxqiu.demo.valid.group.AddValidGroup;
 import com.maxqiu.demo.valid.group.UpdateValidGroup;
 import com.maxqiu.demo.vo.EmployeeVO;
@@ -18,12 +19,12 @@ import com.maxqiu.demo.vo.EmployeeVO;
 @RequestMapping("group")
 public class GroupController {
     @PostMapping("add")
-    public EmployeeVO add(@Validated(AddValidGroup.class) EmployeeVO vo) {
-        return vo;
+    public Result<EmployeeVO> add(@Validated(AddValidGroup.class) EmployeeVO vo) {
+        return Result.success(vo);
     }
 
     @PostMapping("update")
-    public EmployeeVO update(@Validated(UpdateValidGroup.class) EmployeeVO vo) {
-        return vo;
+    public Result<EmployeeVO> update(@Validated(UpdateValidGroup.class) EmployeeVO vo) {
+        return Result.success(vo);
     }
 }

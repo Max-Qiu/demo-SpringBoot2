@@ -14,7 +14,7 @@
 注解 | 说明
 ---|---
 `javax.validation.Valid` | `JSR303`标准的注解
-`org.springframework.validation.annotation.Validated` | `JSR-303`的变体。支持`Spring`的`JSR-303`
+`org.springframework.validation.annotation.Validated` | `JSR-303`的变体。为支持`Spring`的`JSR-303`
 
 参考文档：[@Validated和@Valid的区别？教你使用它完成Controller参数校验（含级联属性校验）以及原理分析【享学Spring】](https://blog.csdn.net/f641385712/article/details/97621783)
 
@@ -59,7 +59,6 @@
 3. 在验证注解内使用`message`字段添加自定义的校验语句
 
 ```java
-
 @RestController
 @Validated
 public class IndexController {
@@ -67,10 +66,10 @@ public class IndexController {
      * 例：校验邮箱与验证码
      */
     @GetMapping("code")
-    public String code(@Email @NotBlank(message = "邮箱不能为空！") String email,
-                       @Size(min = 6, max = 6, message = "验证码为6位") @NotBlank String code) {
+    public Result<String> code(@Email @NotBlank(message = "邮箱不能为空！") String email,
+        @Size(min = 6, max = 6, message = "验证码为6位") @NotBlank String code) {
         // 邮箱和验证码正确性校验：略
-        return email + "\t" + code;
+        return Result.success(email + "\t" + code);
     }
 }
 ```
@@ -192,8 +191,8 @@ public class VoController {
      * 实体校验
      */
     @PostMapping("normal")
-    public NormalVO normal(@Validated NormalVO vo) {
-        return vo;
+    public Result<NormalVO> normal(@Validated NormalVO vo) {
+        return Result.success(vo);
     }
 }
 ```
@@ -212,8 +211,8 @@ public class VoController {
      * 嵌套实体验证
      */
     @PostMapping("nest")
-    public UserVO nest(@Validated @RequestBody UserVO user) {
-        return user;
+    public Result<UserVO> nest(@Validated @RequestBody UserVO user) {
+        return Result.success(user);
     }
 }
 ```
@@ -267,13 +266,13 @@ public interface UpdateValidGroup {}
 @RequestMapping("group")
 public class GroupController {
     @PostMapping("add")
-    public EmployeeVO add(@Validated(AddValidGroup.class) EmployeeVO vo) {
-        return vo;
+    public Result<EmployeeVO> add(@Validated(AddValidGroup.class) EmployeeVO vo) {
+        return Result.success(vo);
     }
 
     @PostMapping("update")
-    public EmployeeVO update(@Validated(UpdateValidGroup.class) EmployeeVO vo) {
-        return vo;
+    public Result<EmployeeVO> update(@Validated(UpdateValidGroup.class) EmployeeVO vo) {
+        return Result.success(vo);
     }
 }
 ```
@@ -281,7 +280,6 @@ public class GroupController {
 校验注解添加校验分组属性
 
 ```java
-
 @Data
 public class EmployeeVO {
     /**
@@ -382,7 +380,6 @@ public class ListValueValidator implements ConstraintValidator<ListValue, Intege
 使用注解（支持使用分组）
 
 ```java
-
 @Data
 public class EmployeeVO {
     /**
@@ -407,8 +404,8 @@ public class CustomController {
      * 修改状态
      */
     @PostMapping("status")
-    public EmployeeVO status(@Validated(ChangeStatusValidGroup.class) EmployeeVO vo) {
-        return vo;
+    public Result<EmployeeVO> status(@Validated(ChangeStatusValidGroup.class) EmployeeVO vo) {
+        return Result.success(vo);
     }
 }
 ```
@@ -421,9 +418,9 @@ public class CustomController {
 
 `Spring`提供了`BindingResult`用于接收校验异常结果，只需要在被校验的实体后面紧跟着一个`BindingResult`即可获取校验失败结果。示例如下：L
 
-```
+```java
 @GetMapping("exception")
-public Object exception(@Validated NormalVO vo, BindingResult result) {
+public Result<?> exception(@Validated NormalVO vo, BindingResult result) {
     if (result.hasErrors()) {
         Map<String, String> map = new HashMap<>();
         // 获取校验的错误结果并遍历
@@ -431,9 +428,9 @@ public Object exception(@Validated NormalVO vo, BindingResult result) {
             // 获取错误的属性的名字和错误提示
             map.put(item.getField(), item.getDefaultMessage());
         });
-        return Result.error(500, map);
+        return Result.other(ResultEnum.PARAMETER_VERIFY_ERROR, map);
     }
-    return vo;
+    return Result.success(vo);
 }
 ```
 
@@ -445,7 +442,7 @@ public Object exception(@Validated NormalVO vo, BindingResult result) {
 
 > 示例：处理全局异常，并返回`json`
 
-```
+```java
 /**
  * 集中处理所有异常
  *
@@ -457,10 +454,10 @@ public Object exception(@Validated NormalVO vo, BindingResult result) {
 @RestControllerAdvice(basePackages = "com.maxqiu.demo.controller")
 public class ExceptionControllerAdvice {
     /**
-     * 处理方法的普通参数校验异常
+     * 处理方法的普通参数异常
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
-    public Result handleValidException(ConstraintViolationException e) {
+    public Result<Map<String, String>> handleValidException(ConstraintViolationException e) {
         Map<String, String> errorMap = new HashMap<>();
         for (ConstraintViolation<?> constraintViolation : e.getConstraintViolations()) {
             String field = "";
@@ -469,21 +466,29 @@ public class ExceptionControllerAdvice {
             }
             errorMap.put(field, constraintViolation.getMessage());
         }
-        return Result.error(500, errorMap);
+        return Result.other(ResultEnum.PARAMETER_VERIFY_ERROR, errorMap);
     }
 
     /**
-     * 处理方法的实体参数校验异常
+     * 处理方法的实体参数异常
      */
     @ExceptionHandler(value = BindException.class)
-    public Result handleValidException(BindException e) {
+    public Result<Map<String, String>> handleValidException(BindException e) {
         Map<String, String> errorMap = new HashMap<>();
         e.getBindingResult().getFieldErrors().forEach(r -> errorMap.put(r.getField(), r.getDefaultMessage()));
-        return Result.error(500, errorMap);
+        return Result.other(ResultEnum.PARAMETER_VERIFY_ERROR, errorMap);
+    }
+
+    /**
+     * 处理参数格式异常
+     */
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public Result<String> handleException() {
+        return Result.other(ResultEnum.PARAMETER_FORMAT_ERROR);
     }
 
     @ExceptionHandler(value = Throwable.class)
-    public Result handleException(Throwable throwable) {
+    public Result<String> handleException(Throwable throwable) {
         log.error("其他异常：{}\n异常类型：{}", throwable.getMessage(), throwable.getClass());
         return Result.error();
     }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maxqiu.demo.common.Result;
+import com.maxqiu.demo.common.ResultEnum;
 import com.maxqiu.demo.vo.NormalVO;
 
 /**
@@ -27,17 +28,17 @@ public class IndexController {
      * 例：校验邮箱与验证码
      */
     @GetMapping("code")
-    public String code(@Email @NotBlank(message = "邮箱不能为空！") String email,
+    public Result<String> code(@Email @NotBlank(message = "邮箱不能为空！") String email,
         @Size(min = 6, max = 6, message = "验证码为6位") @NotBlank String code) {
         // 邮箱和验证码正确性校验：略
-        return email + "\t" + code;
+        return Result.success(email + "\t" + code);
     }
 
     /**
      * 方法级处理校验异常
      */
     @GetMapping("exception")
-    public Object exception(@Validated NormalVO vo, BindingResult result) {
+    public Result<?> exception(@Validated NormalVO vo, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> map = new HashMap<>();
             // 获取校验的错误结果并遍历
@@ -45,8 +46,8 @@ public class IndexController {
                 // 获取错误的属性的名字和错误提示
                 map.put(item.getField(), item.getDefaultMessage());
             });
-            return Result.error(500, map);
+            return Result.other(ResultEnum.PARAMETER_VERIFY_ERROR, map);
         }
-        return vo;
+        return Result.success(vo);
     }
 }

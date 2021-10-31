@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.maxqiu.demo.common.Result;
 import com.maxqiu.demo.vo.NormalVO;
 import com.maxqiu.demo.vo.UserVO;
 
@@ -21,15 +22,15 @@ public class VoController {
      * 实体校验
      */
     @PostMapping("normal")
-    public NormalVO normal(@Validated NormalVO vo) {
-        return vo;
+    public Result<NormalVO> normal(@Validated NormalVO vo) {
+        return Result.success(vo);
     }
 
     /**
      * 嵌套实体验证
      */
     @PostMapping("nest")
-    public UserVO nest(@Validated @RequestBody UserVO user) {
-        return user;
+    public Result<UserVO> nest(@Validated @RequestBody UserVO user) {
+        return Result.success(user);
     }
 }
