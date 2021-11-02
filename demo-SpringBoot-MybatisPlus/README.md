@@ -27,7 +27,7 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
-    <version>3.4.3.3</version>
+    <version>3.4.3.4</version>
 </dependency>
 <!-- JSON 格式化 -->
 <dependency>
