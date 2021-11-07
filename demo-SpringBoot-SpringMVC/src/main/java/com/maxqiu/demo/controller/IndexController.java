@@ -1,20 +1,26 @@
 package com.maxqiu.demo.controller;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.maxqiu.demo.common.CurrUser;
+import com.maxqiu.demo.common.CurrUserVo;
 
 /**
  * 首页
- * 
+ *
  * @author Max_Qiu
  */
-@Controller
-@RequestMapping("")
+@RestController
 public class IndexController {
     @RequestMapping("")
-    @ResponseBody
     public String index() {
         return "index";
+    }
+
+    @GetMapping("currUser")
+    public CurrUserVo currUser(@CurrUser CurrUserVo currUser) {
+        return currUser;
     }
 }
