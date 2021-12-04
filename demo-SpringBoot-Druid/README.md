@@ -22,7 +22,7 @@
 ```yaml
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3307/druid?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
+    url: jdbc:mysql://127.0.0.1:3306/druid?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
     username: root # 用户名
     password: 123 # 密码
 ```

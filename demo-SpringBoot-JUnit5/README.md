@@ -1,14 +1,10 @@
 > 本文档整理自教程：
-视频：[JUnit 5 用户手册](https://junit.org/junit5/docs/current/user-guide/#writing-tests)
-文档：[尚硅谷_Spring Boot2](http://www.atguigu.com/download_detail.shtml?v=314)
 
----
+- JUnit5文档：[JUnit 5 用户手册](https://junit.org/junit5/docs/current/user-guide/#writing-tests)
+- 尚硅谷视频：[尚硅谷_Spring Boot2](http://www.atguigu.com/download_detail.shtml?v=314)
+- 尚硅谷文档：[尚硅谷/SpringBoot2核心技术与响应式编程/07、单元测试](https://www.yuque.com/atguigu/springboot/ksndgx)
 
-> 文档：
-[JUnit 5](https://junit.org/junit5/)
-[尚硅谷/SpringBoot2核心技术与响应式编程/07、单元测试](https://www.yuque.com/atguigu/springboot/ksndgx)
-
-# JUnit 5简介
+# JUnit 5 简介
 
 > JUnit5与之前版本的Junit框架有很大的不同。由三个不同子项目的几个不同模块组成。
 

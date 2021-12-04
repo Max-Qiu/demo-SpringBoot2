@@ -1,12 +1,11 @@
 # yml配置elasticsearch客户端地址（可配置项有限）
 #spring:
 #  elasticsearch:
-#    rest:
-#      uris: http://192.168.220.101:9200 # elasticsearch 连接地址
-#      username: elastic # 用户名
-#      password: 123456 # 密码
-#      connection-timeout: 10s # 连接超时时间（默认1s）
-#      read-timeout: 30s # 数据读取超时时间（默认30s）
+#    uris: http://127.0.0.1:9200 # elasticsearch 连接地址
+#    #username: elastic # 用户名
+#    #password: 123456 # 密码
+#    connection-timeout: 10s # 连接超时时间（默认1s）
+#    socket-timeout: 30s # 数据读取超时时间（默认30s）
 
 logging:
   file:

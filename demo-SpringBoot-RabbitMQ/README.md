@@ -3,7 +3,7 @@
 
 > 本文环境
 
-- SpringBoot 2.4.x
+- SpringBoot 2.6.x
 - RabbitMQ 3.9.x
 
 # 依赖

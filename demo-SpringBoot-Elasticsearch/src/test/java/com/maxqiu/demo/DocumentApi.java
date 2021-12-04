@@ -12,11 +12,12 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import com.maxqiu.demo.entity.User;
 
 /**
+ * 文档增删改查
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class DocumentApi {
-
     @Autowired
     private ElasticsearchRestTemplate template;
 

@@ -1,6 +1,7 @@
 > 官方示例代码：
-GitHub：[https://github.com/baomidou/mybatis-plus-samples](https://github.com/baomidou/mybatis-plus-samples)
-Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baomidou/mybatis-plus-samples)
+
+- GitHub：[https://github.com/baomidou/mybatis-plus-samples](https://github.com/baomidou/mybatis-plus-samples)
+- Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baomidou/mybatis-plus-samples)
 
 # pom 依赖
 
@@ -11,11 +12,6 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
     <groupId>org.projectlombok</groupId>
     <artifactId>lombok</artifactId>
     <optional>true</optional>
-</dependency>
-<!-- String工具类 BlockAttackInnerInterceptor拦截器需要用 -->
-<dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
 </dependency>
 <!-- MySQL驱动 -->
 <dependency>
@@ -28,12 +24,6 @@ Gitee：[https://gitee.com/baomidou/mybatis-plus-samples](https://gitee.com/baom
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
     <version>3.4.3.4</version>
-</dependency>
-<!-- JSON 格式化 -->
-<dependency>
-    <groupId>com.alibaba</groupId>
-    <artifactId>fastjson</artifactId>
-    <version>1.2.75</version>
 </dependency>
 <!-- 性能分析 -->
 <dependency>
@@ -71,6 +61,8 @@ mybatis-plus:
 ```
 
 # 代码示例
+
+详细代码见测试类
 
 ## CRUD 增删改查
 

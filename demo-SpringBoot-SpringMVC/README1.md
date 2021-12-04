@@ -1,8 +1,6 @@
-# SpringMVC：路由映射 - @RequestMapping 注解详解
-
 > 本文档整理自视频教程：[尚硅谷_SpringMVC视频教程](http://www.atguigu.com/download_detail.shtml?v=23)，并对其扩充
 
-环境介绍：本文直接使用`Maven`环境以及`SpringBoot 2.4.3`，不同于视频教程中的先建立web项目再拷贝jar包
+环境介绍：本文直接使用`Maven`环境以及`SpringBoot 2.6.x`，不同于视频教程中的先建立web项目再拷贝jar包
 
 建立SpringBoot项目添加如下核心依赖即可
 

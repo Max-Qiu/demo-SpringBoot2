@@ -1,12 +1,13 @@
 > 本文档整理自视频教程：[尚硅谷_Spring Boot整合篇](http://www.atguigu.com/download_detail.shtml?v=38)
 
-环境介绍：本文使用`SpringBoot 2.4.x`，视频教程使用的`1.5.x`版本
+环境介绍：本文使用`SpringBoot 2.6.x`，视频教程使用的`1.5.x`版本
 
 ---
 
 > 官方文档：
-[Spring Framework Documentation -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#cache)
-[Spring Boot Reference Documentation -- 13. Caching](https://docs.spring.io/spring-boot/docs/current/reference/html/spring-boot-features.html#boot-features-caching)
+
+- [Spring Framework Documentation -- Integration -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#cache)
+- [Spring Boot Reference Documentation -- IO -- 13. Caching](https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.caching.provider)
 
 # Spring缓存简介
 
@@ -24,8 +25,8 @@
 在启动类上添加`@EnableCaching`注解
 
 ```java
-@SpringBootApplication
 @EnableCaching
+@SpringBootApplication
 public class CacheApplication {
     public static void main(String[] args) {
         SpringApplication.run(CacheApplication.class, args);
@@ -62,7 +63,7 @@ public class IndexController {
 > 第三步：测试
 
 1. 第一次访问`http://127.0.0.1:8080/`，控制台输出`执行了 index 方法`，页面显示`test`
-2. 再次访问`http://127.0.0.1:8080/`，控制台无任何输出，页面依旧显示`test`
+2. 再次访问`http://127.0.0.1:8080/`，控制台无任何输出，页面显示`test`
 
 # 整合Redis
 
@@ -91,17 +92,22 @@ public class IndexController {
 `pom.xml`中添加`redis`依赖
 
 ```xml
-    <!-- Redis数据库依赖 -->
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-redis</artifactId>
-    </dependency>
-    <!-- Fastjson格式化工具 -->
-    <dependency>
-        <groupId>com.alibaba</groupId>
-        <artifactId>fastjson</artifactId>
-        <version>1.2.76</version>
-    </dependency>
+<!-- Redis数据库依赖 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+</dependency>
+<!-- 连接池依赖 -->
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-pool2</artifactId>
+</dependency>
+<!-- Fastjson格式化工具 -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>fastjson</artifactId>
+    <version>1.2.78</version>
+</dependency>
 ```
 
 > 第二步：配置数据库连接
@@ -109,13 +115,27 @@ public class IndexController {
 ```yml
 spring:
   redis:
-    host: 192.168.220.101
-    port: 6379
-    password: 123
-    database: 0
+    host: 127.0.0.1 # 地址
+    port: 6379 # 端口
+    # 通用配置
+    username: # 用户名
+    password: 123 # 密码
+    database: 0 # 指定数据库序号
+    ssl: false # 是否启用SSL
+    connect-timeout: 1000 # 连接超时时间（毫秒）
+    timeout: 1000 # 操作超时时间（毫秒）
+    client-name: # 客户端名称（不知道干嘛用的）
+    client-type: lettuce # 驱动类型
+    # 连接池配置
+    lettuce:
+      pool:
+        min-idle: 1 # 最小空闲连接（默认0）
+        max-idle: 8 # 最大空闲连接（默认8）
+        max-active: 16 # 最大连接数（默认8，使用负值表示没有限制）
+        max-wait: -1ms # 最大阻塞等待时间（默认-1，负数表示没限制）
 ```
 
-完整的Redis数据库配置请参考：[SpringBoot2.4.x整合Redis](https://maxqiu.com/article/detail/102)
+完整的Redis数据库配置请参考：[SpringBoot2.6.x整合Redis](https://maxqiu.com/article/detail/102)
 
 > 第三步：查看缓存
 
@@ -504,7 +524,7 @@ public class RedisCacheConfig {
 > 第二步：指定`RedisCacheManager`
 
 ```
-@Cacheable(value = "cacheManager", cacheManager = "expire1min")
+@Cacheable(value = "cacheManager", cacheManager = "expire1day")
 public String cacheManager() {
     System.out.println("执行了 cache1 方法");
     return "1";

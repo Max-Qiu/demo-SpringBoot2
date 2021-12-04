@@ -15,11 +15,12 @@ import org.springframework.data.domain.Sort;
 import com.maxqiu.demo.entity.User;
 
 /**
+ * 基于Repository的增删改查
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 class UserRepositoryTest {
-
     @Autowired
     private UserRepository repository;
 
@@ -37,8 +38,8 @@ class UserRepositoryTest {
     }
 
     @Test
-    void existsById(Integer id) {
-        boolean b = repository.existsById(id);
+    void existsById() {
+        boolean b = repository.existsById(1);
         System.out.println(b);
     }
 

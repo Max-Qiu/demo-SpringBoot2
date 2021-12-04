@@ -1,15 +1,19 @@
-官方教程：[Reference Documentation](https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#reference)
+> 官方教程：[Spring Data Elasticsearch - Reference Documentation](https://docs.spring.io/spring-data/elasticsearch/docs/current/reference/html/#reference)
+
+PS：本文只是一篇极其简单的整合教程，不涉及复杂搜索示例，建议认真阅读官方文档
 
 # 版本对应关系
 
-| Spring Boot    | Spring Data Elasticsearch | Elasticsearch |
-| -------------- | ------------------------- | ------------- |
-| 2.1.18.RELEASE | 3.1.21.RELEASE            | 6.4.3         |
-| 2.2.11.RELEASE | 3.2.11.RELEASE            | 6.8.13        |
-| 2.3.6.RELEASE  | 4.0.5.RELEASE             | 7.6.2         |
-| 2.4.4          | 4.1.1                     | 7.9.3         |
+Spring Boot | Spring Data Elasticsearch | Elasticsearch
+---|---|---
+2.1.18.RELEASE | 3.1.21.RELEASE | 6.4.3
+2.2.11.RELEASE | 3.2.11.RELEASE | 6.8.13
+2.3.6.RELEASE | 4.0.5.RELEASE | 7.6.2
+2.4.12 | 4.1.1 | 7.9.3
+2.5.7 | 4.2.7 | 7.12.1
+2.6.1 | 4.3.0 | 7.15.2
 
-- 本文以`Spring Boot 2.4.4`为例
+- 本文以`Spring Boot 2.6.1`为例
 - 本文不介绍`Reactive`模式的相关代码
 
 # 准备
@@ -46,17 +50,18 @@
 # yml配置elasticsearch客户端地址（可配置项有限）
 spring:
   elasticsearch:
-    rest:
-      uris: http://192.168.220.101:9200 # elasticsearch 连接地址
-      username: elastic # 用户名
-      password: 123456 # 密码
-      connection-timeout: 10s # 连接超时时间（默认1s）
-      read-timeout: 30 # 数据读取超时时间（默认30s）
+    uris: http://127.0.0.1:9200 # elasticsearch 连接地址
+    #username: elastic # 用户名
+    #password: 123456 # 密码
+    connection-timeout: 10s # 连接超时时间（默认1s）
+    socket-timeout: 30s # 数据读取超时时间（默认30s）
 ```
 
 ### Bean
 
 ```java
+import java.time.Duration;
+
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -66,14 +71,13 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 
 /**
  * Java高级别REST客户端是Elasticsearch的默认客户端
- * 
+ *
  * Bean方式配置
- * 
+ *
  * @author Max_Qiu
  */
 @Configuration
 public class RestClientConfig extends AbstractElasticsearchConfiguration {
-
     @Bean
     @Override
     public RestHighLevelClient elasticsearchClient() {
@@ -81,13 +85,15 @@ public class RestClientConfig extends AbstractElasticsearchConfiguration {
         // 使用构建器来提供集群地址，设置默认值HttpHeaders或启用SSL。
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
             // 设置连接地址
-            .connectedTo("192.168.220.101:9200")
+            .connectedTo("127.0.0.1:9200")
             // 可以设置多个地址
-            // .connectedTo("localhost:9200", "localhost:9291")
+            // .connectedTo("127.0.0.1:9200", "127.0.0.1:9201")
             // 是否启用ssl
             // .usingSsl()
-            // 设置超时时间
-            .withConnectTimeout(10L)
+            // 设置连接超时时间
+            .withConnectTimeout(Duration.ofSeconds(10))
+            // 设置
+            .withSocketTimeout(Duration.ofSeconds(30))
             // 设置用户名密码
             // .withBasicAuth("elastic", "123456")
             // 创建连接信息
@@ -142,15 +148,13 @@ public class User {
 
 注解说明：
 
+    在MappingElasticsearchConverter使用元数据驱动的对象的映射文件。元数据取自可以注释的实体属性。
+    提供以下注释：
+    
     @Document：在类级别应用，以指示该类是映射到数据库的候选对象。最重要的属性是：
-         indexName：用于存储此实体的索引的名称。它可以包含SpEL模板表达式，例如 "log-#{T(java.time.LocalDate).now().toString()}"
-         type：映射类型。如果未设置，则使用小写的类的简单名称。（从版本4.0开始不推荐使用）
-         shards：索引的分片数。
-         replicas：索引的副本数。
-         refreshIntervall：索引的刷新间隔。用于索引创建。默认值为“ 1s”。
-         indexStoreType：索引的索引存储类型。用于索引创建。默认值为“ fs”。
-         createIndex：标记是否在存储库引导中创建索引。默认值为true。请参见使用相应的映射自动创建索引
-         versionType：版本管理的配置。默认值为EXTERNAL。
+        indexName：用于存储此实体的索引的名称。它可以包含SpEL模板表达式，例如 "log-#{T(java.time.LocalDate).now().toString()}"
+        createIndex：标记是否在存储库引导中创建索引。默认值为true。请参见使用相应的映射自动创建索引
+        versionType：版本管理的配置。默认值为EXTERNAL。
     
     @Id：在字段级别应用，以标记用于标识目的的字段。
     
@@ -159,13 +163,23 @@ public class User {
     @PersistenceConstructor：标记从数据库实例化对象时要使用的给定构造函数，甚至是受保护的程序包。构造函数参数按名称映射到检索到的Document中的键值。
     
     @Field：在字段级别应用并定义字段的属性，大多数属性映射到各自的Elasticsearch映射定义（以下列表不完整，请查看注释Javadoc以获得完整参考）：
-         name：字段名称，它将在Elasticsearch文档中表示，如果未设置，则使用Java字段名称。
-         type：字段类型，可以是Text, Keyword, Long, Integer, Short, Byte, Double, Float, Half_Float, Scaled_Float, Date, Date_Nanos, Boolean, Binary, Integer_Range, Float_Range, Long_Range, Double_Range, Date_Range, Ip_Range, Object, Nested, Ip, TokenCount, Percolator, Flattened, Search_As_You_Type。请参阅Elasticsearch映射类型
-         format和日期类型的pattern定义。必须为日期类型定义format
-         store：标记是否将原始字段值存储在Elasticsearch中，默认值为false。
-         analyzer，searchAnalyzer，normalizer用于指定自定义分析和正规化。
+        name：字段名称，它将在Elasticsearch文档中表示，如果未设置，则使用Java字段名称。
+        type：字段类型，可以是Text, Keyword, Long, Integer, Short, Byte, Double, Float, Half_Float, Scaled_Float, Date, Date_Nanos, Boolean, Binary, Integer_Range, Float_Range, Long_Range, Double_Range, Date_Range, Ip_Range, Object, Nested, Ip, TokenCount, Percolator, Flattened, Search_As_You_Type。请参阅Elasticsearch映射类型
+        format和日期类型的pattern定义。必须为日期类型定义format
+        store：标记是否将原始字段值存储在Elasticsearch中，默认值为false。
+        analyzer，searchAnalyzer，normalizer用于指定自定义分析和正规化。
     
     @GeoPoint：将字段标记为geo_point数据类型。如果字段是GeoPoint类的实例，则可以省略。
+    
+    @ValueConverter：定义用于转换给定属性的类。与注册的 Spring 不同，Converter这仅转换带注释的属性，而不是给定类型的每个属性。
+    
+    @Setting：注释定义不同的索引设置。以下参数可用：
+        useServerConfiguration 不发送任何设置参数，因此 Elasticsearch 服务器配置确定它们。
+        settingPath 是指定义必须在类路径中解析的设置的 JSON 文件
+        shards要使用的分片数，默认为1
+        replicas副本数，默认为1
+        refreshIntervall, 默认为“1s”
+        indexStoreType, 默认为"fs"
 
 # CRUD
 
@@ -297,5 +311,3 @@ void test() {
     }
 }
 ```
-
-***完！！！***

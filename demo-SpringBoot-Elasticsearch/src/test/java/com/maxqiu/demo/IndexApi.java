@@ -9,11 +9,12 @@ import org.springframework.data.elasticsearch.core.IndexOperations;
 import com.maxqiu.demo.entity.User;
 
 /**
+ * 索引增删改查
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class IndexApi {
-
     @Autowired
     private ElasticsearchRestTemplate template;
 

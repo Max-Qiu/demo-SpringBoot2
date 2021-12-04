@@ -2,9 +2,9 @@
 
 # 简介
 
-之前一篇文章[SpringBoot2.4.x缓存介绍以及整合Redis](https://maxqiu.com/article/detail/91)仅介绍了如何使用Redis作为缓存。
+之前一篇文章[SpringBoot2.6.x缓存介绍以及整合Redis](https://maxqiu.com/article/detail/91)仅介绍了如何使用Redis作为缓存。
 
-如果想要直接操作Redis，SpringBoot提供了`RedisTemplate`类用来直接操作数据
+如果想要直接操作`Redis`，`SpringBoot`提供了`RedisTemplate`类用来直接操作数据
 
 # 配置
 
@@ -27,7 +27,7 @@
 <dependency>
     <groupId>com.alibaba</groupId>
     <artifactId>fastjson</artifactId>
-    <version>1.2.76</version>
+    <version>1.2.78</version>
 </dependency>
 ```
 

@@ -1,7 +1,20 @@
 spring:
   redis:
-    host: 192.168.220.101
-    port: 6379
-    password: 123
-    database: 0
-# 完整配置见：demo-SpringBoot-Redis
+    host: 127.0.0.1 # 地址
+    port: 6379 # 端口
+    # 通用配置
+    username: # 用户名
+    password: 123 # 密码
+    database: 0 # 指定数据库序号
+    ssl: false # 是否启用SSL
+    connect-timeout: 1000 # 连接超时时间（毫秒）
+    timeout: 1000 # 操作超时时间（毫秒）
+    client-name: # 客户端名称（不知道干嘛用的）
+    client-type: lettuce # 驱动类型
+    # 连接池配置
+    lettuce:
+      pool:
+        min-idle: 1 # 最小空闲连接（默认0）
+        max-idle: 8 # 最大空闲连接（默认8）
+        max-active: 16 # 最大连接数（默认8，使用负值表示没有限制）
+        max-wait: -1ms # 最大阻塞等待时间（默认-1，负数表示没限制）

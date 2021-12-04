@@ -1,5 +1,7 @@
 package com.maxqiu.demo.service;
 
+import java.util.Random;
+
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -83,7 +85,7 @@ public class CacheService {
     @Cacheable(cacheNames = "unless", unless = "#result > 3")
     public Integer unless() {
         System.out.println("进入了 unless 方法");
-        return (int)(Math.random() * 10);
+        return new Random().nextInt(10);
     }
 
     @CachePut("cache1")
@@ -109,7 +111,7 @@ public class CacheService {
         System.out.println("cacheEvict3 执行完毕");
     }
 
-    @Cacheable(value = "cacheManager", cacheManager = "expire1min")
+    @Cacheable(value = "cacheManager", cacheManager = "expire1day")
     public String cacheManager() {
         System.out.println("执行了 cache1 方法");
         return "1";

@@ -1,6 +1,6 @@
 > 本文档整理自视频教程：[尚硅谷_SpringBoot](http://www.atguigu.com/download_detail.shtml?v=37)
 
-环境介绍：本文使用`SpringBoot 2.4.4`，视频教程使用的`1.5.x`版本
+环境介绍：本文使用`SpringBoot 2.6.x`，视频教程使用的`1.5.x`版本
 
 # 常用日志框架
 
