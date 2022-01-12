@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxqiu.demo.mapper.WalletMapper">
+    <update id="expend">
+        UPDATE wallet SET money = money - #{money} WHERE id = #{id} AND money >= #{money} AND `lock` = 0
+    </update>
+
+    <update id="income">
+        UPDATE wallet SET money = money + #{money} WHERE id = #{id} AND `lock` = 0
+    </update>
+</mapper>

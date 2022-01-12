@@ -31,6 +31,7 @@
         <module>demo-SpringBoot-Redis</module>
         <module>demo-SpringBoot-SpringMVC</module>
         <module>demo-SpringBoot-SpringSession</module>
+        <module>demo-SpringBoot-Transactional</module>
         <module>demo-SpringBoot-Validation</module>
     </modules>
 

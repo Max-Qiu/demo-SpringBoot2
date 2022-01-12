@@ -19,4 +19,5 @@ demo-SpringBoot-RabbitMQ | RabbitMQ 各种模式示例代码
 demo-SpringBoot-Redis | Redis CRUD
 demo-SpringBoot-SpringMVC | URL匹配规则 与 参数接收
 demo-SpringBoot-SpringSession | 分布式Session
+demo-SpringBoot-Transactional | MySQL 事务
 demo-SpringBoot-Validation | 表单验证
