@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
-    url: jdbc:mysql://127.0.0.1:3306/demo_transactional?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
+    url: jdbc:mysql://127.0.0.1:3306/demo_transactional?useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true # 连接地址
     username: root # 用户名
     password: 123 #密码
 mybatis-plus:

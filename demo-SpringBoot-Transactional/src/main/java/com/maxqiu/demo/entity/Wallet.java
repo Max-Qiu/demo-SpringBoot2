@@ -50,7 +50,7 @@ public class Wallet extends Model<Wallet> {
      * 是否锁定 0否 1是
      */
     @TableField("`lock`")
-    private Integer lock;
+    private Boolean lock;
 
     /**
      * 创建时间

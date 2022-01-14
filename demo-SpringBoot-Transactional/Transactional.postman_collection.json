@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "b4ce7e8a-5f15-4453-b8db-6f5457c87160",
+		"name": "Transactional",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "创建交易",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fromWalletId\": 1,\r\n    \"toWalletId\": 2,\r\n    \"money\": 50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8080/transaction-flow/create",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8080",
+					"path": [
+						"transaction-flow",
+						"create"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

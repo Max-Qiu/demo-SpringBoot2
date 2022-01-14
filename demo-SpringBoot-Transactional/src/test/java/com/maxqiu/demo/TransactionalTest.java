@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.maxqiu.demo.entity.TransactionFlow;
 import com.maxqiu.demo.exception.TransactionalException;
 import com.maxqiu.demo.service.TransactionFlowService;
 
@@ -20,13 +19,9 @@ public class TransactionalTest {
 
     @Test
     void test() {
-        TransactionFlow flow = new TransactionFlow();
-        flow.setFromWalletId(1L);
-        flow.setToWalletId(3L);
-        flow.setMoney(new BigDecimal(50));
         boolean save = false;
         try {
-            save = transactionFlowService.saveFlow(flow);
+            save = transactionFlowService.saveFlow(1L, 3L, new BigDecimal(50));
         } catch (TransactionalException e) {
             System.out.println(e.getMessage());
         }

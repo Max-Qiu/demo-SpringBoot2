@@ -37,17 +37,34 @@ public class WalletService extends ServiceImpl<WalletMapper, Wallet> {
      *             交易异常
      */
     public void transaction(Long flowId, Long fromId, Long toId, BigDecimal money) throws TransactionalException {
+        // 检查支出与收入账户
+        Wallet expend = getById(fromId);
+        Wallet income = getById(toId);
+        if (expend == null) {
+            throw new TransactionalException("支出账户不存在");
+        }
+        if (income == null) {
+            throw new TransactionalException("收入账户不存在");
+        }
+        if (expend.getLock()) {
+            throw new TransactionalException("支出账户已锁定");
+        }
+        if (income.getLock()) {
+            throw new TransactionalException("收入账户已锁定");
+        }
+        if (expend.getMoney().compareTo(money) < 0) {
+            throw new TransactionalException("支出账户余额不足");
+        }
         // 交易
         if (baseMapper.expend(fromId, money)) {
             logWalletService.save(flowId, fromId, 1, money);
         } else {
-            // TODO 查询当前账户，查看具体原因？
-            throw new TransactionalException("支出失败", fromId, toId, money);
+            throw new TransactionalException("支出失败");
         }
         if (baseMapper.income(toId, money)) {
             logWalletService.save(flowId, toId, 2, money);
         } else {
-            throw new TransactionalException("收入失败", fromId, toId, money);
+            throw new TransactionalException("收入失败");
         }
     }
 }

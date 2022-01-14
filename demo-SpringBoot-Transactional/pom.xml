@@ -12,6 +12,16 @@
     <artifactId>demo-SpringBoot-Transactional</artifactId>
 
     <dependencies>
+        <!-- Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <!-- MySQL驱动 -->
         <dependency>
             <groupId>mysql</groupId>
