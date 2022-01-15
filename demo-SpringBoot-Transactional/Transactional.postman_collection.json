@@ -20,7 +20,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://127.0.0.1:8080/transaction-flow/create",
+					"raw": "http://127.0.0.1:8080/wallet/transaction",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -30,8 +30,8 @@
 					],
 					"port": "8080",
 					"path": [
-						"transaction-flow",
-						"create"
+						"wallet",
+						"transaction"
 					]
 				}
 			},
