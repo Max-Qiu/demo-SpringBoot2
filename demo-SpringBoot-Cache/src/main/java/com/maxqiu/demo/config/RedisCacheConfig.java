@@ -16,14 +16,14 @@ import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 
 /**
  * Redis缓存配置
- * 
+ *
  * @author Max_Qiu
  */
 @Configuration
 public class RedisCacheConfig {
     /**
      * 默认Redis全局配置。（30分钟超时）
-     * 
+     *
      * @param redisConnectionFactory
      * @return
      */
@@ -59,7 +59,7 @@ public class RedisCacheConfig {
 
     /**
      * 通用配置
-     * 
+     *
      * @param ttl
      *            超时时间（分钟）
      */
@@ -71,10 +71,8 @@ public class RedisCacheConfig {
             // 如果是空值，不缓存（不建议设置，防止缓存穿透）
             // .disableCachingNullValues()
             // 设置key序列化器
-            .serializeKeysWith(RedisSerializationContext.SerializationPair
-                .fromSerializer(new StringRedisSerializer(StandardCharsets.UTF_8)))
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer(StandardCharsets.UTF_8)))
             // 设置value序列化器（这里使用阿里巴巴的Fastjson格式化工具）
-            .serializeValuesWith(
-                RedisSerializationContext.SerializationPair.fromSerializer(new GenericFastJsonRedisSerializer()));
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericFastJsonRedisSerializer()));
     }
 }

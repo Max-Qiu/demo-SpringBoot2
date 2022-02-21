@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
  * @author Max_Qiu
  */
 @Service
+// 在类的级别配置缓存通用配置
+// @CacheConfig(cacheNames = "cache")
 public class CacheService {
     /**
      * 简写 缓存名称
      */
     // @Cacheable(value = "cache1")
+    // @Cacheable(cacheNames = "cache1")
     @Cacheable("cache1")
     public String cache1() {
         System.out.println("执行了 cache1 方法");
@@ -41,27 +44,9 @@ public class CacheService {
      * 使用参数做缓存键
      */
     @Cacheable(value = "key", key = "#key")
-    public String key1(String key) {
-        System.out.println("执行了 key1 方法，key 的值为：" + key);
+    public String key(String key) {
+        System.out.println("执行了 key 方法，key 的值为：" + key);
         return key;
-    }
-
-    /**
-     * 只有一个变量时，若使用当前变量作为键，可以省略不写
-     */
-    @Cacheable(value = "key")
-    public String key2(String key) {
-        System.out.println("执行了 key2 方法，key 的值为：" + key);
-        return key;
-    }
-
-    /**
-     * 如果给出多个参数，则返回SimpleKey包含所有参数的
-     */
-    @Cacheable(value = "key")
-    public String key3(String username, String password) {
-        System.out.println("执行了 key3 方法，username 的值为：" + username + " password 的值为：" + password);
-        return username + " " + password;
     }
 
     @Cacheable(cacheNames = "sync", sync = true)
@@ -88,6 +73,12 @@ public class CacheService {
         return new Random().nextInt(10);
     }
 
+    @Cacheable(cacheNames = "cacheManager", cacheManager = "expire1day")
+    public String cacheManager() {
+        System.out.println("执行了 cacheManager 方法");
+        return "1";
+    }
+
     @CachePut("cache1")
     public String cachePut() {
         System.out.println("执行了 cachePut 方法");
@@ -99,21 +90,15 @@ public class CacheService {
         System.out.println("执行了 cacheEvict1 方法");
     }
 
-    @CacheEvict(value = "key", allEntries = true)
+    @CacheEvict(cacheNames = "key", allEntries = true)
     public void cacheEvict2() {
         System.out.println("执行了 cacheEvict2 方法");
     }
 
-    @CacheEvict(value = "key", beforeInvocation = true)
+    @CacheEvict(cacheNames = "key", beforeInvocation = true)
     public void cacheEvict3(Integer key) {
         System.out.println("执行了 cacheEvict3 方法");
         int i = key / 0;
         System.out.println("cacheEvict3 执行完毕");
-    }
-
-    @Cacheable(value = "cacheManager", cacheManager = "expire1day")
-    public String cacheManager() {
-        System.out.println("执行了 cache1 方法");
-        return "1";
     }
 }
