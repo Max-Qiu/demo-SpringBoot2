@@ -136,7 +136,7 @@ public void sendTemplateEmail() throws Exception {
 }
 ```
 
-## Service服务示例
+## Util 服务示例
 
 ```java
 import java.io.File;
@@ -153,7 +153,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -162,10 +162,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 邮件 服务
+ * 邮件 工具
+ *
+ * @author Max_Qiu
  */
-@Service
-public class EmailService {
+@Component
+public class EmailUtil {
     /**
      * 邮件发送
      */
@@ -195,8 +197,7 @@ public class EmailService {
      * @param text
      *            内容
      */
-    public boolean simpleMailMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject,
-        String text) {
+    public boolean simpleMailMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject, String text) {
         // 1. 创建一个简单消息
         SimpleMailMessage message = new SimpleMailMessage();
         // 2. 设置
@@ -316,7 +317,7 @@ public class EmailService {
 
     /**
      * 复杂邮件
-     * 
+     *
      * @param toList
      *            接收人列表
      * @param ccList
@@ -334,8 +335,8 @@ public class EmailService {
      * @param attachmentList
      *            邮件的附件
      */
-    public boolean mimeMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject,
-        String text, boolean textIsHtml, List<Inline> inlineList, List<Attachment> attachmentList) {
+    public boolean mimeMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject, String text, boolean textIsHtml,
+        List<Inline> inlineList, List<Attachment> attachmentList) {
         // 1. 创建一个复杂的消息邮件
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper;
@@ -384,12 +385,16 @@ public class EmailService {
             // 内容
             helper.setText(text, textIsHtml);
             // 内部附件
-            for (Inline inline : inlineList) {
-                helper.addInline(inline.getId(), new File(inline.getFilePath()));
+            if (inlineList != null && inlineList.size() != 0) {
+                for (Inline inline : inlineList) {
+                    helper.addInline(inline.getId(), new File(inline.getFilePath()));
+                }
             }
             // 外部附件
-            for (Attachment attachment : attachmentList) {
-                helper.addAttachment(attachment.getFileName(), new File(attachment.getFilePath()));
+            if (attachmentList != null && attachmentList.size() != 0) {
+                for (Attachment attachment : attachmentList) {
+                    helper.addAttachment(attachment.getFileName(), new File(attachment.getFilePath()));
+                }
             }
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
@@ -415,8 +420,8 @@ public class EmailService {
      * @param attachmentList
      *            邮件的附件
      */
-    public boolean mimeMessage(List<String> toList, String subject, String text, boolean textIsHtml,
-        List<Inline> inlineList, List<Attachment> attachmentList) {
+    public boolean mimeMessage(List<String> toList, String subject, String text, boolean textIsHtml, List<Inline> inlineList,
+        List<Attachment> attachmentList) {
         return mimeMessage(toList, null, null, subject, text, textIsHtml, inlineList, attachmentList);
     }
 
@@ -436,14 +441,13 @@ public class EmailService {
      * @param attachmentList
      *            邮件的附件
      */
-    public boolean mimeMessage(String to, String subject, String text, boolean textIsHtml, List<Inline> inlineList,
-        List<Attachment> attachmentList) {
+    public boolean mimeMessage(String to, String subject, String text, boolean textIsHtml, List<Inline> inlineList, List<Attachment> attachmentList) {
         return mimeMessage(Collections.singletonList(to), subject, text, textIsHtml, inlineList, attachmentList);
     }
 
     /**
      * 模板邮件
-     * 
+     *
      * @param toList
      *            接收人列表
      * @param ccList
@@ -461,8 +465,8 @@ public class EmailService {
      * @param attachmentList
      *            邮件的附件
      */
-    public boolean templateMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject,
-        String template, Map<String, Object> map, List<Inline> inlineList, List<Attachment> attachmentList) {
+    public boolean templateMessage(List<String> toList, List<String> ccList, List<String> bccList, String subject, String template,
+        Map<String, Object> map, List<Inline> inlineList, List<Attachment> attachmentList) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper;
         try {
@@ -510,12 +514,16 @@ public class EmailService {
             context.setVariables(map);
             helper.setText(engine.process(template, context), true);
             // 内部附件
-            for (Inline inline : inlineList) {
-                helper.addInline(inline.getId(), new File(inline.getFilePath()));
+            if (inlineList != null && inlineList.size() != 0) {
+                for (Inline inline : inlineList) {
+                    helper.addInline(inline.getId(), new File(inline.getFilePath()));
+                }
             }
             // 外部附件
-            for (Attachment attachment : attachmentList) {
-                helper.addAttachment(attachment.getFileName(), new File(attachment.getFilePath()));
+            if (attachmentList != null && attachmentList.size() != 0) {
+                for (Attachment attachment : attachmentList) {
+                    helper.addAttachment(attachment.getFileName(), new File(attachment.getFilePath()));
+                }
             }
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
