@@ -1,0 +1,20 @@
+server:
+  port: 8090 #服务端口
+logging:
+  level:
+    com.maxqiu.demo: debug
+# 微信支付相关参数
+wx:
+  pay:
+    # 商户号
+    mch-id: 111111111
+    # 微信公众号或者小程序等的appid.
+    app-id: wxxxxxxxxxxxxxxxxx
+    # 商户私钥文件
+    private-key-path: classpath:apiclient_key.pem
+    # 商户公钥文件
+    private-cert-path: classpath:apiclient_cert.pem
+    # APIv3密钥
+    api-v3-key: xxxxxxxxxxxxxxxxxxxxx
+    # 接收结果通知地址
+    notify-url: http://domian/pay/native/notify
