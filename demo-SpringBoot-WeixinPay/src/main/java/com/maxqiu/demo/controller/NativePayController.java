@@ -158,7 +158,7 @@ public class NativePayController {
         // 将请求体json字符串转换为实体
         OriginNotifyResponse notifyResponse = new GsonBuilder().create().fromJson(notifyData, OriginNotifyResponse.class);
         // 支付成功通知
-        if (notifyResponse.getEventType().equals("TRANSACTION.SUCCESS")) {
+        if ("TRANSACTION.SUCCESS".equals(notifyResponse.getEventType())) {
             // 获取锁
             if (orderLock.tryLock()) {
                 try {
@@ -325,7 +325,7 @@ public class NativePayController {
         response.setContentType("application/octet-stream");
         response.setCharacterEncoding("utf-8");
         response.setHeader("Content-Disposition", "attachment;filename=" + filename);
-        try (BufferedInputStream bis = new BufferedInputStream(inputStream);) {
+        try (BufferedInputStream bis = new BufferedInputStream(inputStream)) {
             byte[] buff = new byte[1024];
             OutputStream os = response.getOutputStream();
             int i;

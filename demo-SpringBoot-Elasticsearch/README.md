@@ -6,14 +6,11 @@ PS：本文只是一篇极其简单的整合教程，不涉及复杂搜索示例
 
 Spring Boot | Spring Data Elasticsearch | Elasticsearch
 ---|---|---
-2.1.18.RELEASE | 3.1.21.RELEASE | 6.4.3
-2.2.11.RELEASE | 3.2.11.RELEASE | 6.8.13
-2.3.6.RELEASE | 4.0.5.RELEASE | 7.6.2
-2.4.12 | 4.1.1 | 7.9.3
-2.5.7 | 4.2.7 | 7.12.1
-2.6.1 | 4.3.0 | 7.15.2
+2.4.x | 4.1.x | 7.9.3
+2.5.x | 4.2.x | 7.12.1
+2.6.x | 4.3.x | 7.15.2
 
-- 本文以`Spring Boot 2.6.1`为例
+- 本文以`Spring Boot 2.6.x`为例
 - 本文不介绍`Reactive`模式的相关代码
 
 # 准备
