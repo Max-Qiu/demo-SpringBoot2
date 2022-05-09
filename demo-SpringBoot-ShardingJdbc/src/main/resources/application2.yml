@@ -8,7 +8,7 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
         jdbc-url: jdbc:mysql://127.0.0.1:3306/sj_db1?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
         username: root # 用户名
-        password: 123 #密码
+        password: 123 # 密码
       ds2:
         type: com.zaxxer.hikari.HikariDataSource
         driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
@@ -18,7 +18,7 @@ spring:
     sharding:
       tables:
         user:
-          actual-data-nodes: ds$->{1..2}.user_$->{1..2} #指定 user 表分布情况，配置表在哪个数据库里面，表名称都是什么  ds0.user_1 , ds0.user_2
+          actual-data-nodes: ds$->{1..2}.user_$->{1..2} # 指定 user 表分布情况，配置表在哪个数据库里面，表名称都是什么  ds1.user_1 , ds2.user_2
           key-generator:
             column: id # 指定 user 表里面主键列为 id
             type: SNOWFLAKE # 指定 user 表里面主键生成策略为 SNOWFLAKE
@@ -29,7 +29,7 @@ spring:
           database-strategy:
             inline:
               sharding-column: group_id # 指定库分片策略：根据 group_id 列进行确定
-              algorithm-expression: ds$->{group_id % 2 + 1}  # group_id 值偶数添加到 sj_db1 库，group_id 是奇数添加到 sj_db2 表
+              algorithm-expression: ds$->{group_id % 2 + 1}  # group_id 值偶数添加到 ds1 库，group_id 是奇数添加到 ds2 表
     props:
       sql:
         show: true   # 打开sql输出日志

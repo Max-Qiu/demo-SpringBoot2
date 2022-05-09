@@ -15,13 +15,13 @@ spring:
         jdbc-url: jdbc:mysql://127.0.0.1:3306/sj_db2?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
         username: root # 用户名
         password: 123 # 密码
-    sharding:
-      tables:
-        city:
-          key-generator:
-            column: id
-            type: SNOWFLAKE
-      broadcast-tables: city # 配置公共表
+    rules:
+      sharding:
+        tables:
+          city:
+            key-generate-strategy:
+              column: id
+              key-generator-name: SNOWFLAKE
+        broadcast-tables: city # 配置公共表
     props:
-      sql:
-        show: true   # 打开sql输出日志
+      sql-show: true   # 打开sql输出日志

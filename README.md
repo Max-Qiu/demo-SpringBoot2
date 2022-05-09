@@ -17,6 +17,8 @@ demo-SpringBoot-Mail | 邮件发送
 demo-SpringBoot-MybatisPlus | `MybatisPlus CRUD`
 demo-SpringBoot-RabbitMQ | `RabbitMQ` 各种模式示例代码
 demo-SpringBoot-Redis | `Redis CRUD`
+demo-SpringBoot-ShardingJdbc | `Sharding-JDBC 4.x` 旧版本，已弃用
+demo-SpringBoot-ShardingSphereJdbc | `ShardingSphere-JDBC 5.x`
 demo-SpringBoot-SpringMVC | `URL` 匹配规则 与 参数接收
 demo-SpringBoot-SpringSession | 分布式 `Session`
 demo-SpringBoot-Transactional | `MySQL` 事务

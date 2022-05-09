@@ -1,0 +1,30 @@
+# 单库多表 水平分表
+spring:
+  shardingsphere:
+    datasource:
+      names: ds0
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/sj_db?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
+        username: root # 用户名
+        password: 123 # 密码
+    rules:
+      sharding:
+        tables:
+          user:
+            actual-data-nodes: ds0.user_$->{1..2} # 指定 user 表分布情况，配置表在哪个数据库里面，表名称都是什么  ds0.user_1 , ds0.user_2
+            key-generate-strategy:
+              column: id # 指定 user 表里面主键列为 id
+              key-generator-name: SNOWFLAKE # 指定 user 表里面主键生成策略为 SNOWFLAKE
+            table-strategy:
+              standard:
+                sharding-column: id  # 指定分片策略根据 id 列进行确定
+                sharding-algorithm-name: user_id_inline # 指定分片测量算法名称（自定义的名称）
+        sharding-algorithms:
+          user_id_inline: # 分片算法配置，名称为对应上文中自定义的名称
+            type: INLINE # 分片算法为 行表达式分片算法
+            props:
+              algorithm-expression: user_$->{id % 2 + 1} # id 值偶数添加到 user_1 表，id 是奇数添加到 user_2 表
+    props:
+      sql-show: true   # 打开sql输出日志

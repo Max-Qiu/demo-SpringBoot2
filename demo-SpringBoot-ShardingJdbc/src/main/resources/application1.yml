@@ -8,14 +8,14 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver # 驱动
         jdbc-url: jdbc:mysql://127.0.0.1:3306/sj_db?useSSL=false&serverTimezone=GMT%2B8 # 连接地址
         username: root # 用户名
-        password: 123 #密码
+        password: 123 # 密码
     sharding:
       tables:
         user:
-          actual-data-nodes: ds0.user_$->{1..2} #指定 user 表分布情况，配置表在哪个数据库里面，表名称都是什么  ds0.user_1 , ds0.user_2
+          actual-data-nodes: ds0.user_$->{1..2} # 指定 user 表分布情况，配置表在哪个数据库里面，表名称都是什么  ds0.user_1 , ds0.user_2
           key-generator:
-            column: id # 指定 sj_user 表里面主键列为 id
-            type: SNOWFLAKE # 指定 sj_user 表里面主键生成策略为 SNOWFLAKE
+            column: id # 指定 user 表里面主键列为 id
+            type: SNOWFLAKE # 指定 user 表里面主键生成策略为 SNOWFLAKE
           table-strategy:
             inline:
               sharding-column: id # 指定分片策略根据 id 列进行确定
