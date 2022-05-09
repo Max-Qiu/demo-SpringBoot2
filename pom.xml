@@ -21,6 +21,7 @@
     <modules>
         <module>demo-SpringBoot-Cache</module>
         <module>demo-SpringBoot-Druid</module>
+        <module>demo-SpringBoot-DynamicDatasource</module>
         <module>demo-SpringBoot-Elasticsearch</module>
         <module>demo-SpringBoot-HikariCP</module>
         <module>demo-SpringBoot-JUnit5</module>

@@ -9,6 +9,7 @@
 ---|---
 demo-SpringBoot-Cache | 缓存（含 `Redis` 缓存配置）
 demo-SpringBoot-Druid | `Druid` 连接池配置
+demo-SpringBoot-DynamicDatasource | 多数据源
 demo-SpringBoot-Elasticsearch | `ES` 搜索（仅配置与简单 `CRUD` ）
 demo-SpringBoot-HikariCP | `HikariCP` 连接池配置
 demo-SpringBoot-JUnit5 | 单元测试
