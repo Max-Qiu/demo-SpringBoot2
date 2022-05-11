@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -22,6 +23,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @TableName("db_info")
+@ToString
 public class DbInfo extends Model<DbInfo> {
     private static final long serialVersionUID = 1L;
 
@@ -36,12 +38,6 @@ public class DbInfo extends Model<DbInfo> {
      */
     @TableField("`key`")
     private String key;
-
-    /**
-     * 连接池
-     */
-    @TableField("`type`")
-    private String type;
 
     /**
      * 驱动
