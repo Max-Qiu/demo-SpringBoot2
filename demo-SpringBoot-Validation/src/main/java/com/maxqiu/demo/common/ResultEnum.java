@@ -11,20 +11,17 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ResultEnum {
-    // 成功状态码
+    // 操作成功
     SUCCESS(0, "成功"),
-    //
+    // 操作失败
     FAIL(1, "失败"),
-    // 参数校验异常
-    PARAMETER_VERIFY_ERROR(2, "参数校验异常"),
-    // 参数格式异常
-    PARAMETER_FORMAT_ERROR(3, "参数格式异常"),
-
-    // 未知异常
-    ERROR(99, "未知异常"),
+    // 参数异常
+    PARAMETER_ERROR(400, "参数校验异常"),
+    // 服务器异常
+    SERVER_ERROR(500, "未知异常"),
 
     ;
 
-    private Integer code;
-    private String msg;
+    private final Integer code;
+    private final String msg;
 }

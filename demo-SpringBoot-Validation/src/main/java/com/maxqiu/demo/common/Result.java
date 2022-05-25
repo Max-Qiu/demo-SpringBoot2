@@ -43,7 +43,7 @@ public class Result<T> {
     }
 
     public static <K> Result<K> error() {
-        return new Result<>(ResultEnum.ERROR);
+        return new Result<>(ResultEnum.SERVER_ERROR);
     }
 
     public static <K> Result<K> fail() {
