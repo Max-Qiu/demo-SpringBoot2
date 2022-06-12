@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.maxqiu.demo.common.Result;
@@ -83,6 +84,15 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(value = MissingServletRequestParameterException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public Result<String> handleException(MissingServletRequestParameterException e) {
+        return Result.other(ResultEnum.PARAMETER_ERROR, e.getMessage());
+    }
+
+    /**
+     * 处理方法的参数类型不匹配异常
+     */
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public Result<String> handleException(MethodArgumentTypeMismatchException e) {
         return Result.other(ResultEnum.PARAMETER_ERROR, e.getMessage());
     }
 
