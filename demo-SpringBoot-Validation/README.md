@@ -518,6 +518,15 @@ public class ExceptionControllerAdvice {
     }
 
     /**
+     * 处理方法的参数类型转换异常
+     */
+    @ExceptionHandler(value = MethodArgumentConversionNotSupportedException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public Result<String> handleException(MethodArgumentConversionNotSupportedException e) {
+        return Result.other(ResultEnum.PARAMETER_ERROR, e.getMessage());
+    }
+
+    /**
      * 全局异常捕获
      */
     @ExceptionHandler(value = Throwable.class)

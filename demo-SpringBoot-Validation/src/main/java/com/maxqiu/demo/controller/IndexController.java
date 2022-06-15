@@ -46,7 +46,7 @@ public class IndexController {
                 // 获取错误的属性的名字和错误提示
                 map.put(item.getField(), item.getDefaultMessage());
             });
-            return Result.other(ResultEnum.PARAMETER_VERIFY_ERROR, map);
+            return Result.other(ResultEnum.PARAMETER_ERROR, map);
         }
         return Result.success(vo);
     }

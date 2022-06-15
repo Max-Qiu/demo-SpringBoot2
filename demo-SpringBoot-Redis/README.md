@@ -23,12 +23,6 @@
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-pool2</artifactId>
 </dependency>
-<!-- Fastjson -->
-<dependency>
-    <groupId>com.alibaba</groupId>
-    <artifactId>fastjson</artifactId>
-    <version>1.2.80</version>
-</dependency>
 ```
 
 ## yml配置文件
