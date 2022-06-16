@@ -44,6 +44,17 @@ SpringSession集成了如下环境
     <groupId>org.apache.commons</groupId>
     <artifactId>commons-pool2</artifactId>
 </dependency>
+<!-- fastjson2 -->
+<dependency>
+    <groupId>com.alibaba.fastjson2</groupId>
+    <artifactId>fastjson2</artifactId>
+    <version>2.0.7</version>
+</dependency>
+<dependency>
+    <groupId>com.alibaba.fastjson2</groupId>
+    <artifactId>fastjson2-extension</artifactId>
+    <version>2.0.7</version>
+</dependency>
 ```
 
 ## yml配置
@@ -109,8 +120,16 @@ public class SpringSessionApplication {
 注意：该序列化仅针对`Session`的序列化，与`RedisTemplate`的设置不通用
 
 ```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.serializer.RedisSerializer;
+
+import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
+
 /**
  * Redis共享会话的序列化设置
+ *
+ * @author Max_Qiu
  */
 @Configuration
 public class RedisSessionConfig {
@@ -119,7 +138,7 @@ public class RedisSessionConfig {
      */
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer();
+        return new GenericFastJsonRedisSerializer();
     }
 }
 ```

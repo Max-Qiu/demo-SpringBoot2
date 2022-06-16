@@ -2,8 +2,9 @@ package com.maxqiu.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+
+import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
 
 /**
  * Redis共享会话的序列化设置
@@ -17,6 +18,6 @@ public class RedisSessionConfig {
      */
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        return new GenericJackson2JsonRedisSerializer();
+        return new GenericFastJsonRedisSerializer();
     }
 }
