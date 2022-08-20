@@ -12,6 +12,7 @@ demo-SpringBoot-Druid | `Druid` 连接池配置
 demo-SpringBoot-DynamicDatasource | 多数据源
 demo-SpringBoot-Elasticsearch | `ES` 搜索（仅配置与简单 `CRUD` ）
 demo-SpringBoot-HikariCP | `HikariCP` 连接池配置
+demo-SpringBoot-JPA | `JPA` 示例
 demo-SpringBoot-JUnit5 | 单元测试
 demo-SpringBoot-Log | 日志
 demo-SpringBoot-Mail | 邮件发送
