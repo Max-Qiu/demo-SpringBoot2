@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 父pom使用spring-boot-starter-parent或者公司自定义的 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.3</version>
+        <relativePath/>
+    </parent>
+
+    <!-- 组ID尽量不与其他任何项目相同 -->
+    <groupId>com.maxqiu.demo</groupId>
+    <!-- 项目id名称一般为 xxx-spring-boot-starter -->
+    <artifactId>custom-spring-boot-starter</artifactId>
+    <!-- 版本结尾尽量不要添加 SNAPSHOT 后缀 -->
+    <version>0.0.1</version>
+
+    <!-- 名称同 artifactId -->
+    <name>custom-spring-boot-starter</name>
+    <!-- 描述随便写写 -->
+    <description>自定义启动器</description>
+
+    <dependencies>
+        <!-- 自动配置 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- 自定义配置文件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- jdk11 环境下支持 @Resource 注解 -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <!-- 打包时加入源码 -->
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
