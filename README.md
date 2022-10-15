@@ -7,6 +7,7 @@
 
 项目 | 说明
 ---|---
+custom-spring-boot-starter | 自定义启动器
 demo-SpringBoot-Cache | 缓存（含 `Redis` 缓存配置）
 demo-SpringBoot-Druid | `Druid` 连接池配置
 demo-SpringBoot-DynamicDatasource | 多数据源
@@ -19,6 +20,7 @@ demo-SpringBoot-Mail | 邮件发送
 demo-SpringBoot-MybatisPlus | `MybatisPlus CRUD`
 demo-SpringBoot-RabbitMQ | `RabbitMQ` 各种模式示例代码
 demo-SpringBoot-Redis | `Redis CRUD`
+demo-SpringBoot-Retry | 自动重试
 demo-SpringBoot-ShardingJdbc | `Sharding-JDBC 4.x` 旧版本，已弃用
 demo-SpringBoot-ShardingSphereJdbc | `ShardingSphere-JDBC 5.x`
 demo-SpringBoot-SpringMVC | `URL` 匹配规则 与 参数接收
