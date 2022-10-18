@@ -35,6 +35,7 @@
         <module>demo-SpringBoot-Retry</module>
         <module>demo-SpringBoot-ShardingJdbc</module>
         <module>demo-SpringBoot-ShardingSphereJdbc</module>
+        <module>demo-SpringBoot-Shiro</module>
         <module>demo-SpringBoot-SpringMVC</module>
         <module>demo-SpringBoot-SpringSession</module>
         <module>demo-SpringBoot-Transactional</module>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<h1>Shiro登录认证后主页面</h1>
+<br>
+登录用户为：<span th:text="${session.user}"></span>
+<br>
+<a href="/logout">登出</a>
+<br>
+<a shiro:hasRole="admin" href="/myController/userLoginRoles">测试授权-角色验证</a>
+<br>
+<a shiro:hasPermission="user:delete" href="/myController/userPermissions">测试授权-权限验证</a>
+</body>
