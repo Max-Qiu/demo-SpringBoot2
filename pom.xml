@@ -33,7 +33,6 @@
         <module>demo-SpringBoot-RabbitMQ</module>
         <module>demo-SpringBoot-Redis</module>
         <module>demo-SpringBoot-Retry</module>
-        <module>demo-SpringBoot-ShardingJdbc</module>
         <module>demo-SpringBoot-ShardingSphereJdbc</module>
         <module>demo-SpringBoot-Shiro</module>
         <module>demo-SpringBoot-SpringMVC</module>
