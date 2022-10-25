@@ -36,6 +36,7 @@
         <module>demo-SpringBoot-ShardingSphereJdbc</module>
         <module>demo-SpringBoot-Shiro</module>
         <module>demo-SpringBoot-SpringMVC</module>
+        <module>demo-SpringBoot-SpringSecurity</module>
         <module>demo-SpringBoot-SpringSession</module>
         <module>demo-SpringBoot-Transactional</module>
         <module>demo-SpringBoot-Validation</module>

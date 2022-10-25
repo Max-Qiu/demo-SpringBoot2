@@ -23,6 +23,7 @@ demo-SpringBoot-Redis | `Redis CRUD`
 demo-SpringBoot-Retry | 自动重试
 demo-SpringBoot-ShardingSphereJdbc | `ShardingSphere-JDBC`
 demo-SpringBoot-SpringMVC | `URL` 匹配规则 与 参数接收
+demo-SpringBoot-SpringSecurity | 安全框架 `SpringSecurity`
 demo-SpringBoot-SpringSession | 分布式 `Session`
 demo-SpringBoot-Transactional | `MySQL` 事务
 demo-SpringBoot-Validation | 表单验证

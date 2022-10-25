@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+</head>
+<body>
+<form action="/login" method="post">
+    <fieldset>
+        <legend>请&nbsp;登&nbsp;录</legend>
+        <!-- 假设存在登录失败的参数 -->
+        <div th:if="${param.error != null}">
+            <div>
+                登录失败<span th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">原因:<span th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">未知</span></span>
+            </div>
+        </div>
+        <!-- 假设是完成注销登录 -->
+        <div th:if="${param.logout != null}">
+            <div>
+                您已注销登录。
+            </div>
+        </div>
+        <p>
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username"/>
+        </p>
+        <p>
+            <label for="password">密码</label>
+            <input type="password" id="password" name="password"/>
+        </p>
+        <!-- 如果使用 RememberMeConfigurer ，确保 remember-me 与 RememberMeConfigurer#rememberMeParameter 匹配 -->
+        <p>
+            <label for="remember-me">记住我？</label>
+            <input type="checkbox" id="remember-me" name="remember-me"/>
+        </p>
+        <div>
+            <button type="submit" class="btn">Log in</button>
+        </div>
+    </fieldset>
+</form>
+
+
+</body>
+</html>
