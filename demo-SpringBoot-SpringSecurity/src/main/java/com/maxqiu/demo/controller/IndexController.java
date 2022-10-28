@@ -16,9 +16,8 @@ public class IndexController {
      * 首页
      */
     @GetMapping("")
-    @ResponseBody
     public String index() {
-        return "Index! 这是首页！";
+        return "index";
     }
 
     /**

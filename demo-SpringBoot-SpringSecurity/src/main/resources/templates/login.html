@@ -9,17 +9,9 @@
     <fieldset>
         <legend>请&nbsp;登&nbsp;录</legend>
         <!-- 假设存在登录失败的参数 -->
-        <div th:if="${param.error != null}">
-            <div>
-                登录失败<span th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}">原因:<span th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">未知</span></span>
-            </div>
-        </div>
+        <div th:if="${param.error != null}">登录失败！<span th:if="${session.SPRING_SECURITY_LAST_EXCEPTION != null}"><br/>原因：<span style="color: red" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">未知</span></span></div>
         <!-- 假设是完成注销登录 -->
-        <div th:if="${param.logout != null}">
-            <div>
-                您已注销登录。
-            </div>
-        </div>
+        <div th:if="${param.logout != null}">您已注销登录。</div>
         <p>
             <label for="username">用户名</label>
             <input type="text" id="username" name="username"/>
