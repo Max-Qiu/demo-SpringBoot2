@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.maxqiu.demo</groupId>
-        <artifactId>demo-SpringBoot</artifactId>
+        <artifactId>demo-SpringBoot2</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -18,8 +18,8 @@
         </dependency>
         <!--mysql-->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <scope>runtime</scope>
         </dependency>
         <!--mybatis-plus-->
