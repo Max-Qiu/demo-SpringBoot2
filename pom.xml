@@ -21,6 +21,7 @@
     <modules>
         <module>custom-spring-boot-starter</module>
         <module>demo-SpringBoot-Cache</module>
+        <module>demo-SpringBoot-DistributedLock</module>
         <module>demo-SpringBoot-Druid</module>
         <module>demo-SpringBoot-DynamicDatasource</module>
         <module>demo-SpringBoot-Elasticsearch</module>

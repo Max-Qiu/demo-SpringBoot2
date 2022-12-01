@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.maxqiu.demo.mapper.StockMapper">
+    <update id="deduct">
+        UPDATE stock
+        SET num = num - #{deductNum}
+        WHERE product_id = #{productId}
+          AND warehouse_id = #{warehouseId}
+          AND num >= #{deductNum}
+    </update>
+</mapper>
