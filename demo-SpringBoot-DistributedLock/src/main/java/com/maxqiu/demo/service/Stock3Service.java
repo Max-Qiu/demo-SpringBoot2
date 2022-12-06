@@ -1,6 +1,5 @@
 package com.maxqiu.demo.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -14,6 +13,9 @@ import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
+
+import com.maxqiu.demo.lock.DistributedLockFactory;
+import com.maxqiu.demo.lock.DistributedRedisLock;
 
 import cn.hutool.core.lang.UUID;
 
@@ -90,7 +92,37 @@ public class Stock3Service {
             // 1. 删除锁时先判断，防止误删
             // 2. 判断锁和释放锁使用 lua 脚本，保证原子性
             String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-            stringRedisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), Arrays.asList("lock"), uuid);
+            stringRedisTemplate.execute(new DefaultRedisScript<>(script, Boolean.class), List.of("lock"), uuid);
+        }
+    }
+
+    @Resource
+    private DistributedLockFactory distributedLockFactory;
+
+    /**
+     * 可重入锁
+     */
+    public void reentrantLock() {
+        DistributedRedisLock redisLock = distributedLockFactory.getRedisLock("lock");
+        redisLock.lock();;
+        try {
+            Integer stock = redisTemplate.opsForValue().get("stock");
+            if (stock != null && stock > 0) {
+                redisTemplate.opsForValue().set("stock", stock - 1);
+            }
+            // test();
+        } finally {
+            redisLock.unlock();
+        }
+    }
+
+    private void test() {
+        DistributedRedisLock lock = this.distributedLockFactory.getRedisLock("lock");
+        lock.lock();
+        try {
+            System.out.println("测试可重入锁");
+        } finally {
+            lock.unlock();
         }
     }
 }

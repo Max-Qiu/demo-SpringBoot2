@@ -36,4 +36,10 @@ public class Stock3Controller {
         this.stock3Service.lock();
         return "success";
     }
+
+    @GetMapping("reentrantLock")
+    public String reentrantLock() {
+        this.stock3Service.reentrantLock();
+        return "success";
+    }
 }
