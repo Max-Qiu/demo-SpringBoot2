@@ -15,15 +15,15 @@
 </dependency>
 <!-- MySQL驱动 -->
 <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
     <scope>runtime</scope>
 </dependency>
 <!-- MybatisPlus -->
 <dependency>
     <groupId>com.baomidou</groupId>
     <artifactId>mybatis-plus-boot-starter</artifactId>
-    <version>3.5.2</version>
+    <version>3.5.3</version>
 </dependency>
 <!-- 性能分析 -->
 <dependency>
@@ -57,7 +57,6 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true # 驼峰转下划线（默认）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出
-  type-enums-package: com.maxqiu.demo.enums # 配置扫描通用枚举
 ```
 
 # 代码示例
@@ -86,16 +85,16 @@ mybatis-plus:
 - TestLogicDelete 逻辑删除
 - TestOptimisticLocker 乐观锁
 - TestOther
-  - testOperationAllTable 防全表操作
-  - testAutoFill 自动填充
-  - testEnum 枚举字段
+    - testOperationAllTable 防全表操作
+    - testAutoFill 自动填充
+    - testEnum 枚举字段
 
 > 以下暂无示例，可参考官方示例
 
-- Sequence针对Oracle和SqlServer （懒得折腾Oracle）
-- 多数据源 （暂不涉及）
-- 动态表名 （看懂了，但是没做过分表）
-- 类型处理器 （看懂了，不知道用在什么场景）
-- 自定义全局操作 （没看懂）
-- 多租户 （没看懂）
-- 分离打包 （没看懂）
+- Sequence针对Oracle和SqlServer
+- 多数据源
+- 动态表名
+- 类型处理器
+- 自定义全局操作
+- 多租户
+- 分离打包

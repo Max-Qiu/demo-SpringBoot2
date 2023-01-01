@@ -25,15 +25,14 @@ import com.maxqiu.demo.mapper.UserMapper;
  */
 @SpringBootTest
 public class TestOther {
-
     @Autowired
     private UserMapper userMapper;
 
     /**
      * 防止操作全表
-     * 
+     *
      * 插件内添加 interceptor.addInnerInterceptor(new BlockAttackInnerInterceptor());
-     * 
+     *
      * 可在遇到全表操作时，抛出异常
      */
     @Test
@@ -67,11 +66,11 @@ public class TestOther {
 
     /**
      * 测试自动填充
-     * 
+     *
      * 比较好用的是针对 create_time update_time 字段，在插入和修改自动填充值（即数据库中未设置 默认值 或 根据当前时间戳更新）
-     * 
+     *
      * 使用时需要实现 MetaObjectHandler 例如：TimeMetaObjectHandler
-     * 
+     *
      * 并在对应实体字段添加 @TableField(value = "xxx", fill = FieldFill.xxx) 例如 AutoFill
      */
     @Test
@@ -115,17 +114,14 @@ public class TestOther {
 
     /**
      * 测试枚举
-     * 
+     *
      * 1. 新建枚举<br>
      * 1.1 新建枚举，使用 @EnumValue 标记数据库存的值 参考 GenderEnum<br>
      * 1.2 新建枚举，实现 IEnum 接口
-     * 
+     *
      * 2. 修改实体，对应字段类型修改为枚举类型
-     * 
-     * 3. yml内置扫描通用枚举
-     * 
+     *
      * CRUD如下：
-     * 
      */
     @Test
     void testEnum() {
@@ -153,5 +149,4 @@ public class TestOther {
         // DELETE FROM smp_test_enum WHERE (state = ?)
         enumMapper.delete(deleteWrapper);
     }
-
 }

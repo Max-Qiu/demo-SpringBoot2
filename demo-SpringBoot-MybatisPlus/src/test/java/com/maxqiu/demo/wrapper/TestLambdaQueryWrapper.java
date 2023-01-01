@@ -162,8 +162,7 @@ public class TestLambdaQueryWrapper {
         // WHERE (username LIKE ? AND username NOT LIKE ? AND username LIKE ? AND username LIKE ?)
         // 详细看 Parameters: %m%(String), %m%(String), %m(String), m%(String)
         LambdaQueryWrapper<User> queryWrapper = Wrappers.lambdaQuery();
-        queryWrapper.like(User::getUsername, "m").notLike(User::getUsername, "m").likeLeft(User::getUsername, "m")
-            .likeRight(User::getUsername, "m");
+        queryWrapper.like(User::getUsername, "m").notLike(User::getUsername, "m").likeLeft(User::getUsername, "m").likeRight(User::getUsername, "m");
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
@@ -400,8 +399,7 @@ public class TestLambdaQueryWrapper {
         // SELECT id,username,age,email FROM smp_user WHERE (age = ? AND age = ? AND username = ?)
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.func(true, userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18));
-        queryWrapper.func(true,
-            userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18).eq(User::getUsername, "max"));
+        queryWrapper.func(true, userLambdaQueryWrapper -> userLambdaQueryWrapper.eq(User::getAge, 18).eq(User::getUsername, "max"));
         List<User> users = userMapper.selectList(queryWrapper);
         users.forEach(System.out::println);
     }
@@ -425,7 +423,7 @@ public class TestLambdaQueryWrapper {
         System.out.println(count);
 
         // SELECT id,username,age,email,create_time FROM smp_user WHERE (age = ?)
-        User one = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).one();
+        List<User> one = new LambdaQueryChainWrapper<>(userMapper).eq(User::getAge, 18).list();
         System.out.println(one);
     }
 }

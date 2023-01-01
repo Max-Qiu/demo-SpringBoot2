@@ -7,9 +7,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -17,10 +18,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString
+@Accessors(chain = true)
 @TableName("smp_user")
 public class User extends Model<User> {
     private static final long serialVersionUID = 1L;

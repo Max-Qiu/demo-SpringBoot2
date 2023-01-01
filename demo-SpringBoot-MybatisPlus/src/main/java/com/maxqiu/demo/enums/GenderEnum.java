@@ -2,11 +2,16 @@ package com.maxqiu.demo.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 性别枚举
- * 
+ *
  * @author Max_Qiu
  */
+@Getter
+@AllArgsConstructor
 public enum GenderEnum {
     MALE(1, "男"),
 
@@ -24,17 +29,4 @@ public enum GenderEnum {
      * 性别描述
      */
     private final String str;
-
-    GenderEnum(int code, String str) {
-        this.code = code;
-        this.str = str;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getStr() {
-        return str;
-    }
 }

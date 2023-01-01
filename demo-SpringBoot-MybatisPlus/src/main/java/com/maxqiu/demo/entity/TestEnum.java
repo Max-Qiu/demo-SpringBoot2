@@ -9,9 +9,10 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.maxqiu.demo.enums.GenderEnum;
 import com.maxqiu.demo.enums.StateEnum;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,10 +20,11 @@ import lombok.experimental.Accessors;
  *
  * @author Max_Qiu
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@Getter
+@Setter
 @NoArgsConstructor
+@ToString
+@Accessors(chain = true)
 @TableName("smp_test_enum")
 public class TestEnum extends Model<TestEnum> {
     private static final long serialVersionUID = 1L;

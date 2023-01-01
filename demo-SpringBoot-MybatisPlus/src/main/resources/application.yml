@@ -17,4 +17,3 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true # 驼峰转下划线（默认）
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl # 日志输出
-  type-enums-package: com.maxqiu.demo.enums # 配置扫描通用枚举
