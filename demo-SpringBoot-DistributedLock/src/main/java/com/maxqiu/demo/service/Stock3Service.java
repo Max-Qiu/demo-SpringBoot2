@@ -5,7 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -48,7 +47,7 @@ public class Stock3Service {
     public void watch() {
         redisTemplate.execute(new SessionCallback<>() {
             @Override
-            public Object execute(@NotNull RedisOperations operations) throws DataAccessException {
+            public Object execute(RedisOperations operations) throws DataAccessException {
                 operations.watch("stock");
                 Integer stock = Integer.parseInt(operations.opsForValue().get("stock").toString());
                 if (stock != null && stock > 0) {

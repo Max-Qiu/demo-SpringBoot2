@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
@@ -60,7 +59,7 @@ public class DistributedRedisLock implements Lock {
      * 加锁方法
      */
     @Override
-    public boolean tryLock(long time, @NotNull TimeUnit unit) throws InterruptedException {
+    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
         if (time != -1) {
             this.expire = unit.toSeconds(time);
         }
