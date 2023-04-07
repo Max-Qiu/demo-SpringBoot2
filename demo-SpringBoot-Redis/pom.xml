@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2-extension</artifactId>
+            <artifactId>fastjson2-extension-spring5</artifactId>
         </dependency>
     </dependencies>
 
