@@ -29,7 +29,7 @@ public class CacheCustomKeyGeneratorService {
     @Cacheable
     public String noParameter() {
         System.out.println("执行了normal方法");
-        return "123";
+        return "noParameter";
     }
 
     /**

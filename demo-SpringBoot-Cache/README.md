@@ -1,13 +1,13 @@
 > 本文档整理自视频教程：[尚硅谷_Spring Boot整合篇](http://www.atguigu.com/download_detail.shtml?v=38)
 
-环境介绍：本文使用`SpringBoot 2.6.x`，视频教程使用的`1.5.x`版本
+环境介绍：本文使用`SpringBoot 2.7.x`，视频教程使用的`1.5.x`版本
 
 ---
 
 > 官方文档：
 
-- [Spring Framework Documentation -- Integration -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/integration.html#cache)
-- [Spring Boot Reference Documentation -- IO -- 13. Caching](https://docs.spring.io/spring-boot/docs/current/reference/html/io.html#io.caching.provider)
+- [Spring Framework Documentation -- Integration -- 8. Cache Abstraction](https://docs.spring.io/spring-framework/docs/5.3.26/reference/html/integration.html#cache)
+- [Spring Boot Reference Documentation -- IO -- 1. Caching](https://docs.spring.io/spring-boot/docs/2.7.10/reference/html/io.html#io.caching)
 
 # Spring缓存简介
 
@@ -18,11 +18,30 @@
 
 # 快速开始使用
 
-使用`SpringBoot`快速搭建，仅需要添加`spring-boot-starter-web`即可
+使用 `SpringBoot` 快速搭建
 
-> 第一步：启用缓存
+> 第一步：添加依赖
 
-在启动类上添加`@EnableCaching`注解
+在 `pom.xml` 添加如下依赖 `spring-boot-starter-cache`
+
+```xml
+<!-- 缓存组件 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+<!-- Web基础环境 -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+```
+
+说明：缓存的子依赖（主要是 `spring-context-support` 和 `spring-boot-starter` ）在大部分其他组件中都依赖了（如 `spring-boot-starter-web` ），保险起见还是要手动添加一下
+
+> 第二步：启用缓存
+
+在启动类上添加 `@EnableCaching` 注解
 
 ```java
 @EnableCaching
@@ -34,9 +53,9 @@ public class CacheApplication {
 }
 ```
 
-> 第二步：添加注解
+> 第三步：添加注解
 
-在需要被缓存的方法上添加`@Cacheable`注解
+在需要被缓存的方法上添加 `@Cacheable` 注解
 
 ```java
 @Service
@@ -62,14 +81,14 @@ public class IndexController {
 
 > 第三步：测试
 
-1. 第一次访问`http://127.0.0.1:8080/`，控制台输出`执行了 index 方法`，页面显示`test`
-2. 再次访问`http://127.0.0.1:8080/`，控制台无任何输出，页面显示`test`
+1. 第一次访问 `http://127.0.0.1:8080/` ，控制台输出 `执行了 index 方法` ，页面显示 `test`
+2. 再次访问 `http://127.0.0.1:8080/` ，控制台无任何输出，页面显示 `test`
 
 # 整合第三方缓存库（以 Redis 为例）
 
 ## 支持的缓存库
 
-如`快速开始使用`示例，如果不添加任何特定的缓存库，`SpringBoot`会自动配置一个使用内存中并发映射的简单提供程序（`Simple`）。当需要缓存时，此提供程序将创建它。不建议将简单的提供程序用于生产用途。`SpringBoot`支持以下缓存库：
+如 `快速开始使用` 示例，如果不添加任何特定的缓存库， `SpringBoot` 会自动配置一个使用内存中并发映射的简单提供程序（ `Simple` ）。当需要缓存时，此提供程序将创建它。不建议将简单的提供程序用于生产用途。 `SpringBoot` 支持以下缓存库：
 
 - Generic
 - JCache (JSR-107) (EhCache 3, Hazelcast, Infinispan, and others)
@@ -104,12 +123,12 @@ public class IndexController {
 <dependency>
     <groupId>com.alibaba.fastjson2</groupId>
     <artifactId>fastjson2</artifactId>
-    <version>2.0.7</version>
+    <version>2.0.26</version>
 </dependency>
 <dependency>
     <groupId>com.alibaba.fastjson2</groupId>
-    <artifactId>fastjson2-extension</artifactId>
-    <version>2.0.7</version>
+    <artifactId>fastjson2-extension-spring5</artifactId>
+    <version>2.0.26</version>
 </dependency>
 ```
 
@@ -138,11 +157,11 @@ spring:
         max-wait: -1ms # 最大阻塞等待时间（默认-1，负数表示没限制）
 ```
 
-完整的Redis数据库配置请参考：[SpringBoot2.6.x整合Redis](https://maxqiu.com/article/detail/102)
+完整的Redis数据库配置请参考：[SpringBoot2.7.x整合Redis（RedisTemplate操作五大常用数据类型）](https://maxqiu.com/article/detail/102)
 
 > 第三步：修改缓存配置
 
-通过自定义`RedisCacheManager`，可以修改键值的序列化方案、存储时间、空值是否缓存等。当某个缓存需要自定义过期时间或其他设置时，可以通过配置多个`RedisCacheManager`以及使用`@Cacheable`或`@CacheConfig`的`cacheManager`属性指定对应的`RedisCacheManager`即可
+通过自定义 `RedisCacheManager` ，可以修改键值的序列化方案、存储时间、空值是否缓存等。当某个缓存需要自定义过期时间或其他设置时，可以通过配置多个 `RedisCacheManager` 以及使用 `@Cacheable` 或 `@CacheConfig` 的 `cacheManager` 属性指定对应的 `RedisCacheManager` 即可
 
 ```java
 import java.nio.charset.StandardCharsets;
@@ -168,9 +187,6 @@ import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSeria
 public class RedisCacheConfig {
     /**
      * 默认Redis全局配置。（30分钟超时）
-     *
-     * @param redisConnectionFactory
-     * @return
      */
     @Primary
     @Bean
@@ -226,8 +242,8 @@ public class RedisCacheConfig {
 > 第四步：查看缓存
 
 1. 重启服务
-2. 访问`http://127.0.0.1:8080/`，控制台输出`执行了 index 方法`，页面显示`test`
-3. 使用`redis`客户端工具连接`redis`服务端，查看缓存
+2. 访问 `http://127.0.0.1:8080/` ，控制台输出 `执行了 index 方法` ，页面显示 `test`
+3. 使用 `redis` 客户端工具连接 `redis` 服务端，查看缓存
 
 推荐：免费的`Windows`桌面客户端：[AnotherRedisDesktopManager](https://github.com/qishibo/AnotherRedisDesktopManager/releases)
 
@@ -235,7 +251,7 @@ public class RedisCacheConfig {
 
 ## 使用注解操作缓存
 
-对于缓存的使用，`Spring`的缓存抽象提供了一组注解：
+对于缓存的使用， `Spring` 的缓存抽象提供了一组注解：
 
 - @EnableCaching：启用缓存
 - @Cacheable：触发缓存填充。
@@ -246,9 +262,9 @@ public class RedisCacheConfig {
 
 ### @EnableCaching
 
-单独使用缓存注解并不会自动触发功能，必须先使用`@EnableCaching`开启缓存功能。同理，如果开发过程中觉得问题出在缓存上，也可以注释`@EnableCaching`关闭缓存后进行调试
+单独使用缓存注解并不会自动触发功能，必须先使用 `@EnableCaching` 开启缓存功能。同理，如果开发过程中觉得问题出在缓存上，也可以注释 `@EnableCaching` 关闭缓存后进行调试
 
-> `SpringBoot`中，在启动类上添加`@EnableCaching`开启缓存
+> `SpringBoot` 中，在启动类上添加 `@EnableCaching` 开启缓存
 
 ```java
 @SpringBootApplication
@@ -262,11 +278,11 @@ public class CacheApplication {
 
 ### @Cacheable
 
-顾名思义，使用`@Cacheable`用来设置需要缓存结果的方法，以便在后续调用（具有相同参数）时返回缓存中的值，无需实际调用该方法。
+顾名思义，使用 `@Cacheable` 用来设置需要缓存结果的方法，以便在后续调用（具有相同参数）时返回缓存中的值，无需实际调用该方法。
 
-#### 自定义名称`value`
+#### 自定义名称 `value`
 
-> `@Cacheable`中使用`value`或`cacheNames`设置缓存名称，若仅设置缓存名称，可以省略`value =`或`cacheNames =`
+> `@Cacheable` 中使用 `value` 或 `cacheNames` 设置缓存名称，若仅设置缓存名称，可以省略 `value =` 或 `cacheNames =`
 
 示例如下：
 
@@ -283,7 +299,7 @@ public String cache1() {
 }
 ```
 
-在前面的代码段中，该`cache1`方法与名为`cache1`的缓存相关联。每次调用该方法时，都会检查缓存，以查看调用是否已经运行，并且不需要重复。虽然在大多数情况下，仅声明一个缓存，但注释可指定多个名称，以便使用多个缓存。在这种情况下，在调用该方法之前会检查每个缓存，如果命中了至少一个缓存，则会返回关联的值。示例如下：
+在前面的代码段中，该 `cache1` 方法与名为 `cache1` 的缓存相关联。每次调用该方法时，都会检查缓存，以查看调用是否已经运行，并且不需要重复。虽然在大多数情况下，仅声明一个缓存，但注释可指定多个名称，以便使用多个缓存。在这种情况下，在调用该方法之前会检查每个缓存，如果命中了至少一个缓存，则会返回关联的值。示例如下：
 
 ```java
 @Cacheable("cache1")
@@ -308,13 +324,13 @@ public String cache3() {
 }
 ```
 
-- 先调用`cache1`返回 1 ，再调用`cache3`返回 1<br>说明：**命中一个缓存则立即返回**
-- 先调用`cache2`返回 2 ，然后调用`cache3`返回 2 ，然后调用`cache1`返回 1 ，最后调用`cache3`返回 1<br>说明：**多个缓存名称时，写在前面的优先级高**
-- 先调用`cache3`返回 3 ，再调用`cache1`或`cache2`均返回 3<br>说明：**若多个缓存名称均为空，则多个缓存的值均被写入**
+- 先调用 `cache1` 返回 1 ，再调用 `cache3` 返回 1<br>说明：**命中一个缓存则立即返回**
+- 先调用 `cache2` 返回 2 ，然后调用 `cache3` 返回 2 ，然后调用 `cache1` 返回 1 ，最后调用 `cache3` 返回 1<br>说明：**多个缓存名称时，写在前面的优先级高**
+- 先调用 `cache3` 返回 3 ，再调用 `cache1` 或 `cache2` 均返回 3<br>说明：**若多个缓存名称均为空，则多个缓存的值均被写入**
 
-#### 自定义键`key`
+#### 自定义键 `key`
 
-`@Cacheable`中使用`key`设置缓存键，并且在`key`中可以使用`SpEL`表达式。一般情况下，当方法有参数时，会根据不同的参数缓存不同的值。
+`@Cacheable` 中使用 `key` 设置缓存键，并且在 `key` 中可以使用 `SpEL` 表达式。一般情况下，当方法有参数时，会根据不同的参数缓存不同的值。
 
 > 示例：
 
@@ -329,9 +345,9 @@ public String key(String key) {
 }
 ```
 
-注：详细`key`生成规则见下文
+注：详细 `key` 生成规则见下文
 
-#### 同步缓存`sync`
+#### 同步缓存 `sync`
 
 在多线程环境中，某些操作可能会为同一个参数并发调用。默认情况下，缓存抽象不会锁定任何内容，并且可能会多次计算相同的值，从而破坏了缓存的目的。对于那些特殊情况，可以使用`sync`属性来设置基础缓存提供程序在计算值时锁定缓存条目。结果，只有一个线程正在忙于计算该值，而其他线程则被阻塞，直到在缓存中更新该条目为止。示例如下
 
@@ -341,7 +357,7 @@ public String sync() {
     System.out.println("进入了 sync 方法");
     try {
         // 模拟方法内的值计算
-        Thread.sleep(10000);
+        Thread.sleep(3000);
     } catch (InterruptedException e) {
         e.printStackTrace();
     }
@@ -349,12 +365,12 @@ public String sync() {
 }
 ```
 
-- 若`sync`为`false`（默认false），则在10秒内多次调用时会多次输出`进入了 sync 方法`
-- 若`sync`为`true`，则只会有一次输出`进入了 sync 方法`
+- 若 `sync` 为 `false` （默认false），则在3秒内多次调用时会多次输出 `进入了 sync 方法`
+- 若 `sync` 为 `true` ，则只会有一次输出 `进入了 sync 方法`
 
-#### 条件缓存`condition`：根据入参判断是否缓存结果
+#### 条件缓存 `condition` ：根据入参判断是否缓存结果
 
-`condition`参数通过**给定的参数**判断是否缓存结果，该参数采用一个`SpEL`表达式，该表达式的值等于`true`或`false`。
+`condition` 参数通过**给定的参数**判断是否缓存结果，该参数采用一个`SpEL`表达式，该表达式的值等于 `true` 或 `false`。
 
 - `true`：缓存结果
 - `false`：不缓存结果
@@ -369,45 +385,45 @@ public String condition(Integer id) {
 }
 ```
 
-- 当`id>10`时，条件成立，同一值第一次进入会打印输出，后续进入不打印输出，直接调取缓存
-- 当`id<=10`时，条件不成立，总是会打印输出
+- 当 `id>10` 时，条件成立，同一值第一次进入会打印输出，后续进入不打印输出，直接调取缓存
+- 当 `id<=10` 时，条件不成立，总是会打印输出
 
-#### 条件缓存`unless`：根据结果判断是否缓存结果
+#### 条件缓存 `unless`：根据结果判断是否缓存结果
 
-`unless`参数通过**返回的结果**判断是否缓存结果，该参数采用一个`SpEL`表达式，该表达式的值等于`true`或`false`。
+`unless` 参数通过**返回的结果**判断是否缓存结果，该参数采用一个 `SpEL` 表达式，该表达式的值等于 `true` 或 `false`。
 
-`unless`英文是**除非**的意思，意思就是`除了这个条件成立都缓存`，又或者`这个条件成立就不缓存`
+`unless` 英文是**除非**的意思，意思就是**除了这个条件成立都缓存**，又或者**这个条件成立就不缓存**
 
-- `true`：不缓存结果
-- `false`：缓存结果
+- `true` ：不缓存结果
+- `false` ：缓存结果
 
-> 例：当随机数大于3时，不缓存结果：
+> 例：当随机数大于0时，不缓存结果：
 
 ```java
-@Cacheable(cacheNames = "unlessResult", unless = "#result > 3")
-public Integer unlessResult() {
-    System.out.println("进入了 unlessResult 方法");
-    return (int)(Math.random() * 10);
+@Cacheable(cacheNames = "unless", unless = "#result > 0")
+public Integer unless() {
+    System.out.println("进入了 unless 方法");
+    return new Random().nextInt(10);
 }
 ```
 
-- 先打印输出，当`结果大于3`时，条件成立，不缓存结果
-- 下次进入再次打印输出，当`结果小于等于3`时，条件不成立，缓存结果，后续进入不打印输出，直接调取缓存
+- 先打印输出，当 `结果大于0` 时，条件成立，不缓存结果
+- 下次进入再次打印输出，当 `结果小于等于0` 时，条件不成立，缓存结果，后续进入不打印输出，直接调取缓存
 
-#### 自定义`CacheManager`
+#### 自定义 `CacheManager`
 
-指定`CacheManager`，可以修改指定的配置项，例如缓存时长不同
+指定 `CacheManager`，可以修改指定的配置项，例如缓存时长不同
 
 ```java
-@Cacheable(value = "cacheManager", cacheManager = "expire1day")
+@Cacheable(cacheNames = "cacheManager", cacheManager = "expire1day")
 public String cacheManager() {
-    System.out.println("执行了 cache1 方法");
+    System.out.println("执行了 cacheManager 方法");
     return "1";
 }
 ```
 
-1. 调用`cacheManager`
-2. 使用`redis`客户端查看该值的超时时间
+1. 调用 `cacheManager`
+2. 使用 `redis` 客户端查看该值的超时时间
 
 ### @CachePut
 
@@ -416,12 +432,6 @@ public String cacheManager() {
 > 例：
 
 ```java
-@Cacheable("cache1")
-public String cache1() {
-    System.out.println("执行了cache1方法");
-    return "1";
-}
-
 @CachePut("cache1")
 public String cachePut() {
     System.out.println("执行了 cachePut 方法");
@@ -429,13 +439,13 @@ public String cachePut() {
 }
 ```
 
-1. 先调用`cache1`返回`1`
-2. 然后调用`cachePut`返回`success`
-3. 再调用`cache1`返回`success`（缓存被刷新了）
+1. 先调用 `cache1` 返回 `1`
+2. 然后调用 `cachePut` 返回 `success`
+3. 再调用 `cache1` 返回 `success` （缓存被刷新了）
 
-`@CachePut`中的参数`value`、`key`、`condition`、`unless`使用方法同`@Cacheable`
+`@CachePut` 中的参数 `value` 、 `key` 、 `condition` 、 `unless` 使用方法同 `@Cacheable`
 
-> 强烈建议不要在同一方法上同时使用`@CachePut`和`@Cacheable`注释
+> 强烈建议不要在同一方法上同时使用 `@CachePut` 和 `@Cacheable` 注释
 
 ### @CacheEvict
 
@@ -443,59 +453,58 @@ public String cachePut() {
 
 > 例：
 
-在`@CachePut`示例的基础上增加如下方法
-
-```
+```java
 @CacheEvict("cache1")
-public void cacheEvict1() {
-    System.out.println("执行了 cacheEvict1 方法");
+public void cacheEvict() {
+    System.out.println("执行了 cacheEvict 方法");
 }
 ```
 
-1. 先调用`cachePut`返回`success`
-2. 然后调用`cache1`返回`success`
-3. 然后调用`cacheEvict1`，再查看`redis`客户端，缓存被删除了
-4. 最后调用`cache1`返回`1`，新缓存又进去了
+1. 先调用 `cache1` 返回 `success`
+3. 然后调用 `cacheEvict1` ，再查看 `redis` 客户端，缓存被删除了
+4. 最后调用 `cache1` 返回 `1`，新缓存又进去了
 
-#### 删除所有键`allEntries`
+#### 删除所有键 `allEntries`
 
-当`allEntries`设置为`true`时，删除相同缓存名称下的所有键。默认为`false`
+当 `allEntries` 设置为 `true` 时，删除相同缓存名称下的所有键。默认为 `false`
 
 > 例：
 
 ```java
-@CacheEvict(value = "key", allEntries = true)
-public void cacheEvict2() {
-    System.out.println("执行了 cacheEvict2 方法");
+@CacheEvict(cacheNames = "key", allEntries = true)
+public void cacheEvictAllEntries() {
+    System.out.println("执行了 cacheEvictAllEntries 方法");
 }
 ```
 
-1. 调用几次`key1`方法，存入名称相同但键不同的缓存。如：`key::1`、`key::2`
-2. 调用`cacheEvict2`方法，发现所有的名称为`key`的缓存均被删除了
+1. 调用几次 `key1` 方法，存入名称相同但键不同的缓存。如： `key::1` 、 `key::2`
+2. 调用 `cacheEvictAllEntries` 方法，发现所有的名称为 `key` 的缓存均被删除了
 
-#### 在执行方法前执行缓存清除`beforeInvocation`
+#### 在执行方法前执行缓存清除 `beforeInvocation`
 
-当`beforeInvocation`设置为`true`时，在方法执行前执行缓存删除。即使方法执行抛出异常
+当 `beforeInvocation` 设置为 `true` 时，在方法执行前执行缓存删除。即使方法执行抛出异常
 
 > 例：
 
 ```java
-@CacheEvict(value = "key", beforeInvocation = true)
-public void cacheEvict3(Integer key) {
-    System.out.println("执行了 cacheEvict3 方法");
-    int i = key / 0;
+@CacheEvict(cacheNames = "key", beforeInvocation = true)
+public void cacheEvictBeforeInvocation(String key) {
+    System.out.println("执行了 cacheEvictBeforeInvocation 方法");
+    @SuppressWarnings({"divzero", "NumericOverflow"})
+    int i = 1 / 0;
+    System.out.println(i);
     System.out.println("cacheEvict3 执行完毕");
 }
 ```
 
-1. 调用`key1`方法，存入一个缓存。如：`key::1`
-2. 调用`cacheEvict3`方法，删除相同的缓存，虽然报错，但是缓存已经删除了
+1. 调用 `key1` 方法，存入一个缓存。如： `key::1`
+2. 调用 `cacheEvictBeforeInvocation` 方法，删除相同的缓存，虽然报错，但是缓存已经删除了
 
 ### @Caching
 
-有时，需要指定相同类型的多个注释（例如`@CacheEvict`或`@CachePut`）。例如：因为条件或键表达式在不同的缓存之间是不同的。`@Caching`让多个嵌套`@Cacheable`、`@CachePut`和`@CacheEvict`注解来在相同的方法中使用。
+有时，需要指定相同类型的多个注释（例如 `@CacheEvict` 或 `@CachePut` ）。例如：因为条件或键表达式在不同的缓存之间是不同的。 `@Caching` 让多个嵌套 `@Cacheable` 、 `@CachePut` 和 `@CacheEvict` 注解来在相同的方法中使用。
 
-下面的示例使用两个`@CacheEvict`注释：
+下面的示例使用两个 `@CacheEvict` 注释：
 
 ```java
 @Caching(evict = { @CacheEvict("primary"), @CacheEvict(cacheNames="secondary", key="#p0") })
@@ -506,7 +515,7 @@ public Book importBooks(String deposit, Date date)
 
 在类级别上定义共同的设置项
 
-> 例：`@CacheConfig`设置缓存的名称：
+> 例： `@CacheConfig` 设置缓存的名称：
 
 ```java
 @CacheConfig(cacheNames = "cache")
@@ -516,19 +525,27 @@ public class BookRepositoryImpl implements BookRepository {
 }
 ```
 
-`@CacheConfig`是一个类级别的注释，它允许共享`缓存名称`、自定义`KeyGenerator`、自定义`CacheManager`和自定义`CacheResolver`。将此注释放在类上不会打开任何缓存操作。
+`@CacheConfig` 是一个类级别的注释，它允许共享`缓存名称`、自定义 `KeyGenerator` 、自定义 `CacheManager` 和自定义 `CacheResolver` 。将此注释放在类上不会打开任何缓存操作。
 
 ## 缓存名生成规则
 
 ### 默认的 SimpleKeyGenerator
 
-- 默认情况下是`org.springframework.cache.interceptor.SimpleKeyGenerator`，使用`[cacheNames]::[key]`作为键
-- `[cacheNames]`在`@CacheConfig`和`@Cacheable`中必须配置一个，`@Cacheable`可以覆盖`@CacheConfig`
-- `[key]`是根据`@CacheConfig`或`@Cacheable`的`keyGenerator`配置进行生成的，`@Cacheable`可以覆盖`@CacheConfig`
+- 默认情况下是 `org.springframework.cache.interceptor.SimpleKeyGenerator` ，使用 `[cacheNames]::[key]` 作为键
+- `[cacheNames]` 在 `@CacheConfig` 和 `@Cacheable` 中必须配置一个， `@Cacheable` 可以覆盖 `@CacheConfig`
+- `[key]` 是根据 `@CacheConfig` 或 `@Cacheable` 的 `keyGenerator` 配置进行生成的， `@Cacheable` 可以覆盖 `@CacheConfig`
 
 详细生成规则见如下代码
 
 ```java
+import java.util.List;
+
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import com.maxqiu.demo.request.UserRequest;
+
 @Service
 @CacheConfig(cacheNames = "cacheName")
 public class CacheKeyService {
@@ -555,7 +572,7 @@ public class CacheKeyService {
     @Cacheable(cacheNames = "myCacheName")
     public String noParameter() {
         System.out.println("执行了normal方法");
-        return "normal";
+        return "noParameter";
     }
 
     /**
@@ -625,15 +642,25 @@ public class CacheKeyService {
 }
 ```
 
-### 使用`SpEL`表达式自定义key
+### 使用 `SpEL` 表达式自定义key
 
-- 一般使用缓存时，希望缓存的名称为`[serviceName]::[methodName]::[parameterValues]`的三段式
-- 此时`@CacheConfig`的`cacheNames`配置当前类的名称，完成第一段
-- 此时`@Cacheable`的`key`配置当前方法的名和参数名（SpEL表达式），完成第二段
+- 一般使用缓存时，希望缓存的名称为 `[serviceName]::[methodName]::[parameterValues]` 的三段式
+- 此时 `@CacheConfig` 的 `cacheNames` 配置当前类的名称，完成第一段
+- 此时 `@Cacheable` 的 `key` 配置当前方法的名和参数名（ `SpEL` 表达式），完成第二段
 
 详细生成规则见如下代码
 
 ```java
+package com.maxqiu.demo.service;
+
+import java.util.List;
+
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import com.maxqiu.demo.request.UserRequest;
+
 @Service
 @CacheConfig(cacheNames = "CacheCustomKey")
 public class CacheCustomKeyService {
@@ -645,7 +672,7 @@ public class CacheCustomKeyService {
     @Cacheable(key = "#root.methodName")
     public String noParameter() {
         System.out.println("执行了normal方法");
-        return "123";
+        return "noParameter";
     }
 
     /**
@@ -716,7 +743,7 @@ public class CacheCustomKeyService {
 }
 ```
 
-> 缓存可用的`SpEL`元数据
+> 缓存可用的 `SpEL` 元数据
 
 拷贝自官方文档
 
@@ -733,7 +760,7 @@ result | Evaluation context | The result of the method call (the value to be cac
 
 > `SpEL`使用示例
 
-`SpEL`表达式见官方教程[Spring Expression Language (SpEL)](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/core.html#expressions)，这里举几个简单的例子
+`SpEL` 表达式见官方教程 [Spring Expression Language (SpEL)](https://docs.spring.io/spring-framework/docs/5.3.5/reference/html/core.html#expressions) ，这里举几个简单的例子
 
 ```java
 @Cacheable(cacheNames="books", key="#isbn")
@@ -746,13 +773,21 @@ public Book findBook(ISBN isbn, boolean checkWarehouse, boolean includeUsed)
 public Book findBook(ISBN isbn, boolean checkWarehouse, boolean includeUsed)
 ```
 
-### 使用自定`KeyGenerator`生成`key`
+### 使用自定 `KeyGenerator` 生成 `key`
 
-使用`@Cacheable`的`key`每次都要写`SpEL`表达式，很是麻烦。可以使用自定义`KeyGenerator`实现`org.springframework.cache.interceptor.KeyGenerator`接口，然后在`@CacheConfig`和`@Cacheable`中配置，`@Cacheable`可以覆盖`@CacheConfig`
+使用 `@Cacheable` 的 `key` 每次都要写 `SpEL` 表达式，很是麻烦。可以使用自定义 `KeyGenerator` 实现 `org.springframework.cache.interceptor.KeyGenerator` 接口，然后在 `@CacheConfig` 和 `@Cacheable` 中配置， `@Cacheable` 可以覆盖 `@CacheConfig`
 
-> 自定义`KeyGenerator`
+> 自定义 `KeyGenerator`
 
 ```java
+package com.maxqiu.demo.config;
+
+import java.lang.reflect.Method;
+import java.util.StringJoiner;
+
+import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.stereotype.Component;
+
 @Component
 public class CacheKeyGenerator implements KeyGenerator {
     // key分隔符
@@ -769,7 +804,6 @@ public class CacheKeyGenerator implements KeyGenerator {
      *            被调用的方法
      * @param params
      *            方法参数(扩展了任何var-args)
-     * @return
      */
     @Override
     public String generate(Object target, Method method, Object... params) {
@@ -802,6 +836,16 @@ public class CacheKeyGenerator implements KeyGenerator {
 详细生成规则见如下代码
 
 ```java
+package com.maxqiu.demo.service;
+
+import java.util.List;
+
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+
+import com.maxqiu.demo.request.UserRequest;
+
 @Service
 @CacheConfig(cacheNames = "CacheCustomKeyGenerator", keyGenerator = "cacheKeyGenerator")
 public class CacheCustomKeyGeneratorService {
@@ -813,7 +857,7 @@ public class CacheCustomKeyGeneratorService {
     @Cacheable
     public String noParameter() {
         System.out.println("执行了normal方法");
-        return "123";
+        return "noParameter";
     }
 
     /**

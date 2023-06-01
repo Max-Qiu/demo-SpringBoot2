@@ -23,9 +23,6 @@ import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSeria
 public class RedisCacheConfig {
     /**
      * 默认Redis全局配置。（30分钟超时）
-     *
-     * @param redisConnectionFactory
-     * @return
      */
     @Primary
     @Bean

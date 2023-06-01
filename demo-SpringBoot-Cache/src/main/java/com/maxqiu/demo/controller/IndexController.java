@@ -1,6 +1,7 @@
 package com.maxqiu.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,7 +12,7 @@ import com.maxqiu.demo.service.IndexService;
  */
 @RestController
 public class IndexController {
-    @Autowired
+    @Resource
     private IndexService indexService;
 
     @GetMapping("/")

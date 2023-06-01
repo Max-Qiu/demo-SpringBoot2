@@ -44,7 +44,7 @@ public class CacheKeyService {
     @Cacheable(cacheNames = "myCacheName")
     public String noParameter() {
         System.out.println("执行了normal方法");
-        return "normal";
+        return "noParameter";
     }
 
     /**

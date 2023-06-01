@@ -11,7 +11,12 @@
     <artifactId>demo-SpringBoot-Cache</artifactId>
 
     <dependencies>
-        <!-- Web环境 -->
+        <!-- 缓存组件 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+        <!-- Web基础环境 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

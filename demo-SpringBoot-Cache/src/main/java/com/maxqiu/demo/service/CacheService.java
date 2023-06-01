@@ -43,7 +43,7 @@ public class CacheService {
     /**
      * 使用参数做缓存键
      */
-    @Cacheable(value = "key", key = "#key")
+    @Cacheable(cacheNames = "key", key = "#key")
     public String key(String key) {
         System.out.println("执行了 key 方法，key 的值为：" + key);
         return key;
@@ -54,7 +54,7 @@ public class CacheService {
         System.out.println("进入了 sync 方法");
         try {
             // 模拟方法内的值计算
-            Thread.sleep(10000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -62,12 +62,12 @@ public class CacheService {
     }
 
     @Cacheable(cacheNames = "condition", condition = "#id > 10")
-    public String condition(Integer id) {
+    public Integer condition(Integer id) {
         System.out.println("进入了 condition 方法");
-        return "success";
+        return id;
     }
 
-    @Cacheable(cacheNames = "unless", unless = "#result > 3")
+    @Cacheable(cacheNames = "unless", unless = "#result > 0")
     public Integer unless() {
         System.out.println("进入了 unless 方法");
         return new Random().nextInt(10);
@@ -86,19 +86,21 @@ public class CacheService {
     }
 
     @CacheEvict("cache1")
-    public void cacheEvict1() {
-        System.out.println("执行了 cacheEvict1 方法");
+    public void cacheEvict() {
+        System.out.println("执行了 cacheEvict 方法");
     }
 
     @CacheEvict(cacheNames = "key", allEntries = true)
-    public void cacheEvict2() {
-        System.out.println("执行了 cacheEvict2 方法");
+    public void cacheEvictAllEntries() {
+        System.out.println("执行了 cacheEvictAllEntries 方法");
     }
 
     @CacheEvict(cacheNames = "key", beforeInvocation = true)
-    public void cacheEvict3(Integer key) {
-        System.out.println("执行了 cacheEvict3 方法");
-        int i = key / 0;
+    public void cacheEvictBeforeInvocation(String key) {
+        System.out.println("执行了 cacheEvictBeforeInvocation 方法");
+        @SuppressWarnings({"divzero", "NumericOverflow"})
+        int i = 1 / 0;
+        System.out.println(i);
         System.out.println("cacheEvict3 执行完毕");
     }
 }

@@ -27,7 +27,6 @@ public class CacheKeyGenerator implements KeyGenerator {
      *            被调用的方法
      * @param params
      *            方法参数(扩展了任何var-args)
-     * @return
      */
     @Override
     public String generate(Object target, Method method, Object... params) {
