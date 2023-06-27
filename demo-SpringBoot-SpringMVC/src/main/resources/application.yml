@@ -1,0 +1,4 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: path_pattern_parser # 默认使用 path_pattern_parser

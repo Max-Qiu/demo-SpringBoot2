@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 映射请求
- * 
+ *
  * @author Max_Qiu
  */
 @Controller
@@ -89,8 +89,10 @@ public class RequestController {
 
     /**
      * **：匹配多层路径（字符中间可以有 / 也可以没有 / ）
+     *
+     * path_pattern_parser 匹配模式不支持
      */
-    @RequestMapping("/ant/**/abc")
+    // @RequestMapping("/ant/**/abc")
     @ResponseBody
     public String antPath3() {
         return "/ant/**/abc";
