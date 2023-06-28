@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.maxqiu.demo.common.CurrUser;
-import com.maxqiu.demo.common.CurrUserVo;
+import com.maxqiu.demo.common.CurrUserVO;
 
 /**
  * 首页
@@ -20,7 +20,7 @@ public class IndexController {
     }
 
     @GetMapping("currUser")
-    public CurrUserVo currUser(@CurrUser CurrUserVo currUser) {
-        return currUser;
+    public CurrUserVO currUser(@CurrUser CurrUserVO userVO) {
+        return userVO;
     }
 }

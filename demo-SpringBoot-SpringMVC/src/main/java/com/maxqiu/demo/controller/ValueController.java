@@ -19,14 +19,14 @@ import com.maxqiu.demo.entity.User;
 
 /**
  * 获取参数
- * 
+ *
  * @author Max_Qiu
  */
 @Controller
 @RequestMapping("value")
 public class ValueController {
     /**
-     * @PathVariable 可以映射 URL 中的占位符到目标方法的参数中
+     * `@PathVariable` 可以映射 URL 中的占位符到目标方法的参数中
      */
     @RequestMapping("/pathVariable/{id}")
     @ResponseBody
@@ -42,8 +42,7 @@ public class ValueController {
      */
     @RequestMapping("urlParam1")
     @ResponseBody
-    public String urlParam1(@RequestParam(value = "username") String username,
-        @RequestParam(value = "age", defaultValue = "0") Integer age) {
+    public String urlParam1(@RequestParam(value = "username") String username, @RequestParam(value = "age", defaultValue = "0") Integer age) {
         return "urlParam1：{username:" + username + ", age: " + age + "}";
     }
 
@@ -52,8 +51,7 @@ public class ValueController {
      */
     @RequestMapping("urlParam2")
     @ResponseBody
-    public String urlParam2(@RequestParam String username,
-        @RequestParam(required = false, defaultValue = "0") Integer age) {
+    public String urlParam2(@RequestParam String username, @RequestParam(required = false, defaultValue = "0") Integer age) {
         return "urlParam2：{username:" + username + ", age: " + age + "}";
     }
 
@@ -135,7 +133,7 @@ public class ValueController {
      * - 常用：<br>
      * - javax.servlet.http.HttpServletRequest<br>
      * - javax.servlet.http.HttpServletResponse<br>
-     * 
+     *
      * - 扩展<br>
      * - javax.servlet.http.HttpSession<br>
      * - java.security.Principal<br>
@@ -144,8 +142,6 @@ public class ValueController {
      * - javax.servlet.ServletOutputStream<br>
      * - java.io.BufferedReader<br>
      * - java.io.PrintWriter<br>
-     * 
-     * @throws IOException
      */
     @RequestMapping("/servletApi")
     public void servletApi(HttpServletRequest request, HttpServletResponse response) throws IOException {

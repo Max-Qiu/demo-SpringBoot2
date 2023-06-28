@@ -68,33 +68,4 @@ public class RequestController {
     public String headers() {
         return "headers";
     }
-
-    /**
-     * ?：匹配一个字符（若多个字符需要多个?）
-     */
-    @RequestMapping("/ant/ab?")
-    @ResponseBody
-    public String antPath1() {
-        return "/ant/ab?";
-    }
-
-    /**
-     * *：匹配任意字符（字符中间不能有 / ）
-     */
-    @RequestMapping("/ant/*/abc")
-    @ResponseBody
-    public String antPath2() {
-        return "/ant/*/abc";
-    }
-
-    /**
-     * **：匹配多层路径（字符中间可以有 / 也可以没有 / ）
-     *
-     * path_pattern_parser 匹配模式不支持
-     */
-    // @RequestMapping("/ant/**/abc")
-    @ResponseBody
-    public String antPath3() {
-        return "/ant/**/abc";
-    }
 }

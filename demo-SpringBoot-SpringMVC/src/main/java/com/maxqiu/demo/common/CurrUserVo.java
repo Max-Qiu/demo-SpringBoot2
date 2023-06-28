@@ -10,7 +10,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CurrUserVo {
+public class CurrUserVO {
     private Long id;
     private String name;
 }
