@@ -13,22 +13,21 @@ import com.maxqiu.demo.mapper.LogicDeleteMapper;
 
 /**
  * 测试逻辑删除
- * 
+ *
  * 需要在 application.yml 中开启全局逻辑删除
- * 
+ *
  * 或者为实体的指定字段添加 @TableLogic 注解
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestLogicDelete {
-
     @Autowired
     private LogicDeleteMapper deleteMapper;
 
     /**
      * 测试查询
-     * 
+     *
      * 自动带上 WHERE deleted=0
      */
     @Test
@@ -40,7 +39,7 @@ public class TestLogicDelete {
 
     /**
      * 测试插入
-     * 
+     *
      * 对于逻辑删除字段，需要在数据库中设置默认值，或者手动赋值，或者使用自动填充
      */
     @Test
@@ -55,7 +54,7 @@ public class TestLogicDelete {
 
     /**
      * 测试修改
-     * 
+     *
      * 修改时，默认添加 WHERE deleted=0
      */
     @Test
@@ -77,7 +76,7 @@ public class TestLogicDelete {
 
     /**
      * 测试删除
-     * 
+     *
      * 删除语句会变更为更新语句，并将逻辑删除字段修改为1，同时会带上WHERE deleted=0保证不操作到已经逻辑删除的数据
      */
     @Test

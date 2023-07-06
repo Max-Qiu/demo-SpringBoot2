@@ -13,7 +13,6 @@ import com.maxqiu.demo.service.IRolePermissionService;
  * @author Max_Qiu
  */
 @Service
-public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission>
-    implements IRolePermissionService {
+public class RolePermissionServiceImpl extends ServiceImpl<RolePermissionMapper, RolePermission> implements IRolePermissionService {
 
 }

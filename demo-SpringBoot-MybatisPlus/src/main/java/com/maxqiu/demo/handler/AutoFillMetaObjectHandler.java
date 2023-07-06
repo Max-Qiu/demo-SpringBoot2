@@ -26,8 +26,6 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 创建时自动插入
-     *
-     * @param metaObject
      */
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -52,8 +50,6 @@ public class AutoFillMetaObjectHandler implements MetaObjectHandler {
 
     /**
      * 更新时自动插入
-     *
-     * @param metaObject
      */
     @Override
     public void updateFill(MetaObject metaObject) {

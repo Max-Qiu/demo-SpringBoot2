@@ -14,7 +14,6 @@ import com.maxqiu.demo.entity.Role;
  * @author Max_Qiu
  */
 public interface RoleMapper extends BaseMapper<Role> {
-
     List<Role> getRoleAndPermissionIds();
 
     List<Role> getRoleAndPermissionList();

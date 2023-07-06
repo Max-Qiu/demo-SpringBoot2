@@ -21,7 +21,6 @@ import com.maxqiu.demo.model.ParamSome;
  * @author Max_Qiu
  */
 public interface UserMapper extends BaseMapper<User> {
-
     List<User> rowBoundList(RowBounds rowBounds, Map<String, String> name);
 
     List<User> selectMap(Map<String, Object> param);

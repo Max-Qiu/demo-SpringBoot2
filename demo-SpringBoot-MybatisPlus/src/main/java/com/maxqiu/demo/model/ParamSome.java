@@ -5,7 +5,6 @@ package com.maxqiu.demo.model;
  * @since 2018-09-20
  */
 public class ParamSome {
-
     private Integer yihao;
     private String erhao;
 

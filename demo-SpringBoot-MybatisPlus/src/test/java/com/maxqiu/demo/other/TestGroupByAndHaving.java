@@ -17,7 +17,6 @@ import com.maxqiu.demo.mapper.StudentMapper;
  */
 @SpringBootTest
 public class TestGroupByAndHaving {
-
     @Autowired
     private StudentMapper studentMapper;
 
@@ -44,9 +43,9 @@ public class TestGroupByAndHaving {
 
     /**
      * 分组
-     * 
+     *
      * 并将分组后的数据放入实体字段
-     * 
+     *
      * 实体中该字段需要设置 @TableField(exist = false)
      */
     @Test

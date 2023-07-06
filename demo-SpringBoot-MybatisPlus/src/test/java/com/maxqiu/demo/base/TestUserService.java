@@ -130,18 +130,15 @@ public class TestUserService {
         // UPDATE smp_user SET age=? WHERE (age = ?)
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         // INSERT INTO smp_user ( id, age ) VALUES ( ?, ? )
-        boolean save1 = userService.saveOrUpdate(new User().setId(2L).setAge(11),
-            new LambdaUpdateWrapper<User>().eq(User::getAge, 18));
+        boolean save1 = userService.saveOrUpdate(new User().setId(2L).setAge(11), new LambdaUpdateWrapper<User>().eq(User::getAge, 18));
         System.out.println(save1);
         // UPDATE smp_user SET age=? WHERE (age = ?)
-        boolean save2 = userService.saveOrUpdate(new User().setId(2L).setAge(18),
-            new LambdaUpdateWrapper<User>().eq(User::getAge, 11));
+        boolean save2 = userService.saveOrUpdate(new User().setId(2L).setAge(18), new LambdaUpdateWrapper<User>().eq(User::getAge, 11));
         System.out.println(save2);
         // UPDATE smp_user SET username=?, age=? WHERE (age = ?)
         // SELECT id,username,age,email FROM smp_user WHERE id=?
         // UPDATE smp_user SET age=? WHERE id=?
-        boolean save3 = userService.saveOrUpdate(new User().setId(2L).setAge(18),
-            new LambdaUpdateWrapper<User>().eq(User::getAge, 1));
+        boolean save3 = userService.saveOrUpdate(new User().setId(2L).setAge(18), new LambdaUpdateWrapper<User>().eq(User::getAge, 1));
         System.out.println(save3);
     }
 
@@ -233,8 +230,7 @@ public class TestUserService {
     @Test
     void updateByWrapper() {
         // UPDATE smp_user SET username=? WHERE (age = ?)
-        boolean update =
-            userService.update(new User().setUsername("max"), new LambdaUpdateWrapper<User>().eq(User::getAge, "101"));
+        boolean update = userService.update(new User().setUsername("max"), new LambdaUpdateWrapper<User>().eq(User::getAge, "101"));
         System.out.println(update);
     }
 
@@ -551,8 +547,7 @@ public class TestUserService {
     void pageMapsByWrapper() {
         // SELECT COUNT(*) FROM smp_user WHERE (email LIKE ?)
         // SELECT id,username,age,email FROM smp_user WHERE (email LIKE ?) LIMIT ?
-        Page<Map<String, Object>> page =
-            userService.pageMaps(new Page<>(1, 2), new LambdaQueryWrapper<User>().like(User::getEmail, "m"));
+        Page<Map<String, Object>> page = userService.pageMaps(new Page<>(1, 2), new LambdaQueryWrapper<User>().like(User::getEmail, "m"));
         System.out.println("总页数" + page.getPages());
         System.out.println("总记录数" + page.getTotal());
         List<Map<String, Object>> users = page.getRecords();

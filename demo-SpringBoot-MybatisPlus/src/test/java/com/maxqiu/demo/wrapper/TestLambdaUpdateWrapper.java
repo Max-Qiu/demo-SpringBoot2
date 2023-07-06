@@ -16,7 +16,6 @@ import com.maxqiu.demo.mapper.UserMapper;
  */
 @SpringBootTest
 public class TestLambdaUpdateWrapper {
-
     @Autowired
     private UserMapper userMapper;
 

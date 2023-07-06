@@ -13,7 +13,6 @@ import com.maxqiu.demo.service.IOptimisticLockerService;
  * @author Max_Qiu
  */
 @Service
-public class OptimisticLockerServiceImpl extends ServiceImpl<OptimisticLockerMapper, OptimisticLocker>
-    implements IOptimisticLockerService {
+public class OptimisticLockerServiceImpl extends ServiceImpl<OptimisticLockerMapper, OptimisticLocker> implements IOptimisticLockerService {
 
 }

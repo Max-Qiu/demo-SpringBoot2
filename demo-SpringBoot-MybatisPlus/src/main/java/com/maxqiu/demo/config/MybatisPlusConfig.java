@@ -11,12 +11,11 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 
 /**
  * Mybatis Plus插件
- * 
+ *
  * @author max.qiu
  */
 @Configuration
 public class MybatisPlusConfig {
-
     @Bean
     public MybatisPlusInterceptor paginationInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

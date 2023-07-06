@@ -18,12 +18,11 @@ import com.maxqiu.demo.mapper.UserMapper;
 
 /**
  * 条件构造器创建方法
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestWrappers {
-
     @Autowired
     private UserMapper userMapper;
 
@@ -54,7 +53,7 @@ public class TestWrappers {
 
     /**
      * 无参 不指定泛型 创建一个 LambdaQueryWrapper
-     * 
+     *
      * 此时需要手动指定泛型
      */
     @Test
@@ -78,7 +77,7 @@ public class TestWrappers {
 
     /**
      * 带参 传入实体 创建一个 LambdaQueryWrapper
-     * 
+     *
      * 此时 传入实体 作为查询条件
      */
     @Test
@@ -144,5 +143,4 @@ public class TestWrappers {
         int update = userMapper.update(new User().setAge(18), updateWrapper);
         System.out.println(update);
     }
-
 }

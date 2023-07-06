@@ -12,12 +12,11 @@ import com.maxqiu.demo.mapper.RoleMapper;
 
 /**
  * 连表查询
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestJoinQuery {
-
     @Autowired
     private RoleMapper roleMapper;
 
@@ -37,9 +36,9 @@ public class TestJoinQuery {
 
     /**
      * 不使用 GROUP BY ，利用自定义的resultMap与collection
-     * 
+     *
      * 将返回结果封装成 对象内包含集合 的效果
-     * 
+     *
      * 注意：使用 collection 时建议添加 ORDER BY
      */
     @Test
@@ -57,7 +56,7 @@ public class TestJoinQuery {
 
     /**
      * 使用 GROUP BY + GROUP_CONCAT 查询 role 并将 permission 的 id 合并成一个字段
-     * 
+     *
      * 如果是分页查询，SELECT COUNT(*) 不会被优化，不推荐使用
      */
     @Test
@@ -81,11 +80,11 @@ public class TestJoinQuery {
 
     /**
      * 不使用 GROUP BY ，利用自定义的resultMap与collection
-     * 
+     *
      * 将返回结果封装成 对象内包含集合 的效果
-     * 
+     *
      * 此时的分页查询，SELECT COUNT(*)会被优化
-     * 
+     *
      * 但是！返回的结果集数量不正常，所以需要使用子查询
      */
     @Test
@@ -103,9 +102,9 @@ public class TestJoinQuery {
 
     /**
      * 使用子查询
-     * 
+     *
      * 先分页查询主表
-     * 
+     *
      * 之后根据主表的每条id继续查询子表
      */
     @Test

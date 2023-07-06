@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 自定义ID生成器
- * 
+ *
  * 仅作为示范
- * 
+ *
  * @author Max_Qiu
  */
 // @Component

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.maxqiu.demo.mapper.TestEnumMapper">
-
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.maxqiu.demo.entity.TestEnum">
         <id column="id" property="id"/>
@@ -11,7 +10,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, gender, state
+        id,
+        gender,
+        state
     </sql>
-
 </mapper>

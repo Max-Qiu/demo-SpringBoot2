@@ -17,12 +17,11 @@ import com.maxqiu.demo.mapper.UserMapper;
 
 /**
  * 测试 自定义SQL
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
 public class TestCustomUserMapper {
-
     @Autowired
     private UserMapper userMapper;
 

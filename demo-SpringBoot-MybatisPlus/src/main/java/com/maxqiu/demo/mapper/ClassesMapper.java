@@ -13,6 +13,5 @@ import com.maxqiu.demo.model.ClassesStudent;
  * @author Max_Qiu
  */
 public interface ClassesMapper extends BaseMapper<Classes> {
-
     Page<ClassesStudent> classesStudentPage(Page<ClassesStudent> page, Map<String, Object> map);
 }

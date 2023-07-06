@@ -25,7 +25,7 @@
                r.locked,
                GROUP_CONCAT(z.permission_id) permission_ids
         FROM smp_role r
-                     LEFT JOIN smp_role_permission z ON r.id = z.role_id
+                 LEFT JOIN smp_role_permission z ON r.id = z.role_id
         GROUP BY r.id, r.`name`, r.locked
     </select>
 
@@ -41,8 +41,8 @@
                p.create_time 'p_create_time',
                p.update_time 'p_update_time'
         FROM smp_role r
-                     LEFT JOIN smp_role_permission z ON r.id = z.role_id
-                     LEFT JOIN smp_permission p on p.id = z.permission_id
+                 LEFT JOIN smp_role_permission z ON r.id = z.role_id
+                 LEFT JOIN smp_permission p on p.id = z.permission_id
         ORDER BY r.id
     </select>
     <resultMap id="roleAndPermissionList" type="com.maxqiu.demo.entity.Role" extends="BaseResultMap">

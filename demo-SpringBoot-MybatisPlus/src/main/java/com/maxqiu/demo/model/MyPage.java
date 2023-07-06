@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * 自定义分页实体
- * 
+ *
  * @author Max_Qiu
  * @param <T>
  */
 public class MyPage<T> extends Page<T> {
-
     private static final long serialVersionUID = 6952602466495827040L;
 
     private Integer selectInt;
