@@ -20,7 +20,7 @@ import com.maxqiu.demo.entity.User;
 
 /**
  * List 列表
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -30,9 +30,9 @@ public class ListOperationsTest {
 
     /**
      * 值是String类型的列表
-     * 
+     *
      * 自定义的RedisTemplate在格式化String时会多出引号
-     * 
+     *
      * 需要使用Spring内置的StringRedisTemplate
      */
     @Resource(name = "stringRedisTemplate")
@@ -40,7 +40,7 @@ public class ListOperationsTest {
 
     /**
      * 值是对象类型的列表
-     * 
+     *
      * 使用自定义的RedisTemplate，将值格式化成JSON
      */
     @Resource(name = "redisTemplate")
@@ -73,11 +73,11 @@ public class ListOperationsTest {
 
     /**
      * RPUSH 在列表右侧插值
-     * 
+     *
      * RPUSHX 仅key存在时在列表右侧插值
-     * 
+     *
      * LPUSH 在列表左侧插值
-     * 
+     *
      * LPUSHX 仅key存在时在列表左侧插值
      */
     @Test
@@ -132,7 +132,7 @@ public class ListOperationsTest {
 
     /**
      * RPOP 从列表末尾获取元素并删除
-     * 
+     *
      * LPOP 从列表头部获取元素并删除
      */
     @Test

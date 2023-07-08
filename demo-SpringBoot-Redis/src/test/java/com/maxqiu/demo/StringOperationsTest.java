@@ -25,7 +25,7 @@ import com.maxqiu.demo.entity.User;
 
 /**
  * String 字符串
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -85,11 +85,11 @@ public class StringOperationsTest {
 
     /**
      * SET
-     * 
+     *
      * SETEX
-     * 
+     *
      * SETNX
-     * 
+     *
      * GETSET
      */
     @Test

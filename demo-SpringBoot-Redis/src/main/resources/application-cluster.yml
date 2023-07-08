@@ -8,7 +8,6 @@ spring:
     username: # 用户名
     password: 123 # 密码
     database: 0 # 指定数据库序号
-    ssl: false # 是否启用SSL
     connect-timeout: 1000 # 连接超时时间（毫秒）
     timeout: 1000 # 操作超时时间（毫秒）
     client-name: # 客户端名称（不知道干嘛用的）

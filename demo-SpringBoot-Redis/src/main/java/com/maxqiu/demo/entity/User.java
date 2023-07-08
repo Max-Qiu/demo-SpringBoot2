@@ -4,19 +4,22 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Max_Qiu
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Accessors
+@ToString
+@EqualsAndHashCode
 public class User implements Serializable {
-    private static final long serialVersionUID = 8782039579040438137L;
     private Integer id;
     private String name;
     private BigDecimal height;

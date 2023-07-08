@@ -23,7 +23,7 @@ import com.maxqiu.demo.entity.User;
 
 /**
  * Set 集合
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -118,8 +118,7 @@ public class SetOperationsTest {
     @Order(2)
     void type() {
         // 对象类型
-        Long add = userSetOperations.add("users", new User(1, "tom", new BigDecimal(185)),
-            new User(2, "tom", new BigDecimal(183)));
+        Long add = userSetOperations.add("users", new User(1, "tom", new BigDecimal(185)), new User(2, "tom", new BigDecimal(183)));
         Long size = userSetOperations.size("users");
         assertEquals(add, size);
 
@@ -133,9 +132,9 @@ public class SetOperationsTest {
 
     /**
      * SINTER 交集
-     * 
+     *
      * SUNION 并集
-     * 
+     *
      * SDIFF 差集
      */
     @Test

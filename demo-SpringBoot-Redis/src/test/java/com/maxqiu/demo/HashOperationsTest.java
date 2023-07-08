@@ -20,7 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * Hash 哈希散列
- * 
+ *
  * @author Max_Qiu
  */
 @SpringBootTest
@@ -36,7 +36,7 @@ public class HashOperationsTest {
 
     /**
      * HSET 给哈希散列添加字段和值
-     * 
+     *
      * HSETNX 给哈希散列添加字段和值（仅字段不存在）
      */
     @Test
@@ -61,13 +61,13 @@ public class HashOperationsTest {
 
     /**
      * HGET 获取哈希散列的指定字段的值
-     * 
+     *
      * HMGET 获取哈希散列的多个字段的值
-     * 
+     *
      * HGETALL 获取哈希散列的所有字段与值
-     * 
+     *
      * HKEYS 获取哈希散列的所有字段
-     * 
+     *
      * HVALS 获取哈希散列的所有值
      */
     @Test
