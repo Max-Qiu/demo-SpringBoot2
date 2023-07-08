@@ -4,14 +4,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 用户
  *
  * @author Max_Qiu
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class UserVO {
     @NotNull
     private Integer id;

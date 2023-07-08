@@ -2,14 +2,20 @@ package com.maxqiu.demo.vo;
 
 import javax.validation.constraints.NotBlank;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 地址
  *
  * @author Max_Qiu
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class AddressVO {
     @NotBlank
     private String province;

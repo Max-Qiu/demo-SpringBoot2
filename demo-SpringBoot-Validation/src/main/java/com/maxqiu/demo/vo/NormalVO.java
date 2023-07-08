@@ -23,12 +23,18 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Max_Qiu
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class NormalVO {
     /**
      * 不能为null
@@ -110,18 +116,18 @@ public class NormalVO {
     private LocalDateTime past;
 
     /**
-     * 邮箱
-     */
-    @Email
-    private String email;
-
-    /**
      * 正则
      *
      * 例：只能是数字和字母
      */
     @Pattern(regexp = "^[A-Za-z0-9]+$")
     private String pattern;
+
+    /**
+     * 邮箱
+     */
+    @Email
+    private String email;
 
     /**
      * 是一个URL连接

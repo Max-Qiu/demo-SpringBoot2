@@ -3,6 +3,7 @@ package com.maxqiu.demo.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -38,7 +39,7 @@ public class IndexController {
      * 方法级处理校验异常
      */
     @GetMapping("exception")
-    public Result<?> exception(@Validated NormalVO vo, BindingResult result) {
+    public Result<?> exception(@Valid NormalVO vo, BindingResult result) {
         if (result.hasErrors()) {
             Map<String, String> map = new HashMap<>();
             // 获取校验的错误结果并遍历

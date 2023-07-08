@@ -9,14 +9,20 @@ import com.maxqiu.demo.valid.group.AddValidGroup;
 import com.maxqiu.demo.valid.group.ChangeStatusValidGroup;
 import com.maxqiu.demo.valid.group.UpdateValidGroup;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 员工
  *
  * @author Max_Qiu
  */
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class EmployeeVO {
     /**
      * id
