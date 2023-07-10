@@ -21,8 +21,8 @@ public class RetryService {
     /**
      * 如果在同一个类中调用重试方法，重试注解不会生效
      */
-    public String callInSameClass(int code, String name) throws Exception {
-        return retry(code, name);
+    public String callInSameClass(int code) throws Exception {
+        return retry(code);
     }
 
     /**
@@ -44,14 +44,14 @@ public class RetryService {
             maxDelay = 5000,
             // 相对上一次延迟时间的倍数（比如2：第一次1000毫秒，第二次2000毫秒，第三次4000毫秒...）
             multiplier = 2))
-    public String retry(Integer code, String name) throws Exception {
+    public String retry(Integer code) throws Exception {
         log.info("方法被调用，时间：{}", LocalTime.now());
+        // 这里可能会产生非检查异常
+        int i = 2 / code;
         if (code == 1) {
             // 此处随意使用了一个检查异常
             throw new HttpConnectTimeoutException("抛出自定义异常信息！");
         }
-        // 这里可能会产生非检查异常
-        int i = 2 / code;
         log.info("方法调用成功！，结果：{}", i);
         return "SUCCESS";
     }
@@ -63,11 +63,10 @@ public class RetryService {
      * 返回值类型：必须与重试方法的类型相同
      */
     @Recover
-    public String recover(HttpConnectTimeoutException e, Integer code, String name) {
+    public String recover(HttpConnectTimeoutException e, Integer code) {
         log.error("HttpConnectTimeoutException回调方法执行！");
         log.error("异常信息：{}", e.getMessage());
         log.error("参数code:{}", code);
-        log.error("参数name:{}", name);
         return "指定异常处理";
     }
 
