@@ -2,10 +2,9 @@ server:
   port: 8080
 spring:
   session:
-    store-type: redis # 使用 Redis 存储 Session
-    #redis:
-    #  flush-mode: immediate # 会话刷新模式（此处有bug，设置无效，需要在启动类注册上设置）
-    #  namespace: demo::session # 用于存储会话的键的命名空间（此处有bug，设置无效，需要在启动类注册上设置）
+    timeout: 1800 # 会话超时时间，单位：秒（默认 1800 秒）
+    redis:
+      namespace: demo::session # 用于存储会话的键的命名空间（默认 spring::session）
   # Redis相关配置
   redis:
     host: redis # 地址
@@ -13,7 +12,6 @@ spring:
     username: # 用户名
     password: 123 # 密码
     database: 0 # 指定数据库序号
-    ssl: false # 是否启用SSL
     connect-timeout: 1000 # 连接超时时间（毫秒）
     timeout: 1000 # 操作超时时间（毫秒）
     client-name: # 客户端名称（不知道干嘛用的）

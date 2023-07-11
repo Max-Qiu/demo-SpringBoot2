@@ -7,12 +7,12 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import com.alibaba.fastjson2.support.spring.data.redis.GenericFastJsonRedisSerializer;
 
 /**
- * Redis共享会话的序列化设置
+ * Session 序列化设置
  *
  * @author Max_Qiu
  */
 @Configuration
-public class RedisSessionConfig {
+public class SessionConfig {
     /**
      * 使用 fastjson 序列号
      */
