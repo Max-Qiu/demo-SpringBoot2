@@ -15,7 +15,7 @@
     <groupId>com.maxqiu.demo</groupId>
     <!-- 项目id名称一般为 xxx-spring-boot-starter -->
     <artifactId>custom-spring-boot-starter</artifactId>
-    <!-- 版本结尾尽量不要添加 SNAPSHOT 后缀 -->
+    <!-- 版本号 -->
     <version>0.0.1</version>
 
     <!-- 名称同 artifactId -->
@@ -36,7 +36,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-        <!-- 非 jdk8 环境下支持 @Resource 注解 -->
+        <!-- 支持 @Resource 注解 -->
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
