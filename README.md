@@ -1,3 +1,5 @@
+> `SpringBoot 2.x` 已于 2023-11-24 [停止维护](https://spring.io/projects/spring-boot#support)，因此本项目暂停更新
+
 # SpringBoot 示例代码
 
 - GitHub：[https://github.com/Max-Qiu/demo-SpringBoot](https://github.com/Max-Qiu/demo-SpringBoot)
